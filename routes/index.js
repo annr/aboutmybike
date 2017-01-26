@@ -2,12 +2,20 @@ var express = require('express');
 var router = express.Router();
 const pg = require('pg');
 const path = require('path');
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/amb';
+//const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/amb';
+
+const connectionObject = {
+    host: 'ambpublicinstance.crufdsximznc.us-west-1.rds.amazonaws.com',
+    port: 5432,
+    database: 'amb',
+    user: 'arobson',
+    password: 'h34rt4nn71'
+};
 
 router.get('/', (req, res, next) => {
   const results = [];
   // Get a Postgres client from the connection pool
-  pg.connect(connectionString, (err, client, done) => {
+  pg.connect(connectionObject, (err, client, done) => {
     // Handle connection errors
     if(err) {
       done();
@@ -23,7 +31,7 @@ router.get('/', (req, res, next) => {
     // After all data is returned, close connection and return results and show index page)
     query.on('end', () => {
       done();
-      res.render('index', { title: 'About My Bike Home', bikes: res.json(results) });
+      res.render('index', { title: 'About My Bike Home', results: results});
     });
   });
 });
