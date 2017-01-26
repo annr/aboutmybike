@@ -5,7 +5,7 @@ const path = require('path');
 //const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/amb';
 
 // just curious if this works.
-/*
+
 const connectionObject = {
     host: 'ambpublicinstance.crufdsximznc.us-west-1.rds.amazonaws.com',
     port: 5432,
@@ -13,8 +13,8 @@ const connectionObject = {
     user: 'arobson',
     password: 'h34rt4nn71'
 };
-*/
 
+/*
 const connectionObject = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
@@ -22,6 +22,7 @@ const connectionObject = {
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD
 };
+*/
 
 
 router.get('/', (req, res, next) => {
