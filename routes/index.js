@@ -12,8 +12,9 @@ let connection = {
 };
 
 router.get('/', (req, res, next) => {
+  console.log('CUSTOM OUTPUT: ' + req.app.get('env'));
   if(req.app.get('env') === 'development') {
-    connection = 'postgres://localhost:5432/amb';
+    //connection = 'postgres://localhost:5432/amb';
   }
   const results = [];
   // Get a Postgres client from the connection pool

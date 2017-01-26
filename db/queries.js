@@ -4,32 +4,18 @@ var options = {
   // Initialization Options
   promiseLib: promise
 };
-
-var connectionString;
-var connectionObject;
-
 var pgp = require('pg-promise')(options);
-// LOCALHOST:
-connectionString = 'postgres://localhost:5432/amb';
 
-// or with connctionObject;
-// connectionObject = {
-//     host: 'localhost',
-//     port: 5432,
-//     database: 'amb',
-//     user: 'arobson'
-// };
-
-// AWS:
-connectionObject = {
-    host: 'ambdbinstance.crufdsximznc.us-west-1.rds.amazonaws.com',
-    port: 5432,
-    database: 'amb',
-    user: 'arobson',
-    password: 'h34rt4nn71'
+// PROD
+let connection = {
+    host: process.env.RDS_HOSTNAME,
+    port: process.env.RDS_PORT,
+    database: process.env.RDS_DB_NAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD
 };
 
-var db = pgp(connectionString || connectionObject);
+var db = pgp(connection || connectionObject);
 var fs = require('fs');
 
 // add query functions
