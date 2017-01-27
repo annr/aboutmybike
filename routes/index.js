@@ -5,6 +5,7 @@ const pg = require('pg');
 const path = require('path');
 const db = require('../db/queries');
 
+//let connection = 'postgres://localhost:5432/amb';
 let connection = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
@@ -14,10 +15,6 @@ let connection = {
 };
 
 router.get('/', (req, res, next) => {
-  console.log('CUSTOM OUTPUT: ' + req.app.get('env'));
-  if(req.app.get('env') === 'development') {
-    connection = 'postgres://localhost:5432/amb';
-  }
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connection, (err, client, done) => {
