@@ -7,6 +7,7 @@ var options = {
 var pgp = require('pg-promise')(options);
 
 let connectionString = undefined;
+console.log('QUERIES OUTPUT: ' + '"' + process.env.NODE_ENV + '"')
 if(!process.env.NODE_ENV) {
   connectionString = 'postgres://localhost:5432/amb';
 }
