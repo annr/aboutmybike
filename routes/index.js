@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let app = express();
+let router = express.Router();
 const pg = require('pg');
 const path = require('path');
+const db = require('../db/queries');
 
 let connection = {
     host: process.env.RDS_HOSTNAME,
@@ -13,8 +15,8 @@ let connection = {
 
 router.get('/', (req, res, next) => {
   console.log('CUSTOM OUTPUT: ' + req.app.get('env'));
-  if(req.app.get('env') === 'development') {
-    //connection = 'postgres://localhost:5432/amb';
+  if(!process.env.NODE_ENV) {
+    connection = 'postgres://localhost:5432/amb';
   }
   const results = [];
   // Get a Postgres client from the connection pool
@@ -43,5 +45,11 @@ router.get('/', (req, res, next) => {
 // router.get('/', function(req, res, next) {
 //   res.render('index', { title: 'Express' });
 // });
+
+router.get('/api/bikes', db.getAllBikes);
+router.get('/api/bike/:id', db.getSingleBike);
+router.post('/api/bike/create', db.createBike);
+router.put('/api/bike/:id', db.updateBike);
+router.delete('/api/bike/:id', db.removeBike);
 
 module.exports = router;

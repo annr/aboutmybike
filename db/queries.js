@@ -6,8 +6,12 @@ var options = {
 };
 var pgp = require('pg-promise')(options);
 
+let connectionString = undefined;
+if(!process.env.NODE_ENV) {
+  connectionString = 'postgres://localhost:5432/amb';
+}
 // PROD
-let connection = {
+let connectionObject = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
     database: process.env.RDS_DB_NAME,
@@ -15,7 +19,7 @@ let connection = {
     password: process.env.RDS_PASSWORD
 };
 
-var db = pgp(connection || connectionObject);
+var db = pgp(connectionString || connectionObject);
 var fs = require('fs');
 
 // add query functions
