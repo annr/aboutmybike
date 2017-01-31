@@ -14,9 +14,7 @@
  * limitations under the License.
 **/
 
-// Load the SDK and UUID
 var AWS = require('aws-sdk');
-var uuid = require('node-uuid');
 
 var fs = require('fs');
 
@@ -24,7 +22,6 @@ var fs = require('fs');
 var s3 = new AWS.S3();
 
 // Create a bucket and upload something into it
-//var bucketName = 'node-sdk-sample-' + uuid.v4();
 
 var bucketName = 'amb-storage';
 
