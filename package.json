@@ -1,9 +1,14 @@
 {
   "name": "aboutmybike",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "build-css": "node-sass -o dist/css src/scss"
+  },
+  "devDependencies": {
+    "bootstrap": "^4.0.0-alpha.5",
+    "node-sass": "^4.4.0"
   },
   "dependencies": {
     "aws-sdk": "^2.9.0",
@@ -14,7 +19,6 @@
     "express": "~4.14.0",
     "hbs": "~4.0.1",
     "morgan": "~1.7.0",
-    "node-uuid": "^1.4.7",
     "pg": "^6.1.0",
     "pg-promise": "^5.5.2",
     "serve-favicon": "~2.3.0"

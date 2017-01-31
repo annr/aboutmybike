@@ -1,0 +1,169 @@
+// Core variables and mixins
+@import "../../node_modules/bootstrap/scss/custom";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// Reset and dependencies
+@import "../../node_modules/bootstrap/scss/normalize";
+@import "../../node_modules/bootstrap/scss/print";
+
+// Core CSS
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/code";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/tables";
+@import "../../node_modules/bootstrap/scss/forms";
+@import "../../node_modules/bootstrap/scss/buttons";
+
+// Utilities
+@import "../../node_modules/bootstrap/scss/utilities";
+
+// Components
+@import "../../node_modules/bootstrap/scss/nav";
+@import "../../node_modules/bootstrap/scss/navbar";
+@import "../../node_modules/bootstrap/scss/card";
+
+@import 'variables';
+@import 'utilities';
+
+.foo {
+  @include absolute(0, 0, auto, auto);
+}
+
+body {
+  padding-top: 5rem;
+}
+
+.generic-container {
+  padding: 3rem 1.5rem;
+  margin: 0 auto;
+}
+
+.add-bike-form {
+  max-width: 410px;
+}
+
+.form-check-label {
+  padding-left: 1.25rem;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  margin: 0 1em;
+  font-size: 1.4rem;
+}
+
+input[type="file"].form-control-file {
+  display: none;
+}
+
+.preview-bike-photo-wrapper {
+  height: 238px;
+  width: 360px;
+  overflow: hidden;
+}
+
+.form-control-number {
+  width: 70px;
+}
+
+label {
+  font-weight: normal;
+}
+
+legend {
+  font-size: 1.6rem;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+}
+
+.add-bike-photo {
+  opacity: 0.30;
+}
+
+.add-bike-photo:hover {
+  opacity: 0.25;
+}
+
+dl.bike-details dt {
+  float: left;
+  padding-right: 1rem;
+}
+
+.card {
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+}
+
+.card-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-photo-wrapper {
+  width: 100%;
+  overflow: hidden;
+  height: 250px;
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .card-photo-wrapper {
+    height: 200px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-photo-wrapper {
+    height: 145px;
+  }
+  .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 543px) and (max-width: 767px) {
+  .card-photo-wrapper {
+    height: 350px;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 543px) {
+  .card-photo-wrapper {
+    height: 315px;
+  }
+}
+
+@media (min-width: 465px) and (max-width: 499px) {
+  .card-photo-wrapper {
+    height: 290px;
+  }
+}
+
+@media (min-width: 430px) and (max-width: 465px) {
+  .card-photo-wrapper {
+    height: 250px;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 429px) {
+  .card-photo-wrapper {
+    height: 235px;
+  }
+}
+
+@media (max-width: 389px) {
+  .card-photo-wrapper {
+    height: 200px;
+  }
+}
+
+.card-photo {
+    width: 100%;
+}
