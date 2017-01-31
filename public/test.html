@@ -1,31 +1,17 @@
 <html>
-  <head>
-    <title>test static form load to S3</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-  </head>
-  <body>
-
-  <form action="http://amb-storage.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
-    Key to upload: 
-    <input type="input"  name="key" value="photos/${filename}" /><br />
-    <input type="hidden" name="acl" value="public-read" />
-    <input type="hidden" name="success_action_redirect" value="http://amb-storage.s3.amazonaws.com/successful_upload.html" />
-    Content-Type: 
-    <input type="input"  name="Content-Type" value="image/jpeg" /><br />
-    <input type="hidden" name="x-amz-meta-uuid" value="14365123651274" /> 
-    <input type="hidden" name="x-amz-server-side-encryption" value="AES256" /> 
-    <input type="text"   name="X-Amz-Credential" value="AKIAJQHIN57R3M4C6BXQ/20170131/us-west-1/s3/aws4_request" />
-    <input type="text"   name="X-Amz-Algorithm" value="AWS4-HMAC-SHA256" />
-    <input type="text"   name="X-Amz-Date" value="20151229T000000Z" />
-    Tags for File: 
-    <input type="input"  name="x-amz-meta-tag" value="" /><br />
-    <input type="hidden" name="Policy" value="ew0KICAgICJWZXJzaW9uIjogIjIwMTItMTAtMTciLA0KICAgICJTdGF0ZW1lbnQiOiBbDQogICAgICAgIHsNCiAgICAgICAgICAgICJFZmZlY3QiOiAiQWxsb3ciLA0KICAgICAgICAgICAgIkFjdGlvbiI6ICJzMzpMaXN0QWxsTXlCdWNrZXRzIiwNCiAgICAgICAgICAgICJSZXNvdXJjZSI6ICJhcm46YXdzOnMzOjo6KiINCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgIkVmZmVjdCI6ICJBbGxvdyIsDQogICAgICAgICAgICAiQWN0aW9uIjogWw0KICAgICAgICAgICAgICAgICJzMzpMaXN0QnVja2V0IiwNCiAgICAgICAgICAgICAgICAiczM6R2V0QnVja2V0TG9jYXRpb24iDQogICAgICAgICAgICBdLA0KICAgICAgICAgICAgIlJlc291cmNlIjogImFybjphd3M6czM6OjphbWItc3RvcmFnZSINCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgIkVmZmVjdCI6ICJBbGxvdyIsDQogICAgICAgICAgICAiQWN0aW9uIjogWw0KICAgICAgICAgICAgICAgICJzMzpQdXRPYmplY3QiLA0KICAgICAgICAgICAgICAgICJzMzpHZXRPYmplY3QiLA0KICAgICAgICAgICAgICAgICJzMzpEZWxldGVPYmplY3QiDQogICAgICAgICAgICBdLA0KICAgICAgICAgICAgIlJlc291cmNlIjogImFybjphd3M6czM6OjphbWItc3RvcmFnZS8qIg0KICAgICAgICB9DQogICAgXQ0KfQ==" />
-    <input type="hidden" name="X-Amz-Signature" value="QUtJQUpRSElONTdSM000QzZCWFEvMjAxNzAxMzEvdXMtd2VzdC0xL3MzL2F3czRfcmVxdWVzdA==" />
-    File: 
-    <input type="file" name="file" /><br />
-    <!-- The elements after this will be ignored -->
-    <input type="submit" name="submit" value="Upload to Amazon S3" />
-  </form>
-  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="http://s3.amazonaws.com/%3Cbucketname%3E/" method="post" enctype="multipart/form-data">
+<input type="text" name="key" value="testfile.txt" />
+<input type="text" name="acl" value="public-read" />
+<input type="text" name="content-type" value="text/plain" />
+<input type="hidden" name="AWSAccessKeyId" value="AKIAJQHIN57R3M4C6BXQ" />
+<input type="hidden" name="policy" value="ewogICAgIlZlcnNpb24iOiAiMjAxMi0xMC0xNyIsCiAgICAiU3RhdGVtZW50IjogWwogICAgICAgIHsKICAgICAgICAgICAgIlNpZCI6ICJTdG10MTQ4NTgyMjMyNTAwMCIsCiAgICAgICAgICAgICJFZmZlY3QiOiAiQWxsb3ciLAogICAgICAgICAgICAiQWN0aW9uIjogWwogICAgICAgICAgICAgICAgInMzOlB1dE9iamVjdCIsCiAgICAgICAgICAgICAgICAiczM6UHV0T2JqZWN0QWNsIgogICAgICAgICAgICBdLAogICAgICAgICAgICAiUmVzb3VyY2UiOiBbCiAgICAgICAgICAgICAgICAiYXJuOmF3czpzMzo6OmFtYi1zdG9yYWdlLyoiCiAgICAgICAgICAgIF0KICAgICAgICB9CiAgICBdCn0=" />
+<input type="hidden" name="signature" value="p+OG4FuN1hC3S3GcoQbpi6wJ4WI=" />
+<input name="file" type="file" />
+<input name="submit" value="Upload" type="submit" />
+</form>
+</body>
 </html>
