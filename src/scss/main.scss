@@ -55,7 +55,7 @@ body {
 
 /* Custom page header */
 .header {
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
   border-bottom: .05rem solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
@@ -239,8 +239,60 @@ dl.bike-details dt {
   margin-top: 10px;
 }
 
-.bike-detail {
-  width: 706px;
+.card {
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  margin-bottom: 20px;
+}
+
+.card-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-photo-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .card-photo-wrapper {
+    height: 200px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-photo-wrapper {
+    height: 155px;
+  }
+  .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 767px) {
+  .card-photo-wrapper {
+    height: 365px;
+  }
+}
+
+@media (min-width: 465px) and (max-width: 499px) {
+  .card-photo-wrapper {
+    height: 290px;
+  }
+}
+
+@media (max-width: 465px) {
+  .card-photo-wrapper {
+    height: 250px;
+  }
+}
+
+.card-photo {
+    width: 100%;
 }
 
 @media (min-width: 543px) and (max-width: 767px) {

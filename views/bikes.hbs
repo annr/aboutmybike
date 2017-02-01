@@ -1,9 +1,22 @@
-Bikes:
-<ul>
-{{#each results}}
-  <li class="row">
-    {{brand}}
-    <img src="/dist/images/mock/bike{{id}}.jpg">
-  </li>
-{{/each}}
-</ul>
+<div class="row">
+  {{#each results}}
+  <div class="col-md-4">
+  <div class="card">
+  <div class="card-photo-wrapper">
+  <a href="#/view/{{id}}">
+  <img class="card-photo" src="/images/mock/bike{{id}}.jpg" alt="Fuji">
+  </a>
+  </div>
+  <div class="card-block"><h4 class="card-title">{{model}} {{brand}}
+  </h4>
+  <p class="card-text"></p><a href="#/view/{{id}}">View Bike</a>
+  </div>
+  </div>
+  </div>
+  {{/each}}
+</div>
+
+        <br><br>
+  <div class="bike-detail-container">
+     <p><a class="btn btn-lg btn-youll-grow-out-of-it" href="/add" role="button">+ Add Your Bike</a></p>
+  </div>

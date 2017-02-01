@@ -1,1 +1,55 @@
-add a bike.
+<script>
+
+  function handleChange(event) {
+    console.log('wat');
+    var _self = this;
+    // Jquery selector below to reach up to parent is HORRIBLE. Fix.
+    $.ajax({
+        url: "/upload",
+        type: "POST",
+        data: new FormData(event.currentTarget.closest('form')),
+        contentType: false,
+        cache: false,     
+        processData:false,
+        success: function(data) {
+          _self.setState({
+            src: data.tmp_path,
+            uploaderDisplay: "none",
+            previewDisplay: "inline"
+          });
+        }
+    });
+  }
+
+
+</script>
+
+<form class="generic-container add-bike-form" enctype="multipart/form-data">
+
+<div class="form-group">
+<label class="custom-file-upload">
+<input type="file" name="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+<img src="/images/upload.png" width="360" height="238" class="add-bike-photo" style="display: inline;">
+
+<div class="preview-bike-photo-wrapper" style="display: none;">
+<img src="" width="360" class="preview-bike-photo">
+</div><input type="hidden" name="preview_path" id="tmp-photo-path" value="">
+</label>
+</div>
+
+<p><small>All fields are optional</small></p>
+
+<input type="hidden" name="user_id" value="1">
+
+<div class="form-group">
+<label for="saySomething">What do you think about this bike?</label><textarea class="form-control" id="saySomething" rows="5" name="description"></textarea></div>
+
+<div class="form-group">
+<label for="bikeStyle">Style</label><select class="form-control" id="bikeStyle" name="style"><option></option><option>Road</option>
+<option>Mountain</option><option>Hybrid</option><option>Fixed-gear</option><option>Cruiser</option><option>BMX</option><option>Track</option><option>Folding</option><option>Recumbant</option><option>Tandem</option><option>Adult Tricycle</option><option>Other</option></select></div>
+
+<div class="form-group">
+<label for="brand">Brand</label><input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Raleigh"></div><div class="form-group"><label for="model">Model</label><input type="text" class="form-control" id="model" name="model"></div><div class="form-group"><label for="nickname">If your bike had a name it would be...</label><input type="text" class="form-control" id="nickame" name="nickname"></div>
+
+<button type="submit" class="btn btn-primary">Save Basic Details</button>
+</form>

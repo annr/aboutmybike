@@ -8,9 +8,13 @@ let bodyParser = require('body-parser');
 let index = require('./routes/index');
 let bikes = require('./routes/bikes');
 let bike = require('./routes/bike');
-//let add = require('./routes/add');
+let add = require('./routes/add');
 
+let api = require('./api');
+let static = require('.db/static-bikes');
 let app = express();
+
+app.use('/api', api);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,8 +30,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/bikes', bikes);
-app.use('/bike', bike);
-//app.use('/add', add);
+
+app.get('/bike/:id', function(req, res, next) {
+  var id = req.params.id;
+
+  // get bike and pass to bike object.
+
+  res.render('bike', { title: 'About My Bike', layout: 'layout', bike: static.getSingleBike(id) });
+});
+
+app.use('/add', add);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
