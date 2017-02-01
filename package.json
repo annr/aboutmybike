@@ -7,7 +7,7 @@
     "build-css": "node-sass -o public/css src/scss"
   },
   "devDependencies": {
-    "bootstrap": "^4.0.0-alpha.5",
+    "bootstrap": "^4.0.0-alpha.6",
     "node-sass": "^4.4.0"
   },
   "dependencies": {
