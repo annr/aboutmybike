@@ -11,7 +11,8 @@ let bike = require('./routes/bike');
 let add = require('./routes/add');
 
 let api = require('./api');
-let static = require('.db/static-bikes');
+
+let static = require('./db/static-bikes');
 let app = express();
 
 app.use('/api', api);
