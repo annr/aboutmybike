@@ -209,12 +209,15 @@ legend {
 }
 
 .add-bike-photo {
-  opacity: 0.30;
   width: 100%;
 }
 
-.add-bike-photo:hover {
-  opacity: 0.20;
+.upload-graphic {
+  opacity: 0.30;
+}
+
+.upload-graphic:hover {
+  opacity: 0.20; 
 }
 
 dl.bike-details dt {

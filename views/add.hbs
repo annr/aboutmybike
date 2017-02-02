@@ -1,39 +1,35 @@
-<script>
 
-  function handleChange(event) {
-    console.log('wat');
-    var _self = this;
-    // Jquery selector below to reach up to parent is HORRIBLE. Fix.
-    $.ajax({
-        url: "/upload",
-        type: "POST",
-        data: new FormData(event.currentTarget.closest('form')),
-        contentType: false,
-        cache: false,     
-        processData:false,
-        success: function(data) {
-          _self.setState({
-            src: data.tmp_path,
-            uploaderDisplay: "none",
-            previewDisplay: "inline"
-          });
+<script type="text/javascript" defer="defer">
+    $(document).ready(function() {
+      console.log( "ready!" );
+        function filePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#upload-target').attr('src', e.target.result);
+                    //$('#uploadForm').after('<img src="'+e.target.result+'"/>');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
+
+        $("#bike_photo").change(function () {
+          filePreview(this);
+        });
     });
-  }
-
-
 </script>
 
-<form class="generic-container add-bike-form" enctype="multipart/form-data">
+<form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/add">
 
 <div class="form-group">
 <label class="custom-file-upload">
-<input type="file" name="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-<img src="/images/upload.png" width="540" class="add-bike-photo upload-target" style="display: inline;">
+<input type="file" name="bike_photo" id="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+
+<img src="/images/upload.png" width="540" class="add-bike-photo upload-graphic" id="upload-target" style="display: inline;">
 
 <div class="preview-bike-photo-wrapper" style="display: none;">
 <img src="" width="360" class="preview-bike-photo">
-</div><input type="hidden" name="preview_path" id="tmp-photo-path" value="">
+</div>
 </label>
 </div>
 

@@ -10,4 +10,11 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/* Create bike record */
+router.post('/', function(req, res, next) {
+   console.log('Create bike record');
+
+});
+
+
 module.exports = router;
