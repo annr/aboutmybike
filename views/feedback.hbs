@@ -11,14 +11,14 @@
 
 <div class="form-group">
 
-<label for="comments">Comments</label><textarea class="form-control" id="comments" rows="5" name="comments"></textarea>
+<label for="comments">Comments</label><textarea class="form-control" id="comments" rows="5" name="comments" required></textarea>
 
 </div>
 
-<button type="submit" class="btn btn-primary" onclick="send(); return false;">Submit</button>
+<button type="submit" class="btn btn-primary" required>Submit</button>
 
 {{#if formSubmissionSuccess}}
-Thanks!
+<Thanks!
 {{/if}}
 
 </form>

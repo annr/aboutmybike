@@ -32,7 +32,7 @@ sendFeedback = function(email, comments) {
     var params = {
         Message: comments + "\n\nFrom:\n" + email,
         Subject: 'AMB Feedback / Questions Submission',
-        TopicArn: 'arn:aws:sns:us-west-1:619254428467:amb-contact-form'
+        TopicArn: 'arn:aws:sns:us-west-1:619254428467:ElasticBeanstalkNotifications-Environment-aboutmybike-dev'
     };
     sns.publish(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
