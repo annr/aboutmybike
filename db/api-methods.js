@@ -1,27 +1,38 @@
 var db = require('./db');
 
 // add query functions
-function getAllBikes(callback) {
+
+function getAllBikes(req, res, next) {
   db.any('select * from bike')
     .then(function (data) {
-      callback(data);
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved ALL bikes'
+        });
     })
     .catch(function (err) {
-      console.log(err);
+      return next(err);
     });
 }
 
-function getSingleBike(bikeID, callback) {
+function getSingleBike(req, res, next) {
+  var bikeID = parseInt(req.params.id);
   db.one('select * from bike where id = $1', bikeID)
     .then(function (data) {
-      callback(data);
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved ONE bike'
+        });
     })
     .catch(function (err) {
-      console.log(err);
+      return next(err);
     });
 }
 
-/*
 function createBike(req, res, next) {
   var previewPath = req.body.preview_path;
   db.one('insert into bike(user_id, style, brand, model) ' +
@@ -65,22 +76,23 @@ function removeBike(req, res, next) {
   var bikeID = parseInt(req.params.id);
   db.result('delete from bike where id = $1', bikeID)
     .then(function (result) {
+      /* jshint ignore:start */
       res.status(200)
         .json({
           status: 'success',
           message: `Removed ${result.rowCount} bike`
         });
+      /* jshint ignore:end */
     })
     .catch(function (err) {
       return next(err);
     });
 }
-*/
 
 module.exports = {
   getAllBikes: getAllBikes,
-  getSingleBike: getSingleBike//,
-  //createBike: createBike,
-  //updateBike: updateBike,
-  //removeBike: removeBike
+  getSingleBike: getSingleBike,
+  createBike: createBike,
+  updateBike: updateBike,
+  removeBike: removeBike
 };

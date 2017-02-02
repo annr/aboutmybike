@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('./db/queries');
+const db = require('./db/api-methods');
 
 router.get('/bikes', db.getAllBikes);
 router.get('/bike/:id', db.getSingleBike);

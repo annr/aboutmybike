@@ -164,12 +164,12 @@ body {
 }
 
 .generic-container {
-  padding: 3rem 1.5rem;
+  padding: 3rem 0;
   margin: 0 auto;
 }
 
 .add-bike-form {
-  max-width: 410px;
+  max-width: 540px;
 }
 
 .form-check-label {
@@ -210,10 +210,11 @@ legend {
 
 .add-bike-photo {
   opacity: 0.30;
+  width: 100%;
 }
 
 .add-bike-photo:hover {
-  opacity: 0.25;
+  opacity: 0.20;
 }
 
 dl.bike-details dt {

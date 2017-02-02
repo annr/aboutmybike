@@ -4669,11 +4669,11 @@ body {
   color: #e2369c; }
 
 .generic-container {
-  padding: 3rem 1.5rem;
+  padding: 3rem 0;
   margin: 0 auto; }
 
 .add-bike-form {
-  max-width: 410px; }
+  max-width: 540px; }
 
 .form-check-label {
   padding-left: 1.25rem;
@@ -4704,7 +4704,8 @@ legend {
   cursor: pointer; }
 
 .add-bike-photo {
-  opacity: 0.30; }
+  opacity: 0.30;
+  width: 100%; }
 
 .add-bike-photo:hover {
   opacity: 0.25; }

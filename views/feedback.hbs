@@ -1,0 +1,24 @@
+<form class="generic-container" action="/feedback" method="post">
+
+<h4>{{page_title}}</h4>
+<p>This is a work in progress. An interest or help you have for me is appreciated.</p>
+<div class="form-group">
+
+<label for="email">Email</label><input type="email" class="form-control" id="email" name="email">
+
+</div>
+
+
+<div class="form-group">
+
+<label for="comments">Comments</label><textarea class="form-control" id="comments" rows="5" name="comments"></textarea>
+
+</div>
+
+<button type="submit" class="btn btn-primary" onclick="send(); return false;">Submit</button>
+
+{{#if formSubmissionSuccess}}
+Thanks!
+{{/if}}
+
+</form>
