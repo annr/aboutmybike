@@ -11,6 +11,8 @@ let bike = require('./routes/bike');
 let add = require('./routes/add');
 let feedback = require('./routes/feedback');
 
+let upload = require('./routes/upload');
+
 let api = require('./api');
 
 let queries = require('./db/queries');
@@ -73,6 +75,12 @@ app.get('/bike/:id', function(req, res, next) {
 
 app.use('/add', add);
 app.use('/feedback', feedback);
+app.use('/upload', upload);
+
+// app.post('/upload', upload.single('bike_photo'), function (req, res, next) {
+//   res.writeHead(200, {"Content-Type": "application/json"});
+//   res.end(JSON.stringify({ tmp_path: req.file.path }));
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
