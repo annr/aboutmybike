@@ -90,7 +90,7 @@ function removeBike(req, res, next) {
 }
 
 function getAllManufacturers(req, res, next) {
-  db.any('select id as value, name as label from manufacturer')
+  db.any('select id as value, name as label from manufacturer order by market_size')
     .then(function (data) {
       res.status(200).json(data);
     })

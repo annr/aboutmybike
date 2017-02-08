@@ -79,8 +79,8 @@ function removeBike(req, res, next) {
 
 module.exports = {
   getAllBikes: getAllBikes,
-  getSingleBike: getSingleBike//,
-  //createBike: createBike,
+  getSingleBike: getSingleBike,
+  createBike: createBike//,
   //updateBike: updateBike,
   //removeBike: removeBike
 };
