@@ -1,8 +1,35 @@
-
 <script type="text/javascript" defer="defer">
 
 
   $(document).ready(function() {
+
+    $("#uploadForm").submit(function( event ) {
+      event.preventDefault();
+      // submit if image is attached:
+
+      // crappy way for now:
+      if(!$('#upload-target').hasClass('upload-graphic')) {
+        this.submit();
+      } else {
+        $(this).prepend('<div class="alert alert-warning" id="noAttachedPhotoWarning" role="alert">Please attach a photo of your bike to submit the form.</div>');
+      }
+    });
+
+    function filePreview(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#upload-target').removeClass('upload-graphic');
+          $('#upload-target').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+        $('#file_name').val(input.files[0].name);
+        $('#noAttachedPhotoWarning').hide();
+      }
+    }
+    $("#bike_photo").change(function () {
+      filePreview(this);
+    });
 
     function searchAndUpdateBrand(str) {
       var searchBrandAjax = new XMLHttpRequest();
@@ -35,20 +62,6 @@
       getModelsAjax.send();
     }
 
-    function filePreview(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          $('#upload-target').removeClass('upload-graphic');
-          $('#upload-target').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    $("#bike_photo").change(function () {
-      filePreview(this);
-    });
-
     var ajax = new XMLHttpRequest();
     ajax.open("GET", "/api/brands", true);
     ajax.onload = function() {
@@ -57,7 +70,10 @@
         document.querySelector("#brand"),
         { 
           list: list,
-          filter: Awesomplete.FILTER_STARTSWITH
+          filter: Awesomplete.FILTER_STARTSWITH,
+          sort: function(item) { // need to override sort. false doesn't work
+            return item;
+          }
         });
     };
     ajax.send();
@@ -77,21 +93,21 @@
   });
 </script>
 
+
 <form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/add">
 
-<div class="form-group">
+<div class="form-group text-center">
 <label class="custom-file-upload">
 <input type="file" name="bike_photo" id="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
 
 <img src="/images/upload.png" width="540" class="add-bike-photo upload-graphic" id="upload-target" style="display: inline;">
 
-<div class="preview-bike-photo-wrapper" style="display: none;">
-<img src="" width="360" class="preview-bike-photo">
-</div>
+<input type="hidden" name="original_file_name" id="file_name" />
+
 </label>
 </div>
 
-<p><small>All fields are optional</small></p>
+<!-- <p><small>All fields are optional</small></p> -->
 
 <input type="hidden" name="user_id" value="1">
 

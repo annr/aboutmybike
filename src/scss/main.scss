@@ -21,6 +21,7 @@
 @import "../../node_modules/bootstrap/scss/nav";
 @import "../../node_modules/bootstrap/scss/navbar";
 @import "../../node_modules/bootstrap/scss/card";
+@import "../../node_modules/bootstrap/scss/alert";
 
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities";
@@ -31,6 +32,26 @@
 @import 'awesomplete/awesomplete.base';
 @import 'awesomplete/awesomplete';
 //@import 'awesomplete/awesomplete.theme';
+
+//awesomeplete overrides:
+
+.awesomplete {
+    display: block;
+}
+
+.awesomplete mark {
+  background: hsla(327, 100%, 83%, 0.3);
+  padding-right:0;
+}
+
+.awesomplete li:hover mark {
+  background: hsla(327, 100%, 81%, 0.3);
+}
+
+.awesomplete li[aria-selected="true"] mark {
+  background: hsla(8, 91%, 75%, 0.5);
+  color: inherit;
+}
 
 .foo {
   @include absolute(0, 0, auto, auto);
@@ -208,9 +229,6 @@ legend {
   font-size: 1.6rem;
 }
 
-.custom-file-upload {
-  cursor: pointer;
-}
 
 .add-bike-photo {
   width: 100%;
@@ -218,6 +236,7 @@ legend {
 
 .upload-graphic {
   opacity: 0.30;
+  cursor: pointer;
 }
 
 .upload-graphic:hover {

@@ -4721,6 +4721,20 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   color: inherit; }
 
 /*# sourceMappingURL=awesomplete.css.map */
+.awesomplete {
+  display: block; }
+
+.awesomplete mark {
+  background: rgba(255, 168, 216, 0.3);
+  padding-right: 0; }
+
+.awesomplete li:hover mark {
+  background: rgba(255, 158, 211, 0.3); }
+
+.awesomplete li[aria-selected="true"] mark {
+  background: rgba(249, 149, 133, 0.5);
+  color: inherit; }
+
 .foo {
   top: 0;
   right: 0;
@@ -4866,14 +4880,12 @@ label {
 legend {
   font-size: 1.6rem; }
 
-.custom-file-upload {
-  cursor: pointer; }
-
 .add-bike-photo {
   width: 100%; }
 
 .upload-graphic {
-  opacity: 0.30; }
+  opacity: 0.30;
+  cursor: pointer; }
 
 .upload-graphic:hover {
   opacity: 0.20; }

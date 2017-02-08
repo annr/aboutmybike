@@ -5,13 +5,15 @@ var formidable = require('formidable');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 
+let queries = require('../db/queries');
+
 function getFilename() {
   var ts = new Date().getTime();
   // TO-DO: Limit timestamp to a day or so.
   return "aboutmybike-" + ts;
 }
 
-/* GET bike listing. */
+/* GET upload form. */
 router.get('/', function(req, res, next) {
   res.render('add', {
       app_name: res.locals.app.name,
@@ -23,6 +25,12 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var bucketName = 'amb-storage';
 
+  var rootFolder = '/dev';
+  if(process.env.RDS_HOSTNAME !== undefined) {
+    rootFolder = '/photos';
+  }
+  var destinationFolder = rootFolder + '/new_folder/2017-001';
+
   // TO-DO: add user id to file name so that the amount of photo uploads are controlled 
   // (the last uploaded be the user is overwritten)
 
@@ -32,23 +40,26 @@ router.post('/', function(req, res, next) {
 
   form.parse(req, function(err, fields, files) {
 
-    var photoPath = files.bike_photo.path;
+    var localPath = files.bike_photo.path;
     var isSupportedImage = (files.bike_photo.type === 'image/jpeg') || (files.bike_photo.type === 'image/png');
     var extension = files.bike_photo.type.split('/')[1];
     if (extension === 'jpeg') extension = 'jpg'; 
     var filename = getFilename() + '.' + extension;
-    if(photoPath && isSupportedImage) {
+    if(localPath && isSupportedImage) {
 
       // I'm not sure if this readFile is necessary or if formidable will stream the data.
-      fs.readFile(photoPath, (err, data) => {
+      fs.readFile(localPath, (err, data) => {
         if (err) throw err;
-        console.log('gonna do it');
-        var params = {Bucket: bucketName, Key: filename, Body: data};
+        var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: data};
         s3.putObject(params, function(err, data) {
           if (err)
             console.log(err)
           else
-            console.log("Successfully uploaded " + filename + ".jpg");
+            console.log("Successfully uploaded " + filename);
+            queries.createBike(fields, destinationFolder + filename);
+
+            res.redirect('/bike/'+1);
+
         });
       });
 
