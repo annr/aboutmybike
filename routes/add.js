@@ -29,7 +29,7 @@ router.post('/', function(req, res, next) {
   if(process.env.RDS_HOSTNAME !== undefined) {
     rootFolder = '/photos';
   }
-  var destinationFolder = rootFolder + '/new_folder/2017-001';
+  var destinationFolder = rootFolder + '/2017-001';
 
   // TO-DO: add user id to file name so that the amount of photo uploads are controlled 
   // (the last uploaded be the user is overwritten)
@@ -56,10 +56,10 @@ router.post('/', function(req, res, next) {
             console.log(err)
           else
             console.log("Successfully uploaded " + filename);
-            queries.createBike(fields, destinationFolder + filename);
-
-            res.redirect('/bike/'+1);
-
+            queries.createBike(fields, destinationFolder + '/' + filename, function(data) {
+              console.log('got id ' + data.id );
+              res.redirect('/bike/'+data.id);
+            });
         });
       });
 

@@ -10,6 +10,7 @@ router.get('/:id', function(req, res, next) {
   queries.getSingleBike(id, function(data) {
     var bike = data;
     var detailString = [];
+    var s3Url = 'https://s3-us-west-1.amazonaws.com/amb-storage';
 
     bike.title = (bike.brand + " " + bike.model).trim();
 
@@ -28,6 +29,8 @@ router.get('/:id', function(req, res, next) {
       detailString.push(bike.brakes + ' brakes');
     }
     bike.details = detailString.join(', ');
+
+    bike.photo_url = s3Url + bike.main_photo_path;
 
     res.render('bike', {
       app_name: res.locals.app.name,

@@ -34,21 +34,15 @@ function getSingleBike(req, res, next) {
 }
 
 function createBike(req, res, next) {
-  var previewPath = req.body.preview_path;
-  db.one('insert into bike(user_id, style, brand, model) ' +
-      'values($1, $2, $3, $4) returning id', [parseInt(req.body.user_id), req.body.style, req.body.brand, req.body.model])
+  console.log('id ' + parseInt(req.body.user_id));
+  db.one('insert into bike(user_id, main_photo_path) ' +
+      'values($1, $2) returning id', [parseInt(req.body.user_id), req.body.photo_url])
     .then(function (data) {
-      var bikeId = data.id;
-      var newDir = 'dist/images/mock/';
-      var extension = previewPath.split('.')[1];
-      var newPath = newDir+data.id+'.'+extension;
-      fs.rename(previewPath, newPath, function() {
-        console.log('successfully moved preview image');
-      });
       res.status(200)
         .json({
           status: 'success',
-          bikeId: bikeId
+          data: data.id,
+          message: 'Added bike'
         });
     })
     .catch(function (err) {
