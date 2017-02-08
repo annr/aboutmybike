@@ -8,5 +8,8 @@ router.get('/bike/:id', db.getSingleBike);
 router.post('/bike/create', db.createBike);
 router.put('/bike/:id', db.updateBike);
 router.delete('/bike/:id', db.removeBike);
+router.get('/brands', db.getAllManufacturers);
+router.get('/brand_by_name/:name', db.getManufacturerByName);
+router.get('/models_by_brand/:id', db.getModelsByBrandId);
 
 module.exports = router;

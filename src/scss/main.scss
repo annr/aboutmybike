@@ -28,6 +28,10 @@
 @import 'variables';
 @import 'utilities';
 
+@import 'awesomplete/awesomplete.base';
+@import 'awesomplete/awesomplete';
+//@import 'awesomplete/awesomplete.theme';
+
 .foo {
   @include absolute(0, 0, auto, auto);
 }

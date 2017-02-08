@@ -1,22 +1,80 @@
 
 <script type="text/javascript" defer="defer">
-    $(document).ready(function() {
-      console.log( "ready!" );
-        function filePreview(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#upload-target').removeClass('upload-graphic');
-                    $('#upload-target').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
 
-        $("#bike_photo").change(function () {
-          filePreview(this);
-        });
+
+  $(document).ready(function() {
+
+    function searchAndUpdateBrand(str) {
+      var searchBrandAjax = new XMLHttpRequest();
+      // use the value they entered to try to figure out the brand.
+      searchBrandAjax.open("GET", "/api/brand_by_name/" + str, true);
+      searchBrandAjax.onload = function() {
+        var result = JSON.parse(searchBrandAjax.responseText);
+        $('#brand_id').val(result.data.id);
+        result.status === 'success' ? $('#brand').val(result.data.name) : $('#brand').val(result.data.name + ' "' + str + '"');
+        getBrandModels(result.data.id);
+      };
+      searchBrandAjax.send();
+    }
+
+    function getBrandModels(brand_id) {
+      var getModelsAjax = new XMLHttpRequest();
+      // use the value they entered to try to figure out the brand.
+      getModelsAjax.open("GET", "/api/models_by_brand/" + brand_id, true);
+      getModelsAjax.onload = function() {
+        var list = JSON.parse(getModelsAjax.responseText);
+        if(list.length > 0) {
+          new Awesomplete(
+            document.querySelector("#model"),
+            { 
+              list: list,
+              filter: Awesomplete.FILTER_STARTSWITH
+            });
+        }
+      };
+      getModelsAjax.send();
+    }
+
+    function filePreview(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#upload-target').removeClass('upload-graphic');
+          $('#upload-target').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    $("#bike_photo").change(function () {
+      filePreview(this);
     });
+
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "/api/brands", true);
+    ajax.onload = function() {
+      var list = JSON.parse(ajax.responseText);
+      new Awesomplete(
+        document.querySelector("#brand"),
+        { 
+          list: list,
+          filter: Awesomplete.FILTER_STARTSWITH
+        });
+    };
+    ajax.send();
+
+    $("#brand").change(function () {
+      searchAndUpdateBrand(this.value);
+    });
+
+    addEventListener("awesomplete-select", function(e) {
+      if(e.target.name === 'brand') {
+        getBrandModels(e.text.value);
+      }
+      var hiddenFieldToUpdate = '#' + e.target.name + '_id';
+      $(hiddenFieldToUpdate).val(e.text.value);
+    }, false);
+
+  });
 </script>
 
 <form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/add">
@@ -38,7 +96,7 @@
 <input type="hidden" name="user_id" value="1">
 
 <div class="form-group">
-<label for="saySomething">What about your bike? (You can say whatever)</label>
+<label for="saySomething">What about your bike? (Say anything)</label>
 <!--<label for="saySomething">You can say whatever you like about this bike</label>--><textarea class="form-control" id="saySomething" rows="5" name="description"></textarea></div>
 
 <div class="form-group">
@@ -46,7 +104,23 @@
 <option>Mountain</option><option>Hybrid</option><option>Fixed-gear</option><option>Cruiser</option><option>BMX</option><option>Track</option><option>Folding</option><option>Recumbant</option><option>Tandem</option><option>Adult Tricycle</option><option>Other</option></select></div>
 
 <div class="form-group">
-<label for="brand">Brand</label><input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Huffy"></div><div class="form-group"><label for="model">Model</label><input type="text" class="form-control" id="model" name="model"></div><div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname"></div>
+
+<label for="brand">Brand</label>
+<input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Huffy" class="awesomplete" />
+<input type="hidden" id="brand_id" name="brand_id" />
+
+</div>
+
+<div class="form-group">
+
+<label for="model">Model</label>
+<input type="text" class="form-control" id="model" name="model">
+<input type="hidden" id="model_id" name="model_id" />
+
+</div>
+
+
+<div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname"></div>
 
 <button type="submit" class="btn btn-primary">Save Basic Details</button>
 </form>

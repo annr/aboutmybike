@@ -89,10 +89,58 @@ function removeBike(req, res, next) {
     });
 }
 
+function getAllManufacturers(req, res, next) {
+  db.any('select id as value, name as label from manufacturer')
+    .then(function (data) {
+      res.status(200).json(data);
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
+function getManufacturerByName(req, res, next) {
+  var name = req.params.name;
+  db.one("select * from manufacturer where name ilike " + "'" + name + "%' limit 1")
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved Brand'
+        });
+    })
+    .catch(function (err) {
+      res.status(404)
+        .json({
+          status: 'error',
+          message: 'No data returned',
+          data: {
+            id: 0,
+            name: "New or Unknown Brand"
+          }
+        });
+    });
+}
+
+function getModelsByBrandId(req, res, next) {
+  var manuID = parseInt(req.params.id);
+  db.any('select id as value, name as label from model where manufacturer_id = $1', manuID)
+    .then(function (data) {
+      res.status(200).json(data);
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
 module.exports = {
   getAllBikes: getAllBikes,
   getSingleBike: getSingleBike,
   createBike: createBike,
   updateBike: updateBike,
-  removeBike: removeBike
+  removeBike: removeBike,
+  getAllManufacturers: getAllManufacturers,
+  getManufacturerByName: getManufacturerByName,
+  getModelsByBrandId: getModelsByBrandId
 };

@@ -1,0 +1,63 @@
+var commonBikeBrands = [
+  "Trek",
+  "Schwinn",
+  "Giant",
+  "Cannondale",
+  "Mongoose",
+  "Raleigh",
+  "Specialized",
+  "Diamondback",
+  "Fuji",
+  "Haro",
+  "Shimano",
+  "Huffy", 
+  "Gary Fisher", 
+  "Ellsworth", 
+  "Klein Bikes", 
+  "Jamis", 
+  "Bianchi",
+  "GT Bicycles",
+  "Rocky Mountain Bicycles",
+  "SCOTT"
+];
+
+var lessCommonBikeBrands = [
+  "Marin Bikes",
+  "Santa Cruz",
+  "Felt",
+  "Moots Cycles",
+  "3T",
+  "Colnago",
+  "Parlee",
+  "Shinola",
+  "Handsome Cycles",
+  "All City",
+  "Mission Bicycles",
+  "Aegis",
+  "Banshee",
+  "Bridgestone",
+  "Breezer",
+  "Cervélo",
+  "Dahon",
+  "Electra",
+  "Wheeler",
+  "Gitane",
+  "KHS",
+  "Kona",
+  "Linus",
+  "PUBLIC bikes",
+  "Masi",
+  "Mikkelsen",
+  "Motobecane",
+  "Peugeot",
+  "Panasonic",
+  "Salsa",
+  "Soma",
+  "Voodoo",
+  "Yeti"
+];
+
+exports.brands = {
+  common: commonBikeBrands,
+  lessCommon: lessCommonBikeBrands
+}
