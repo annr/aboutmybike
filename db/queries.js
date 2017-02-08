@@ -21,30 +21,35 @@ function getSingleBike(bikeID, callback) {
     });
 }
 
-/*
-function createBike(req, res, next) {
-  var previewPath = req.body.preview_path;
+function createBike(fields, photoPath) {
+  console.log('create the bike record...');
+  
+  console.log(fields);
+
   db.one('insert into bike(user_id, style, brand, model) ' +
       'values($1, $2, $3, $4) returning id', [parseInt(req.body.user_id), req.body.style, req.body.brand, req.body.model])
     .then(function (data) {
-      var bikeId = data.id;
-      var newDir = 'dist/images/mock/';
-      var extension = previewPath.split('.')[1];
-      var newPath = newDir+data.id+'.'+extension;
-      fs.rename(previewPath, newPath, function() {
-        console.log('successfully moved preview image');
-      });
-      res.status(200)
-        .json({
-          status: 'success',
-          bikeId: bikeId
-        });
+      return data.id;
+      // var bikeId = data.id;
+      // var newDir = 'dist/images/mock/';
+      // var extension = previewPath.split('.')[1];
+      // var newPath = newDir+data.id+'.'+extension;
+      // fs.rename(previewPath, newPath, function() {
+      //   console.log('successfully moved preview image');
+      // });
+      // res.status(200)
+      //   .json({
+      //     status: 'success',
+      //     bikeId: bikeId
+      //   });
     })
     .catch(function (err) {
       return next(err);
     });
+
 }
 
+/*
 function updateBike(req, res, next) {
   db.none('update bike set style=$1, brand=$2, model=$3, nickname=$4 where id=$5',
     [req.body.style, req.body.brand, req.body.model,
