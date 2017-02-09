@@ -17,7 +17,7 @@ function getAllBikes(req, res, next) {
     });
 }
 
-function getSingleBike(req, res, next) {
+function getBike(req, res, next) {
   var bikeID = parseInt(req.params.id);
   db.one('select * from bike where id = $1', bikeID)
     .then(function (data) {
@@ -130,7 +130,7 @@ function getModelsByBrandId(req, res, next) {
 
 module.exports = {
   getAllBikes: getAllBikes,
-  getSingleBike: getSingleBike,
+  getBike: getBike,
   createBike: createBike,
   updateBike: updateBike,
   removeBike: removeBike,

@@ -37,8 +37,15 @@
       searchBrandAjax.open("GET", "/api/brand_by_name/" + str, true);
       searchBrandAjax.onload = function() {
         var result = JSON.parse(searchBrandAjax.responseText);
-        $('#brand_id').val(result.data.id);
-        result.status === 'success' ? $('#brand').val(result.data.name) : $('#brand').val(result.data.name + ' "' + str + '"');
+        if (result.status === 'success') {
+          $('#brand_id').val(result.data.id);
+          // for some brands you may want to transform the #brand field text
+          // but I can't think how, because brand vs manufacturer is usu. the shorter string:
+          // Trek vs Trek Bicycle Foundation
+        } else {
+          // user may have previously selected another brand
+          $('#brand_id').val('');
+        }
         getBrandModels(result.data.id);
       };
       searchBrandAjax.send();

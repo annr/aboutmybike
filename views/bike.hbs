@@ -14,7 +14,7 @@
       {{#if bike.description}}
  <div class="row">
 <div class="col-lg-12">
-        <h5>About {{bike.id}}'s bike</h5>
+{{!--         <h5>About {{bike.user_id}}'s bike</h5> --}}
         <p>{{bike.description}}</p>
       </div>
 
@@ -27,9 +27,9 @@
          
 			<dl class="row">
 
-			{{#if bike.name}}
+			{{#if bike.nickname}}
 			  <dt class="col-sm-3">Name</dt>
-			  <dd class="col-sm-9">{{bike.name}}</dd>
+			  <dd class="col-sm-9">{{bike.nickname}}</dd>
 			{{/if}}
 
 			{{#if bike.details}}

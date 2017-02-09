@@ -30,7 +30,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){
-  res.locals.app = { name : "About My Bike" };
+  res.locals.app = {
+    name : "About My Bike",
+    s3Url: "https://s3-us-west-1.amazonaws.com/amb-storage"
+  };
+
   next();
 })
 

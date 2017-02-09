@@ -4,8 +4,7 @@ var router = express.Router();
 const db = require('./db/api-methods');
 
 router.get('/bikes', db.getAllBikes);
-router.get('/bike/:id', db.getSingleBike);
-router.post('/createbike', db.createBike);
+router.get('/bike/:id', db.getBike);
 router.put('/bike/:id', db.updateBike);
 router.delete('/bike/:id', db.removeBike);
 router.get('/brands', db.getAllManufacturers);

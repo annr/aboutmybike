@@ -56,9 +56,14 @@ router.post('/', function(req, res, next) {
             console.log(err)
           else
             console.log("Successfully uploaded " + filename);
-            queries.createBike(fields, destinationFolder + '/' + filename, function(data) {
-              console.log('got id ' + data.id );
-              res.redirect('/bike/'+data.id);
+            queries.createBike(fields, destinationFolder + '/' + filename, function(err, data) {
+              if(err) {
+                next(err);
+              } else {
+                // go to the addmore page with the bike object
+                //res.render('addmore', data);
+                res.redirect('/bike/'+data.id);
+              }
             });
         });
       });
