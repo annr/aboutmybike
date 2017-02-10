@@ -100,7 +100,7 @@ body {
 /* Customize container */
 @media (min-width: 48em) {
   .container {
-    max-width: 46rem;
+   /* max-width: 46rem; */
   }
 }
 .container-narrow > hr {
@@ -189,12 +189,8 @@ body {
 }
 
 .generic-container {
-  padding: 1.5rem 0;
+  padding: 2rem 0;
   margin: 0 auto;
-}
-
-.add-bike-form {
-  max-width: 540px;
 }
 
 .form-check-label {

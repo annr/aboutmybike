@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 let queries = require('../db/queries');
 
-/* GET bike listing. */
+let common = require('../db/queries');
+
+/* GET bike listing */
 router.get('/:id', function(req, res, next) {
 
   var id = req.params.id;
