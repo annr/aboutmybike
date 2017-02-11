@@ -71,17 +71,20 @@ body {
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
+/* currently the AMB layout gets padding from "container". this is commented.
 .header,
 .marketing,
 .footer {
   padding-right: 1rem;
   padding-left: 1rem;
 }
+*/
 
 /* Custom page header */
 .header {
   /* padding-bottom: 1rem; */
   border-bottom: .05rem solid #e5e5e5;
+  margin-bottom: 2rem;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -90,11 +93,20 @@ body {
   line-height: 3rem;
 }
 
+/* hack! */
+.nav-link {
+    padding: 0 1em 1em;
+}
+
 /* Custom page footer */
 .footer {
   padding-top: 1.5rem;
   color: #777;
   border-top: .05rem solid #e5e5e5;
+}
+
+.container {
+ min-width: 480px;
 }
 
 /* Customize container */
@@ -136,7 +148,7 @@ body {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
@@ -157,10 +169,11 @@ body {
 }
 
 .amb-text-logo a {
-  font-family: Didot;
+  font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
   text-transform: uppercase;
   line-height: 1.7;
   color: #333;
+  line-height: 120%;
 }
 
 .amb-text-logo a:hover {
@@ -189,7 +202,7 @@ body {
 }
 
 .generic-container {
-  padding: 2rem 0;
+  padding: 0.9rem;
   margin: 0 auto;
 }
 
@@ -230,7 +243,7 @@ legend {
   width: 100%;
 }
 
-.upload-graphic {
+.upload-graphic, .upload-target-wrapper {
   opacity: 0.30;
   cursor: pointer;
 }
@@ -244,17 +257,8 @@ dl.bike-details dt {
   padding-right: 1rem;
 }
 
-.card {
-  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
-  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
-  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
-}
-
-.card-title {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.upload-target-wrapper  {
+  position: relative;
 }
 
 .bike-detail-container {
@@ -262,11 +266,30 @@ dl.bike-details dt {
   margin-top: 10px;
 }
 
+
+/* CARD STYLES */
+/* an attempt to make a simple, temp. foolproof but decent grid, using the solution here:
+http://stackoverflow.com/questions/10989238/center-align-image-within-div-horizontally
+codepen here: http://jsfiddle.net/marvo/3k3CC/2/
+
+The height on <img> is set to 100%, and the height of the photo wrapper is set to a specific height
+at a breakpoint. The width of the img is determined by the browser and centered the wrapper
+
+  display : block;
+  margin : auto;
+
+The values favor 4x3 ratio; taller will get centered and that images that are wider,
+they'll get cut off horiz on one side. not ideal, but maybe a fine solution until you crop
+images for the grid.
+
+Another consideration is that all of the images use the same size photos but can be displayed vastly
+different: ~500x380 vs 206x154 (!!!) FIX THIS.
+*/
+
 .card {
   -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
   -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
-  margin-bottom: 20px;
 }
 
 .card-title {
@@ -276,47 +299,86 @@ dl.bike-details dt {
   text-overflow: ellipsis;
 }
 
-.card-photo-wrapper {
-  width: 100%;
+.card-text {
+  font-size: smaller;
   overflow: hidden;
+  text-overflow: ellipsis;
+  height: 40px;
+}
+
+.card {
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-photo {
+  display : block;
+  margin : auto;
+}
+
+.card-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+.card-photo-wrapper {
+  display: inline-block;
+  overflow:hidden;
+}
+
+.card-photo-wrapping-link {
+  text-align: center;
+}
+
+/* largest size catch-all */
+
+.card-photo-wrapper {
+  height: 261px;
+  width: 348px;
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {
   .card-photo-wrapper {
-    height: 200px;
+    height: 216px;
+    width: 288px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .card-photo-wrapper {
-    height: 155px;
+    width: 208px;
+    height: 156px;
   }
   .card-title {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 }
 
-@media (min-width: 500px) and (max-width: 767px) {
+@media (min-width: 542px) and (max-width: 767px) {
   .card-photo-wrapper {
-    height: 365px;
+    height: 381px;
+    width: 508px;
   }
 }
 
-@media (min-width: 465px) and (max-width: 499px) {
+/* just between min (480) and 541 */
+@media (max-width: 541px) {
   .card-photo-wrapper {
-    height: 290px;
+    height: 335px;
+    width: 448px;
   }
 }
 
-@media (max-width: 465px) {
-  .card-photo-wrapper {
-    height: 250px;
-  }
-}
+/* END CARD STYLE */
 
-.card-photo {
-    width: 100%;
-}
+
+
 
 .bike-detail, .add-bike-photo {
   max-width: 700px;

@@ -1,18 +1,26 @@
 <div class="row">
   {{#each results}}
   <div class="col-md-4">
+
+
   <div class="card">
+    <a href="/bike/{{id}}" class="card-photo-wrapping-link">
+
   <div class="card-photo-wrapper">
-  <a href="/bike/{{id}}">
-  <img class="card-photo" src="https://s3-us-west-1.amazonaws.com/amb-storage{{main_photo_path}}" alt="Fuji">
-  </a>
+    <img class="card-photo" height="100%" src="https://s3-us-west-1.amazonaws.com/amb-storage{{main_photo_path}}" alt="Fuji">
   </div>
-  <div class="card-block"><h4 class="card-title">{{model}} {{brand}}
-  </h4>
-  <p class="card-text"></p><a href="/bike/{{id}}">View Bike</a>
+  <div class="card-block">
+    <h6 class="card-title">
+    <a href="/bike/{{id}}">{{title}}</a>
+  </h6>
+  <p class="card-text">{{description}}</p>
   </div>
+
   </div>
+
+
   </div>
+
   {{/each}}
 </div>
 
