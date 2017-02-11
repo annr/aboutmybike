@@ -45,10 +45,19 @@
 
 			</dl>
 
+   </div>
+
+         {{#if bike.description}}
+      <div class="col-lg-6 quote">
+      <img src="/images/open-quote.png" class="curly-big">
+      {{!--         <h5>About {{bike.user_id}}'s bike</h5> --}}
+        <p>{{bike.description}}</p>
       </div>
 
-      </div>
+      {{/if}}
 
+
+</div>
 
     <hr>
 

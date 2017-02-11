@@ -61,8 +61,8 @@ router.post('/', function(req, res, next) {
                 next(err);
               } else {
                 // go to the addmore page with the bike object
-                res.redirect('addmore', data);
-                //res.redirect('/bike/'+data.id);
+                //res.redirect('addmore', data);
+                res.redirect('/bike/'+data.id);
               }
             });
         });

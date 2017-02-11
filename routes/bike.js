@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let queries = require('../db/queries');
 
-let common = require('../db/queries');
+let helper = require('../helpers/bike');
 
 /* GET bike listing */
 router.get('/:id', function(req, res, next) {
@@ -16,7 +16,7 @@ router.get('/:id', function(req, res, next) {
       var bike = data;
       var detailString = [];
 
-      bike.title = (bike.brand + " " + bike.model).trim();
+      bike.title = parseInt(bike.user_id) + "'s " + helper.getTitle(bike);
 
       bike.city = "San Francisco";
       bike.era = "1980s";
