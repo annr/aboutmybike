@@ -22,6 +22,7 @@
 @import "../../node_modules/bootstrap/scss/navbar";
 @import "../../node_modules/bootstrap/scss/card";
 @import "../../node_modules/bootstrap/scss/alert";
+@import "../../node_modules/bootstrap/scss/modal";
 
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities";
@@ -158,6 +159,31 @@ body {
 
 /* END JUMBOTRON NARROW OVERRIDE STYLES */
 
+/* THIS MAY BE A TEST */
+/* THE HTML IS COMMENTED OUT IN ADD.HBS */
+/*
+.wheel-hint {
+  position: absolute;
+  display: none;
+  line-height: 120%;
+}
+
+@media (min-width: 768px) {
+  .wheel-hint {
+    display: block;
+  }
+
+  #right-wheel {
+    top: 431px;
+    left: 450px;
+  }
+
+  #left-wheel {
+    top: 160px;
+    left: 20px;
+  }
+}
+*/
 
 .curly-big {
   position: absolute;
@@ -244,12 +270,19 @@ legend {
 }
 
 .upload-graphic, .upload-target-wrapper {
-  opacity: 0.30;
+  opacity: 0.25;
   cursor: pointer;
 }
 
+.help-block {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #737373;
+}
+
 .upload-graphic:hover {
-  opacity: 0.20; 
+  opacity: 0.18;
 }
 
 dl.bike-details dt {
@@ -311,7 +344,6 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
   margin-bottom: 20px;
-  text-align: center;
 }
 
 .card-photo {
@@ -327,11 +359,6 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   margin-bottom: 0.5rem;
 }
 
-.card-photo-wrapper {
-  display: inline-block;
-  overflow:hidden;
-}
-
 .card-photo-wrapping-link {
   text-align: center;
 }
@@ -341,6 +368,7 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 .card-photo-wrapper {
   height: 261px;
   width: 348px;
+  overflow:hidden;
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {

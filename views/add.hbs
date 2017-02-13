@@ -101,28 +101,34 @@
 </script>
 
 
-<form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/add">
+<h4>Let's make your bike page!</h4>
+
+<p>Attach a <strong>clear</strong> photo of your bicycle using this image as your guide</p>
+
 
 <div class="row">
 
+  <form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/add">
 
-<div class="col-md-6">
+      <div class="form-group text-center" id="step1">
+        <label class="custom-file-upload">
+        <input type="file" name="bike_photo" id="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
 
-    <div class="form-group text-center">
-      <label class="custom-file-upload">
-      <input type="file" name="bike_photo" id="bike_photo" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+        <div class="upload-target-wrapper">
 
-      <img src="/images/upload.png" width="540" class="add-bike-photo upload-graphic" id="upload-target" style="display: inline;">
+{{!--         <div class="wheel-hint" id="right-wheel">&#8593;<br>And one wheel bascially here</div>
+        <div class="wheel-hint" id="left-wheel">One wheel bascially here<br>&#8595;</div> --}}
 
-      <input type="hidden" name="original_file_name" id="file_name" />
+        <img src="/images/example.png" width="540" class="add-bike-photo upload-graphic" id="upload-target" style="display: inline;">
+        <p>(Primary photo must be from the side)</p>
+        </div>
+        <input type="hidden" name="original_file_name" id="file_name" />
 
-      </label>
-    </div>
+        </label>
+      </div>
+  </form>
 
-</div>
 
-
-<div class="col-md-6">
     <input type="hidden" name="user_id" value="1">
 
     <div class="form-group">
@@ -148,13 +154,6 @@
 
     <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname"></div>
 
-    <button type="submit" class="btn btn-primary">Save Basics</button>
-
-
-</div>
+      <button type="submit" class="btn btn-primary">Save Basics</button>
 
 </div>
-
-
-
-</form>

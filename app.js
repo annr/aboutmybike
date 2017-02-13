@@ -9,6 +9,7 @@ let index = require('./routes/index');
 let bikes = require('./routes/bikes');
 let bike = require('./routes/bike');
 let add = require('./routes/add');
+let add_some = require('./routes/add_some');
 let feedback = require('./routes/feedback');
 
 let api = require('./api');
@@ -43,6 +44,7 @@ app.use('/bikes', bikes);
 app.use('/bike', bike);
 
 app.use('/add', add);
+app.use('/add_some', add_some);
 app.use('/feedback', feedback);
 
 // app.post('/upload', upload.single('bike_photo'), function (req, res, next) {
