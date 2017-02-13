@@ -246,12 +246,6 @@ input[type="file"].form-control-file {
   display: none;
 }
 
-.preview-bike-photo-wrapper {
-  height: 238px;
-  width: 360px;
-  overflow: hidden;
-}
-
 .form-control-number {
   width: 70px;
 }
@@ -264,24 +258,15 @@ legend {
   font-size: 1.6rem;
 }
 
-
 .add-bike-photo {
   width: 100%;
-}
-
-.upload-graphic, .upload-target-wrapper {
-  opacity: 0.25;
   cursor: pointer;
 }
 
-.help-block {
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  color: #737373;
+.upload-placeholder {
+  opacity: 0.25;
 }
-
-.upload-graphic:hover {
+.upload-placeholder:hover {
   opacity: 0.18;
 }
 
@@ -290,15 +275,32 @@ dl.bike-details dt {
   padding-right: 1rem;
 }
 
-.upload-target-wrapper  {
+#upload-target-wrapper  {
   position: relative;
+}
+
+#choose_photo_help {
+    background-color: #ddd;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 0;
+    width: 100%;
+    font-size: smaller;
+    padding: 8px;
+    opacity: 0.5;
+}
+
+.help-block {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #737373;  
 }
 
 .bike-detail-container {
   text-align: center;
   margin-top: 10px;
 }
-
 
 /* CARD STYLES */
 /* an attempt to make a simple, temp. foolproof but decent grid, using the solution here:
@@ -386,6 +388,7 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   .card-title {
     font-size: 0.9rem;
   }
+
 }
 
 @media (min-width: 542px) and (max-width: 767px) {
