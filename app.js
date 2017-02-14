@@ -8,9 +8,10 @@ let bodyParser = require('body-parser');
 let index = require('./routes/index');
 let bikes = require('./routes/bikes');
 let bike = require('./routes/bike');
-let add = require('./routes/add');
-let add_some = require('./routes/add_some');
 let feedback = require('./routes/feedback');
+
+let edit = require('./routes/edit');
+let upload = require('./routes/upload');
 
 let api = require('./api');
 
@@ -43,9 +44,18 @@ app.use('/', index);
 app.use('/bikes', bikes);
 app.use('/bike', bike);
 
-app.use('/add', add);
-app.use('/add_some', add_some);
 app.use('/feedback', feedback);
+
+//app.get('/:var(add|edit)', edit)
+app.use(['/add', '/edit'], edit);
+
+//app.use('/edit', edit);
+//app.use('/add', add);
+// app.use(['/abcd', '/xyza', /\/lmn|\/pqr/], function (req, res, next) {
+//   next();
+// });
+
+app.use('/upload', upload);
 
 // app.post('/upload', upload.single('bike_photo'), function (req, res, next) {
 //   res.writeHead(200, {"Content-Type": "application/json"});

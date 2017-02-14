@@ -8,23 +8,17 @@ let reasons = [
   { "id" : 4, "label": "exercise"},
   { "id" : 5, "label": "social"},
   { "id" : 6, "label": "style"},
-  { "id" : 7, "label": "adventure"},
   { "id" : 8, "label": "thrill"},
-  { "id" : 9, "label": "freedom"}
+  { "id" : 7, "label": "The feeling of being in motion again. It's the most extraordinatry thing in the world."}
 ];
 
 let _ = require('../public/javascripts/lodash');
-
 
 function transformForDisplay(data) {
   var bike = data;
   var detailString = [];
 
   bike.title = parseInt(bike.user_id) + "'s " + getTitle(bike);
-
-  if(bike.type_ids) {
-    bike.type = getType(bike.type_ids);
-  }
 
   bike.for = getReasonsList(bike.reason_ids);
 
@@ -45,20 +39,44 @@ function transformForDisplay(data) {
   return bike;
 }
 
-function getType(type_ids) {
-  // we only allow one type for now, even though we've created the postgres field as an array
-  if (!type_ids) return null;
-  return _.find(types, { 'id': parseInt(type_ids[0]) }).label;
-}
-
 function getReasonsList(reason_ids) {
   var reasonsSaved = _.map(_.filter(reasons, function(reason) { return reason_ids.indexOf(reason.id) !== -1 } ), 'label');
   return reasonsSaved.join(', ');
 }
 
+function getTypes(type_id) {
+  // I think this can be done much more efficeintly.
+
+  let newTypes = [];
+
+  _.map(types, function(t) {
+    var z = { id: t.id, label: t.label };
+    if(t.id === type_id) {
+      z.selected = true;
+    }
+    if(t.related_type_ids) {
+      z.label = ' - ' + t.label;
+    }
+    newTypes.push(z);
+  });
+
+  return newTypes;
+}
+
+function getReasons(reason_ids) {
+  // transform reasons to add checked state
+  reasons = _.map(reasons, function(r) {
+    if(reason_ids.indexOf(r.id) !== -1) {
+      r.checked = true;
+    }
+    return r;
+  });
+  return reasons;
+}
+
 function getTitle(bike) {
   var title = '';
-  var type = getType(bike.type_ids);
+  var type = bike.type;
 
   if(!!bike.manufacturer_name) {
     title += bike.manufacturer_name;
@@ -91,5 +109,7 @@ function getTitle(bike) {
 
 module.exports = {
   getTitle: getTitle,
-  transformForDisplay: transformForDisplay
+  transformForDisplay: transformForDisplay,
+  getReasons: getReasons,
+  getTypes: getTypes
 };
