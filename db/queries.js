@@ -23,6 +23,25 @@ function getBike(bikeID, callback) {
 }
 
 function createBike(fields, photoPath, callback) {
+  fields.type_id = (fields.type_id) ? 'ARRAY[' + fields.type_id + ']' : null;
+  fields.reasons = (fields.reasons) ? 'ARRAY[' + fields.reasons + ']' : null;
+
+  if(!fields.serial_number) { fields.serial_number = null; }
+  if(!fields.description) { fields.description = null; }
+  if(!fields.nickname) { fields.nickname = null; }
+
+  db.one('insert into bike(user_id, main_photo_path, description, nickname, serial_number, type_ids, reason_ids) ' +
+      'values($1, $2, $3, $4, $5, ' + fields.type_id + ', ' + fields.reasons + ') returning id', [parseInt(fields.user_id), photoPath, fields.description, fields.nickname, fields.serial_number])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error('Failed to create bike record: (' + err + ')'));
+    });
+}
+
+/*
+function createBikeDetails(fields, callback) {
   var brand = null;
   var model = null;
   var brand_id = null;
@@ -55,6 +74,8 @@ function createBike(fields, photoPath, callback) {
       callback(new Error('Failed to create bike record: (' + err + ')'));
     });
 }
+*/
+
 
 function getManufacturer(manuId, callback) {
   db.one('select * from manufacturer where id = $1', manuId)

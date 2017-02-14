@@ -21,16 +21,30 @@
 			  <dd class="col-sm-9">{{bike.nickname}}</dd>
 			{{/if}}
 
+      {{#if bike.type}}
+        <dt class="col-sm-3">Type</dt>
+        <dd class="col-sm-9">{{bike.type}}</dd>
+      {{/if}}
+
+      {{#if bike.for}}
+        <dt class="col-sm-3">For</dt>
+        <dd class="col-sm-9">{{bike.for}}</dd>
+      {{/if}}
+
 			{{#if bike.details}}
 			  <dt class="col-sm-3">Details</dt>
 			  <dd class="col-sm-9">{{bike.details}}</dd>
       {{/if}}
 
-
 			{{#if bike.city}}
 			  <dt class="col-sm-3 text-truncate">City</dt>
 			  <dd class="col-sm-9">{{bike.city}}</dd>
 			{{/if}}
+
+      {{#if bike.serial_number}}
+        <dt class="col-sm-3">Serial No.</dt>
+        <dd class="col-sm-9">{{bike.serial_number}}</dd>
+      {{/if}}
 
 			</dl>
 

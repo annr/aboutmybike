@@ -13,27 +13,9 @@ router.get('/:id', function(req, res, next) {
     if(err) {
       next(err);
     } else {
-      var bike = data;
-      var detailString = [];
+      var bike = helper.transformForDisplay(data);
 
-      bike.title = parseInt(bike.user_id) + "'s " + helper.getTitle(bike);
-
-      bike.city = "San Francisco";
-      bike.era = "1980s";
-
-      detailString.push(bike.era);
-      if(bike.speeds) {
-        detailString.push(bike.speeds + ' speed');
-      }
-      if(bike.handlebars) {
-        detailString.push(bike.handlebars + ' handlebars');
-      }
-      if(bike.brakes) {
-        detailString.push(bike.brakes + ' brakes');
-      }
-      bike.details = detailString.join(', ');
-
-      bike.photo_url = res.locals.app.s3Url + bike.main_photo_path;
+      bike.photo_url = res.locals.app.s3Url + bike.photo_url;
 
       res.render('bike', {
         app_name: res.locals.app.name,

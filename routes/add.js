@@ -39,7 +39,6 @@ router.post('/', function(req, res, next) {
   var form = new formidable.IncomingForm();
 
   form.parse(req, function(err, fields, files) {
-
     var localPath = files.bike_photo.path;
     var isSupportedImage = (files.bike_photo.type === 'image/jpeg') || (files.bike_photo.type === 'image/png');
     var extension = files.bike_photo.type.split('/')[1];

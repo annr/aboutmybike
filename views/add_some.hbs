@@ -3,17 +3,24 @@
 
   $(document).ready(function() {
 
-    var target = $('#upload-target-wrapper');
+    var target = $('#upload_photo_group');
 
     $("#uploadForm").submit(function( event ) {
       event.preventDefault();
       // submit if image is attached:
 
       // crappy way for now:
-      if(!$('#upload-target').attr('src').indexOf('example-with-upload.png') !== -1) {
+      if($('#upload-target').attr('src').indexOf('example-with-upload.png') === -1) {
+        // prep reasons.
+        // it's so annoying, but formidable won't send an array of checkboxes and neither will req.body/req.params
+        var reasons = [];
+        $("input[name='reason_ids']:checkbox:checked").each(function(){
+          reasons.push($(this).val());
+        })
+        $("#reasons").val(reasons.join(','));
         this.submit();
       } else {
-        $(this).prepend('<div class="alert alert-warning" id="noAttachedPhotoWarning" role="alert">Please attach a photo of your bike to submit the form.</div>');
+        target.append('<div class="alert alert-warning" id="noAttachedPhotoWarning" role="alert">Please attach a photo of your bike to submit the form.</div>');
       }
     });
 
@@ -59,14 +66,13 @@
 
 <div class="row">
 
-
 <div class="col-md-6">
 
-    <div class="form-group text-center">
+    <div class="form-group text-center" id="upload_photo_group">
       <label class="custom-file-upload">
       <input type="file" name="bike_photo" id="bike_photo" class="form-control-file">
 
-      <div id="upload-target-wrapper">
+      <div class="upload-target-wrapper">
         <img src="/images/example-with-upload.png" width="540" class="add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
 
 {{!--         <p class="text-warning" id="replace_image_hint" style="display:none;">Use another photo</p> --}}
@@ -74,14 +80,14 @@
         <div id="choose_photo_help">Choose a photo or drag it here</div>
 
       </div>
-      <p class="help-block" id="primary_photo_help">(Primary photo must be from the side)</p>
-      <input type="hidden" name="original_file_name" id="file_name" />
 
+      <p class="help-block" id="primary_photo_help">(Primary photo must be from the side)</p>
+
+      <input type="hidden" name="original_file_name" id="file_name" />
       </label>
     </div>
 
 </div>
-
 
 <div class="col-md-6">
     <input type="hidden" name="user_id" value="1">
@@ -90,13 +96,11 @@
     <label for="saySomething">What about your bike?</label>
     <!--<label for="saySomething">You can say whatever you like about this bike</label>--><textarea class="form-control" id="saySomething" rows="5" name="description"></textarea></div>
 
-
     <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname"></div>
 
-
     <div class="form-group">
-      <label for="bikeStyle">Style</label>
-      <select class="form-control" id="style" name="style">
+      <label for="type_id">Type</label>
+      <select class="form-control" id="type_id" name="type_id">
         <option></option>
         <option value="1">Road</option>
         <option value="2"> - Racing</option>
@@ -135,41 +139,43 @@
 
     <label>This bike is for:</label><br>
       <label class="checkbox-inline">
-        <input type="checkbox" value="1">
+        <input type="checkbox" name="reason_ids" value="1">
         fun
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" value="2">
+        <input type="checkbox" name="reason_ids" value="2">
         commute
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" value="3">
+        <input type="checkbox" name="reason_ids" value="3">
         work
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" value="4">
+        <input type="checkbox" name="reason_ids" value="4">
         exercise
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" value="5">
+        <input type="checkbox" name="reason_ids" value="5">
         social
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" value="6">
+        <input type="checkbox" name="reason_ids" value="6">
         style
       </label>
 {{!--  <label class="checkbox-inline">
-        <input type="checkbox" value="7">
+        <input type="checkbox" name="reason_ids" value="7">
         adventure
       </label> --}}
       <label class="checkbox-inline">
-        <input type="checkbox" value="8">
+        <input type="checkbox" name="reason_ids" value="8">
         thrill
       </label>
       <label>
-        <input type="checkbox" value="9" checked>
+        <input type="checkbox" name="reason_ids" value="9" checked>
         The feeling of being in motion again. It's the most extraordinatry thing in the world.
       </label>
+
+      <input type="hidden" name="reasons" id="reasons" value="">
 
     </div>
 
