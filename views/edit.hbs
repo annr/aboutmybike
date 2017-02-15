@@ -1,0 +1,255 @@
+<script type="text/javascript" defer="defer">
+
+  $(document).ready(function() {
+
+    $("#editIntro").submit(function(event) {
+      event.preventDefault();
+      if($(this).find('input[name=bike_id]').val() === '') {
+        appendPhotoAlert('Please attach a bike photo before submitting this form.');
+        return;
+      }
+      var reasons = [];
+      $("input[name='reason_ids']:checkbox:checked").each(function(){
+        reasons.push($(this).val());
+      })
+      $("#reasons").val(reasons.join(','));
+      //this.submit();
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: new FormData(this),
+        success: function(data) {
+          console.log(data);
+          appendIntroAlert('Successfully added details.');
+          // show next step with options to skip 2nd step.
+          $('#editIntro').hide();
+          $('#editDetails').show();
+        },
+        error: function(err) {
+          appendIntroAlert(err);
+        }
+      });
+
+    });
+
+    $("#uploadForm").submit(function( event ) {
+      event.preventDefault();
+      //disable submit until photo is updated.
+      // is this nec?? If they've attached a new image it will get updated even if the user
+      // navigates away, right?
+
+      //$("#submitIntro").prop("disabled",true);
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        // Form data
+        data: new FormData(this),
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhr: function() {
+          var myXhr = $.ajaxSettings.xhr();
+          return myXhr;
+        },
+        success: function(data) {
+          appendPhotoAlert('Successfully attached your bike photo.');
+          if($('input[name=bike_id]').val() === '') {
+            $('input[name=bike_id]').val(data.id);
+          }
+        },
+        error: function(err) {
+          // be transparent and output error. 
+          // but how to you get specific error and not whole page?
+          appendPhotoAlert(err);
+        }//,
+        // complete: function() {
+        //   $("#submitIntro").prop("disabled",true);
+        // }
+      });
+    });
+
+    // make curry functions for these.
+    function appendPhotoAlert(msg) {
+      $('#upload_photo_group').append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
+    }
+
+    function appendIntroAlert(msg) {
+      $('#editIntro').append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
+    }
+
+    function filePreview(input, callback) {
+      $('.alert-warning').remove();
+      var maxSize = 5000000;
+      var minSize = 200000;
+      if (input.files && input.files[0]) {  
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#upload-target').attr('src', e.target.result);
+          $('#upload-target').removeClass('upload-placeholder');
+        }
+        if(input.files[0].type !== 'image/jpeg' && input.files[0].type !== 'image/png') {
+          appendPhotoAlert('Bike photo must be an image.');
+          return;
+        }
+        if(input.files[0].size <= minSize) {
+          appendPhotoAlert('Image size must be at least ' + minSize/1000 + 'K (Yours is ' + Math.round(input.files[0].size/1000) + 'K). Please attach a larger photo of your bike.');
+          return;
+        }
+        if(input.files[0].size > maxSize) {
+          appendPhotoAlert('Image size must be at less than <nowrap>' + maxSize/1000000 + ' Megabytes</nowrap> (Yours is ' + (input.files[0].size/1000000).toFixed(2) + 'M). Please attach a smaller photo of your bike.');
+          return;
+        }
+        reader.readAsDataURL(input.files[0]);
+        $('#file_name').val(input.files[0].name);
+
+        callback();
+      } else {
+        throw new Error('client script logic wrong Ann');
+      }
+    }
+    $("#bike_photo").change(function () {
+      filePreview(this, function() {
+        $("#uploadForm").submit();
+      });
+    });
+
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#myInput').focus()
+    });
+
+  });
+</script>
+
+<h4>{{page_heading}}</h4>
+
+<div class="row">
+
+<div class="col-md-6">
+  <form class="generic-container add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+    <div class="form-group text-center" id="upload_photo_group">
+      <label class="custom-file-upload">
+      <input type="file" name="bike_photo" id="bike_photo" class="form-control-file">
+
+      <div class="upload-target-wrapper">
+
+        {{#if bike.photo_url}}
+        <img src="{{bike.photo_url}}" width="540" class="add-bike-photo" id="upload-target" style="display: inline;">
+        {{else}}
+        <img src="/images/example-with-upload.png" width="540" class="add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
+        {{/if}}
+
+{{!--   <p class="text-warning" id="replace_image_hint" style="display:none;">Use another photo</p> --}}
+
+        <div id="choose_photo_help" class="add-bike-photo">Choose a photo{{!--  or drag it here --}}</div>
+
+      </div>
+
+      <p class="help-block" id="primary_photo_help">(Primary photo must be from the side)</p>
+
+      <input type="hidden" name="original_filename" id="file_name" />
+      </label>
+    </div>
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+    <input type="hidden" name="user_id" value="1">
+  </form>
+
+</div>
+
+<div class="col-md-6">
+
+  <form class="generic-container add-bike-form" id="editIntro">
+    <input type="hidden" name="step" value="1">
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+    <div class="form-group">
+    <label for="saySomething">What about your bike?</label>
+    <textarea class="form-control" id="saySomething" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
+
+    <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname" value="{{bike.nickname}}"></div>
+
+    <div class="form-group">
+      <label for="type_id">Type</label>
+      <select class="form-control" id="type_id" name="type_id">
+        <option></option>
+        {{#each types}}
+          <option value="{{id}}"{{#if selected}} selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group">
+    <label>This bike is for:</label><br>
+    {{#each reasons}}
+      <label class="checkbox-inline">
+        <input type="checkbox" name="reason_ids" value="{{id}}"{{#if checked}} checked{{/if}}>
+        {{label}}
+      </label>
+    {{/each}}
+
+      <input type="hidden" name="reasons" id="reasons" value="">
+
+    </div>
+
+    <div class="form-group">
+      <label for="serial_number">Serial Number</label>
+      <input type="text" class="form-control" id="serial_number" name="serial_number" value="{{bike.serial_number}}">
+      <p class="help-block">Optional but important. <a href="#" data-toggle="modal" data-target="#myModal">See why.</a></p>
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submitIntro">Save</button>
+
+  </form>
+
+
+  <form class="generic-container add-bike-form" id="editDetails">
+
+    <input type="hidden" name="step" value="2">
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+
+    <div class="form-group">
+    <label for="color">Color</label>
+    <input type="color" name="color" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submitDetails">Save</button>
+
+  </form>
+
+</div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Bicycle serial numbers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <p>The serial number is the unique id that will help recover your bike if it is stolen or lost, and therefore it is important that you record it.</p>
+
+         <p>The serial number is probably located here:</p>
+
+         <img src="/images/coming_soon.jpg" width="200" height="200" alt="placeholder diagram">
+
+         <p>But may be located in any of these places:</p>
+
+         <img src="/images/coming_soon.jpg" width="200" height="200" alt="placeholder diagram">
+
+         <p>Go ahead and record all the numbers you find; the more the better.</p>
+
+         <p class="text-warning">That's said, it's fine if you skip serial number for now.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br>
