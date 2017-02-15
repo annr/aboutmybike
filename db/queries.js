@@ -23,15 +23,8 @@ function getBike(bikeID, callback) {
 }
 
 function createBike(fields, photoPath, callback) {
-  fields.type_id = (fields.type_id) ? 'ARRAY[' + fields.type_id + ']' : null;
-  fields.reasons = (fields.reasons) ? 'ARRAY[' + fields.reasons + ']' : null;
-
-  if(!fields.serial_number) { fields.serial_number = null; }
-  if(!fields.description) { fields.description = null; }
-  if(!fields.nickname) { fields.nickname = null; }
-
-  db.one('insert into bike(user_id, main_photo_path, description, nickname, serial_number, type_ids, reason_ids) ' +
-      'values($1, $2, $3, $4, $5, ' + fields.type_id + ', ' + fields.reasons + ') returning id', [parseInt(fields.user_id), photoPath, fields.description, fields.nickname, fields.serial_number])
+  db.one('insert into bike(user_id, main_photo_path) ' +
+      'values($1, $2) returning id', [parseInt(fields.user_id), photoPath])
     .then(function (data) {
       callback(null, data);
     })
@@ -40,7 +33,7 @@ function createBike(fields, photoPath, callback) {
     });
 }
 
-function updateBike(fields, callback) {
+function updateBikeIntro(fields, callback) {
   fields.type_id = (fields.type_id) ? 'ARRAY[' + fields.type_id + ']' : null;
   fields.reasons = (fields.reasons) ? 'ARRAY[' + fields.reasons + ']' : null;
 
@@ -57,52 +50,28 @@ function updateBike(fields, callback) {
     });
 }
 
-function updateBikePhoto(fields, photoPath, callback) {
+function createBikePhoto(fields, photoPath, callback) {
+  console.log('creating bike photo....', parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath);
+
+  db.one('insert into photo(user_id, bike_id, original_filename, file_path) ' +
+      'values($1, $2, $3, $4) returning id', [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error('Failed to create photo record: (' + err + ')'));
+    });
+}
+
+function updateMainPhoto(fields, photoPath, callback) {
   db.none('update bike set main_photo_path = $1 where id = $2', [photoPath, parseInt(fields.bike_id)])
     .then(function (data) {
       callback(null, data);
     })
     .catch(function (err) {
-      callback(new Error('Failed to update bike photo: (' + err + ')'));
+      callback(new Error('Failed to update main bike photo: (' + err + ')'));
     });
 }
-
-/*
-function createBikeDetails(fields, callback) {
-  var brand = null;
-  var model = null;
-  var brand_id = null;
-  var model_id = null;
-
-  // careful. you can't parseInt(null)
-  if(fields.brand_id !== "") {
-    brand_id = parseInt(fields.brand_id);
-  }
-  if(fields.model_id !== "") {
-    model_id = parseInt(fields.model_id);
-  }
-
-  if(!fields.description) { fields.description = null; }
-  if(!fields.nickname) { fields.nickname = null; }
-
-  if(!fields.brand_id && fields.brand !== '') {
-    brand = fields.brand;
-  }
-  if(!fields.model_id && fields.model !== '') {
-    model = fields.model;
-  }
-
-  db.one('insert into bike(user_id, main_photo_path, description, nickname, manufacturer_id, model_id, brand_unlinked, model_unlinked) ' +
-      'values($1, $2, $3, $4, $5, $6, $7, $8) returning id', [parseInt(fields.user_id), photoPath, fields.description, fields.nickname, brand_id, model_id, brand, model])
-    .then(function (data) {
-      callback(null, data);
-    })
-    .catch(function (err) {
-      callback(new Error('Failed to create bike record: (' + err + ')'));
-    });
-}
-*/
-
 
 function getManufacturer(manuId, callback) {
   db.one('select * from manufacturer where id = $1', manuId)
@@ -119,7 +88,8 @@ module.exports = {
   getAllBikes: getAllBikes,
   getBike: getBike,
   createBike: createBike,
-  updateBike: updateBike,
-  updateBikePhoto: updateBikePhoto,
+  updateBikeIntro: updateBikeIntro,
+  createBikePhoto: createBikePhoto,
+  updateMainPhoto: updateMainPhoto,
   getManufacturer: getManufacturer
 };
