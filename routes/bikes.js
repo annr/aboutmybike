@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
         } else {
           data[i].title = helper.getTitle(data[i]);
         }
-        if(data[i].description.length > (descriptionCropLength - 3)) {
+        if(data[i].description && data[i].description.length > (descriptionCropLength - 3)) {
           data[i].description = data[i].description.substring(0, 100) + '...';
         }
       }

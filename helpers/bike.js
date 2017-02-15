@@ -40,38 +40,43 @@ function transformForDisplay(data) {
 }
 
 function getReasonsList(reason_ids) {
+  if(!reason_ids) return '';
   var reasonsSaved = _.map(_.filter(reasons, function(reason) { return reason_ids.indexOf(reason.id) !== -1 } ), 'label');
   return reasonsSaved.join(', ');
 }
 
-function getTypes(type_id) {
+function getFormTypes(type_id) {
   // I think this can be done much more efficeintly.
 
-  let newTypes = [];
+  let formTypes = [];
 
   _.map(types, function(t) {
     var z = { id: t.id, label: t.label };
-    if(t.id === type_id) {
+    if(type_id && t.id === type_id) {
       z.selected = true;
     }
     if(t.related_type_ids) {
       z.label = ' - ' + t.label;
     }
-    newTypes.push(z);
+    formTypes.push(z);
   });
 
-  return newTypes;
+  return formTypes;
 }
 
-function getReasons(reason_ids) {
+function getFormReasons(reason_ids) {
+  let formReasons = [];
+  // default reason 'adventure' !
+  if(!reason_ids) reason_ids = [7];
   // transform reasons to add checked state
-  reasons = _.map(reasons, function(r) {
-    if(reason_ids.indexOf(r.id) !== -1) {
-      r.checked = true;
+  _.map(reasons, function(r) {
+    var z = { id: r.id, label: r.label };
+    if(reason_ids && reason_ids.indexOf(r.id) !== -1) {
+      z.checked = true;
     }
-    return r;
+    formReasons.push(z);
   });
-  return reasons;
+  return formReasons;
 }
 
 function getTitle(bike) {
@@ -110,6 +115,6 @@ function getTitle(bike) {
 module.exports = {
   getTitle: getTitle,
   transformForDisplay: transformForDisplay,
-  getReasons: getReasons,
-  getTypes: getTypes
+  getFormReasons: getFormReasons,
+  getFormTypes: getFormTypes
 };
