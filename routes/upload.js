@@ -55,12 +55,7 @@ router.post('/', function(req, res, next) {
                 if(err) {
                   next(err);
                 } else {
-                  console.log('correct data for bike insert???');
-                  console.log(data);
-
                   fields.bike_id = data.id;
-                  console.log('using new bike id ' + data.id);
-
                   queries.createBikePhoto(fields, destinationFolder + '/' + filename, function(err, data) {
                     if(err) {
                       next(err);

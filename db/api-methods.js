@@ -34,7 +34,6 @@ function getBike(req, res, next) {
 }
 
 function createBike(req, res, next) {
-  console.log('id ' + parseInt(req.body.user_id));
   db.one('insert into bike(user_id, main_photo_path) ' +
       'values($1, $2) returning id', [parseInt(req.body.user_id), req.body.photo_url])
     .then(function (data) {

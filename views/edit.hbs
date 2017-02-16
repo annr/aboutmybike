@@ -18,16 +18,13 @@
       $.ajax({
         url: $(this).attr('action'),
         type: 'POST',
-        data: new FormData(this),
+        data: $(this).serialize(),
         success: function(data) {
-          console.log(data);
-          appendIntroAlert('Successfully added details.');
-          // show next step with options to skip 2nd step.
-          $('#editIntro').hide();
-          $('#editDetails').show();
+          $('#step1Wrapper').hide();
+          $('#step2Wrapper').show();
         },
         error: function(err) {
-          appendIntroAlert(err);
+          appendIntroAlert(JSON.stringify(err));
         }
       });
 
@@ -118,7 +115,78 @@
       $('#myInput').focus()
     });
 
-  });
+
+    /* STEP 2 functions */ 
+    function searchAndUpdateBrand(str) {
+      var searchBrandAjax = new XMLHttpRequest();
+      // use the value they entered to try to figure out the brand.
+      searchBrandAjax.open("GET", "/api/brand_by_name/" + str, true);
+      searchBrandAjax.onload = function() {
+        var result = JSON.parse(searchBrandAjax.responseText);
+        if (result.status === 'success') {
+          $('#brand_id').val(result.data.id);
+          // for some brands you may want to transform the #brand field text
+          // but I can't think how, because brand vs manufacturer is usu. the shorter string:
+          // Trek vs Trek Bicycle Foundation
+        } else {
+          // user may have previously selected another brand
+          $('#brand_id').val('');
+        }
+        getBrandModels(result.data.id);
+      };
+      searchBrandAjax.send();
+    }
+
+    function getBrandModels(brand_id) {
+      var getModelsAjax = new XMLHttpRequest();
+      // use the value they entered to try to figure out the brand.
+      getModelsAjax.open("GET", "/api/models_by_brand/" + brand_id, true);
+      getModelsAjax.onload = function() {
+        var list = JSON.parse(getModelsAjax.responseText);
+        if(list.length > 0) {
+          new Awesomplete(
+            document.querySelector("#model"),
+            { 
+              list: list,
+              filter: Awesomplete.FILTER_STARTSWITH
+            });
+        }
+      };
+      getModelsAjax.send();
+    }
+
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "/api/brands", true);
+    ajax.onload = function() {
+      var list = JSON.parse(ajax.responseText);
+      new Awesomplete(
+        document.querySelector("#brand"),
+        { 
+          list: list,
+          filter: Awesomplete.FILTER_STARTSWITH,
+          sort: function(item) { // need to override sort. false doesn't work
+            return item;
+          }
+        });
+    };
+    ajax.send();
+
+    $("#brand").change(function () {
+      searchAndUpdateBrand(this.value);
+    });
+
+    addEventListener("awesomplete-select", function(e) {
+      if(e.target.name === 'brand') {
+        getBrandModels(e.text.value);
+      }
+      var hiddenFieldToUpdate = '#' + e.target.name + '_id';
+      $(hiddenFieldToUpdate).val(e.text.value);
+    }, false);
+
+
+});
+
+
 </script>
 
 <h4>{{page_heading}}</h4>
@@ -158,12 +226,27 @@
 
 <div class="col-md-6">
 
-  <form class="generic-container add-bike-form" id="editIntro">
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#intro" role="tab">Intro</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#basics" role="tab">Basics</a>
+  </li>
+  <li class="nav-item">
+   <a class="nav-link" data-toggle="tab" href="#specifics" role="tab">Specifics</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="tab-pane" id="intro" role="tabpanel">
+  <form class="generic-container add-bike-form" id="editIntro" method="post" action="/edit">
     <input type="hidden" name="step" value="1">
     <input type="hidden" name="user_id" value="1">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <div class="form-group">
-    <label for="saySomething">What about your bike?</label>
+    <label for="saySomething">What about your bike? (Express yourself.)</label>
     <textarea class="form-control" id="saySomething" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
 
     <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname" value="{{bike.nickname}}"></div>
@@ -179,16 +262,62 @@
     </div>
 
     <div class="form-group">
-    <label>This bike is for:</label><br>
-    {{#each reasons}}
-      <label class="checkbox-inline">
-        <input type="checkbox" name="reason_ids" value="{{id}}"{{#if checked}} checked{{/if}}>
-        {{label}}
-      </label>
-    {{/each}}
-
+      <label>This bike is for:</label><br>
+      {{#each reasons}}
+        <label class="checkbox-inline">
+          <input type="checkbox" name="reason_ids" value="{{id}}"{{#if checked}} checked{{/if}}>
+          {{label}}
+        </label>
+      {{/each}}
       <input type="hidden" name="reasons" id="reasons" value="">
+    </div>
 
+    <button type="submit" class="btn btn-primary" id="submitIntro">Save {{#unless bike.id}} and Continue{{/unless}}</button>
+
+  </form>
+  </div>
+
+  <div class="tab-pane" id="basics" role="tabpanel">
+
+  <form class="generic-container add-bike-form" id="editDetails" method="post" action="/edit">
+
+{{!--   <h5 id="step2_welcome">Good job adding stuff!</h5>
+  <p>Here are a few more details you might add.</p> --}}
+
+    <input type="hidden" name="step" value="2">
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+
+    <div class="form-group">
+      <label for="color">Color:</label> &nbsp;
+      <input type="color" class="color-input" name="color" value="#dcdbdf">
+    </div>
+
+    <div class="form-group">
+    <label for="brand">Brand</label>
+    <input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Schwinn" class="awesomplete">
+    <input type="hidden" id="brand_id" name="brand_id">
+    </div>
+
+    <div class="form-group">
+    <label for="model">Model</label>
+    <input type="text" class="form-control" id="model" name="model" placeholder="Ex. Stingray">
+    <input type="hidden" id="model_id" name="model_id">
+    </div>
+
+    <div class="form-group">
+      <label for="era">Era</label>
+      <select class="form-control" id="era" name="era">
+        <option></option>
+        <option>Recent</option>
+        <option>2000s</option>
+        <option>1990s</option>
+        <option>1980s</option>
+        <option>1970s</option>
+        <option>Mid-Century</option>
+        <option>Early 1900s</option>
+        <option>Late 1800s</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -197,26 +326,21 @@
       <p class="help-block">Optional but important. <a href="#" data-toggle="modal" data-target="#myModal">See why.</a></p>
     </div>
 
-    <button type="submit" class="btn btn-primary" id="submitIntro">Save</button>
+{{!--     <div class="form-group">
+      <label for="country">Country</label>
+      <input type="text" class="form-control" id="country" name="country">
+    </div> --}}
 
+    <button type="submit" class="btn btn-primary" id="submitDetails">Continue to bike page</button>
   </form>
 
+  </div>
 
-  <form class="generic-container add-bike-form" id="editDetails">
+  <div class="tab-pane" id="specifics" role="tabpanel">
+  PLACEHOLDER for Specifics
+  </div>
 
-    <input type="hidden" name="step" value="2">
-    <input type="hidden" name="user_id" value="1">
-    <input type="hidden" name="bike_id" value="{{bike.id}}">
-
-    <div class="form-group">
-    <label for="color">Color</label>
-    <input type="color" name="color" />
-    </div>
-
-    <button type="submit" class="btn btn-primary" id="submitDetails">Save</button>
-
-  </form>
-
+</div>
 </div>
 
 </div>
@@ -241,7 +365,7 @@
 
          <img src="/images/coming_soon.jpg" width="200" height="200" alt="placeholder diagram">
 
-         <p>Go ahead and record all the numbers you find; the more the better.</p>
+         <p>Go ahead and record all the numbers you find; the more the better. Serial numbers are not displayed on bike pages.</p>
 
          <p class="text-warning">That's said, it's fine if you skip serial number for now.</p>
       </div>
