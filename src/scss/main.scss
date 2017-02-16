@@ -21,6 +21,7 @@
 @import "../../node_modules/bootstrap/scss/nav";
 @import "../../node_modules/bootstrap/scss/navbar";
 @import "../../node_modules/bootstrap/scss/card";
+@import "../../node_modules/bootstrap/scss/custom-forms";
 @import "../../node_modules/bootstrap/scss/alert";
 @import "../../node_modules/bootstrap/scss/modal";
 @import "../../node_modules/bootstrap/scss/dropdown";
@@ -297,7 +298,6 @@ dl.bike-details dt {
 }
 
 .color-input {
-  width: 100%;
   padding: 0;
   height: 36px;
   cursor: pointer;

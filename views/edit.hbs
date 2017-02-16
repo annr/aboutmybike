@@ -1,13 +1,56 @@
 <script type="text/javascript" defer="defer">
 
   $(document).ready(function() {
+    if (location.hash === '') {
+      var defaultTab = '#intro';
+      $('a[href="'+ defaultTab + '"]').tab('show');
+      history.pushState(null, null, defaultTab);
+    }
+    if (location.hash !== '') {
+      $('a[href="' + location.hash + '"]').tab('show');
+    }
+
+    $('a[data-toggle="tab"]').on('click', function(e) {
+      console.log($(this).attr('href'));
+      history.pushState(null, null, $(this).attr('href'));
+    });
+
+    window.addEventListener("popstate", function(e) {
+      // this assumes that the URL has changed and this gets the right one.
+      var activeTab = $('a[href="' + location.hash + '"]');
+      if (activeTab.length) {
+        activeTab.tab('show');
+      } else {
+        //$('.nav-tabs a:first').tab('show');
+      }
+    });
+
+    $("#editBasics").submit(function(event) {
+      event.preventDefault();
+
+      console.log('should not exist...');
+
+      console.log($(this).find('input[name=description]'));
+      //this.submit();
+    });
+
 
     $("#editIntro").submit(function(event) {
       event.preventDefault();
+      var desc = $(this).find('input[name=description]');
+
+      console.log('would submit...');
       if($(this).find('input[name=bike_id]').val() === '') {
         appendPhotoAlert('Please attach a bike photo before submitting this form.');
         return;
       }
+      if(desc.val() === '') {
+        appendIntroAlert('Please enter some thoughts about your bike.');
+        // call attention to missing field
+        //desc.border...
+        return;
+      }
+
       var reasons = [];
       $("input[name='reason_ids']:checkbox:checked").each(function(){
         reasons.push($(this).val());
@@ -226,15 +269,15 @@
 
 <div class="col-md-6">
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" role="tablist">
   <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#intro" role="tab">Intro</a>
+    <a class="nav-link"  data-toggle="tab" href="#intro" role="tab">Intro</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#basics" role="tab">Basics</a>
+    <a class="nav-link"  data-toggle="tab" href="#basics" role="tab">Basics</a>
   </li>
   <li class="nav-item">
-   <a class="nav-link" data-toggle="tab" href="#specifics" role="tab">Specifics</a>
+   <a class="nav-link"  data-toggle="tab" href="#specifics" role="tab">Specifics</a>
   </li>
 </ul>
 
@@ -246,7 +289,7 @@
     <input type="hidden" name="user_id" value="1">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <div class="form-group">
-    <label for="saySomething">What about your bike? (Express yourself.)</label>
+    <label for="saySomething">What about your bike? (Express yourself)</label>
     <textarea class="form-control" id="saySomething" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
 
     <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname" value="{{bike.nickname}}"></div>
@@ -290,7 +333,7 @@
 
     <div class="form-group">
       <label for="color">Color:</label> &nbsp;
-      <input type="color" class="color-input" name="color" value="#dcdbdf">
+      <input type="color" class="color-input form-control" name="color" value="#dcdbdf">
     </div>
 
     <div class="form-group">
@@ -337,7 +380,66 @@
   </div>
 
   <div class="tab-pane" id="specifics" role="tabpanel">
-  PLACEHOLDER for Specifics
+
+<div class="alert alert-warning" role="alert">Disabled for now</div>
+
+{{!--   <form class="generic-container add-bike-form" id="editDetails" method="post" action="/edit">
+ --}}
+{{!--   <h5 id="step2_welcome">Good job adding stuff!</h5>
+  <p>Here are a few more details you might add.</p> --}}
+
+    <input type="hidden" name="step" value="3">
+
+
+
+{{!--     <form class="form-inline">
+ --}}
+
+    <div class="form-group">
+      <label class="mr-sm-2" for="inlineFormCustomSelect">Handlebars</label>
+      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
+    </div>
+
+
+    <div class="form-group">
+      <label class="mr-sm-2" for="inlineFormCustomSelect">Gears</label>
+      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
+    </div>
+
+    <div class="form-group">
+      <label class="mr-sm-2" for="inlineFormCustomSelect">Brakes</label>
+      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
+    </div>
+
+    <div class="form-group">
+      <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
+        <option>Add item...</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+
+      <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+        <input type="checkbox" class="custom-control-input">
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description">Remember my preference</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+
+{{!--     </form> --}}
+
+
+{{!--     <button type="submit" class="btn btn-primary" id="submitSpecifics">Save</button> --}}
+
+{{!--   </form>
+ --}}
+
+
   </div>
 
 </div>
