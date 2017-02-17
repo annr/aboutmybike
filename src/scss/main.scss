@@ -303,6 +303,10 @@ dl.bike-details dt {
   cursor: pointer;
 }
 
+.fixed-width-inline-form-control  {
+  width: 165px;
+}
+
 /* CARD STYLES */
 /* an attempt to make a simple, temp. foolproof but decent grid, using the solution here:
 http://stackoverflow.com/questions/10989238/center-align-image-within-div-horizontally
@@ -422,6 +426,12 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
     max-width: none;
     max-height: none;
     width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .fixed-width-inline-form-control  {
+    width: 125px;
   }
 }
 

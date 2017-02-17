@@ -8,8 +8,20 @@ let reasons = [
   { "id" : 4, "label": "exercise"},
   { "id" : 5, "label": "social"},
   { "id" : 6, "label": "style"},
+  { "id" : 7, "label": "adventure"},
   { "id" : 8, "label": "thrill"},
-  { "id" : 7, "label": "The feeling of being in motion again. It's the most extraordinatry thing in the world."}
+  { "id" : 9, "label": "The feeling of being in motion again. It's the most extraordinatry thing in the world."}
+];
+
+let eras = [
+  { "label": "Recent"},
+  { "label": "2000s"},
+  { "label": "1990s"},
+  { "label": "1980s"},
+  { "label": "1970s"},
+  { "label": "Mid-Century"},
+  { "label": "Early 1900s"},
+  { "label": "Late 1800s"}
 ];
 
 let _ = require('../public/javascripts/lodash');
@@ -45,6 +57,8 @@ function getReasonsList(reason_ids) {
   return reasonsSaved.join(', ');
 }
 
+/* the following three helpers can be written way more efficiently */
+
 function getFormTypes(type_id) {
   // I think this can be done much more efficeintly.
 
@@ -67,7 +81,7 @@ function getFormTypes(type_id) {
 function getFormReasons(reason_ids) {
   let formReasons = [];
   // default reason 'adventure' !
-  if(!reason_ids) reason_ids = [7];
+  if(!reason_ids) reason_ids = [9];
   // transform reasons to add checked state
   _.map(reasons, function(r) {
     var z = { id: r.id, label: r.label };
@@ -77,6 +91,18 @@ function getFormReasons(reason_ids) {
     formReasons.push(z);
   });
   return formReasons;
+}
+
+function getFormEras(era) {
+  let formEras = [];
+  _.map(eras, function(e) {
+    var z = { label: e.label };
+    if(era === e.label) {
+      z.selected = true;
+    }
+    formEras.push(z);
+  });
+  return formEras;
 }
 
 function getTitle(bike) {
@@ -116,5 +142,6 @@ module.exports = {
   getTitle: getTitle,
   transformForDisplay: transformForDisplay,
   getFormReasons: getFormReasons,
-  getFormTypes: getFormTypes
+  getFormTypes: getFormTypes,
+  getFormEras: getFormEras
 };

@@ -333,18 +333,19 @@
 
     <div class="form-group">
       <label for="color">Color:</label> &nbsp;
-      <input type="color" class="color-input form-control" name="color" value="#dcdbdf">
+      <input type="color" class="color-input form-control" name="color" value="{{#if bike.color}}{{bike.color}}{{else}}#dcdbdf{{/if}}">
     </div>
 
     <div class="form-group">
     <label for="brand">Brand</label>
-    <input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Schwinn" class="awesomplete">
+{{!--     class="awesomplete"  --}}
+    <input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Schwinn" value="{{bike.manufacturer_name}}">
     <input type="hidden" id="brand_id" name="brand_id">
     </div>
 
     <div class="form-group">
     <label for="model">Model</label>
-    <input type="text" class="form-control" id="model" name="model" placeholder="Ex. Stingray">
+    <input type="text" class="form-control" id="model" name="model" placeholder="Ex. Stingray" value="{{bike.model_name}}">
     <input type="hidden" id="model_id" name="model_id">
     </div>
 
@@ -352,14 +353,9 @@
       <label for="era">Era</label>
       <select class="form-control" id="era" name="era">
         <option></option>
-        <option>Recent</option>
-        <option>2000s</option>
-        <option>1990s</option>
-        <option>1980s</option>
-        <option>1970s</option>
-        <option>Mid-Century</option>
-        <option>Early 1900s</option>
-        <option>Late 1800s</option>
+        {{#each eras}}
+          <option {{#if selected}} selected{{/if}}>{{label}}</option>
+        {{/each}}
       </select>
     </div>
 
@@ -390,51 +386,63 @@
 
     <input type="hidden" name="step" value="3">
 
+    <div class="form-group">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="handlebars">Handlebars</label>
+      <select class="custom-select" id="handlebars" name="handlebars">
+        <option></option>
+        <option>Drop</option>
+        <option>Bullhorn</option>
+        <option>Flat</option>
+        <option>Riser</option>
+        <option>Cruiser / Upright</option>
+        <option>Mustache</option>
+        <option>BMX</option>
+        <option>Trekking / Butterfly</option>
+        <option>Ape Hangers</option>
+        <option>Other</option>
+      </select>
+    </div>
 
 
-{{!--     <form class="form-inline">
+    <div class="form-group">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="gears">Gears</label>
+      <select class="custom-select mb-2 mr-sm-4 mb-sm-0" id="gears" name="gears">
+        <option></option>
+        <option value="1">Derailer</option>
+        <option value="2">Single</option>
+        <option value="3">Hub</option>
+      </select>
+    </div>
+
+{{!-- 
+    <div class="form-group">
+      <label class="mr-sm-2" for="inlineFormCustomSelect">Speeds</label>
+      <input class="form-control" type="number" id="speeds" name="speeds">
+    </div>
  --}}
 
     <div class="form-group">
-      <label class="mr-sm-2" for="inlineFormCustomSelect">Handlebars</label>
-      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="brakes">Brakes</label>
+      <select id="brakes" name="brakes" id="brakes" class="custom-select mb-2 mr-sm-4 mb-sm-0">
+        <option></option>
+        <option value="1">Rim</option>
+        <option value="2">Disc</option>
+        <option value="3">None</option>
+      </select>
     </div>
 
-
-    <div class="form-group">
-      <label class="mr-sm-2" for="inlineFormCustomSelect">Gears</label>
-      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
-    </div>
-
-    <div class="form-group">
-      <label class="mr-sm-2" for="inlineFormCustomSelect">Brakes</label>
-      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Ex. Drop">
-    </div>
-
-    <div class="form-group">
-      <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-        <option>Add item...</option>
+    <div class="form-group form-inline">
+      <select class="custom-select fixed-width-inline-form-control mb-2 mb-sm-0">
+        <option>Add misc...</option>
         <option value="1">One</option>
         <option value="2">Two</option>
         <option value="3">Three</option>
       </select>
+
+      <input type="text" class="form-control" name="misc_detail">
     </div>
 
-      <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
-        <input type="checkbox" class="custom-control-input">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">Remember my preference</span>
-      </label>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
-
-
-
-
-{{!--     </form> --}}
-
-
-{{!--     <button type="submit" class="btn btn-primary" id="submitSpecifics">Save</button> --}}
+    <button type="submit" class="btn btn-primary" id="submitSpecifics" disabled>Save</button>
 
 {{!--   </form>
  --}}
@@ -457,17 +465,29 @@
         </button>
       </div>
       <div class="modal-body">
+
          <p>The serial number is the unique id that will help recover your bike if it is stolen or lost, and therefore it is important that you record it.</p>
 
-         <p>The serial number is probably located here:</p>
+         
 
+      <div class="row">
+
+      <div class="col-md-6">
+
+      <p>The serial number is probably located here:</p>
          <img src="/images/coming_soon.jpg" width="200" height="200" alt="placeholder diagram">
+
+         </div>
+
+         <div class="col-md-6">
 
          <p>But may be located in any of these places:</p>
 
          <img src="/images/coming_soon.jpg" width="200" height="200" alt="placeholder diagram">
 
-         <p>Go ahead and record all the numbers you find; the more the better. Serial numbers are not displayed on bike pages.</p>
+         </div>
+   </div>
+         <p style="margin-top: 1.5rem;">Go ahead and record all the numbers you find; the more the better. Serial numbers are not displayed on bike pages.</p>
 
          <p class="text-warning">That's said, it's fine if you skip serial number for now.</p>
       </div>

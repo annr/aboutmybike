@@ -15,13 +15,13 @@ router.get(['/', '/:id'], function(req, res, next) {
   var calculatedRows;
 
   if (!req.params.id) {
-    console.log(page_heading);
     res.render(view, {
       app_name: res.locals.app.name,
       page_title: page_title,
       page_heading: page_heading,
       reasons: helper.getFormReasons(),
       types: helper.getFormTypes(),
+      eras: helper.getFormEras(),
       rows: rows
     });
   } else {
@@ -33,7 +33,8 @@ router.get(['/', '/:id'], function(req, res, next) {
       if(err) {
         next(err);
       } else {
-
+        console.log(data.manufacturer_name);
+        console.log(data.model_name);
         data.photo_url = res.locals.app.s3Url + data.main_photo_path;
 
         // Try to guess how many textarea rows will be necessary to edit the text.
@@ -52,6 +53,7 @@ router.get(['/', '/:id'], function(req, res, next) {
           bike: data,
           reasons: helper.getFormReasons(data.reason_ids),
           types: helper.getFormTypes(data.type_id),
+          eras: helper.getFormEras(data.era),
           rows: rows
         });
       }
