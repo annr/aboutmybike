@@ -85,7 +85,7 @@ function updateBikeBasics(fields, callback) {
   db.none('update bike set serial_number = $1, manufacturer_id = $2, model_id = $3, brand_unlinked = $4, model_unlinked = $5 where id = $6',
     [fields.serial_number, brand_id, model_id, brand, model, parseInt(fields.bike_id)])
     .then(function () {
-      callback(null);
+      updateBikeBasicsInfo(fields, callback);
     })
     .catch(function (err) {
       callback(new Error('Failed to create bike record: (' + err + ')'));
@@ -95,9 +95,10 @@ function updateBikeBasics(fields, callback) {
 function updateBikeBasicsInfo(fields, callback) {
   console.log('in update info ');
   // #dcdbdf is the color input  default; they did not select any color.
-  if(!fields.color || fields.color !== '#dcdbdf') { fields.color = null; }
+  if(!fields.color || fields.color === '#dcdbdf') { fields.color = null; }
+
   if(!fields.era) { fields.era = null; }
-  db.none('update bike_info set color = $1, era = $2 where id = $3', [fields.color, fields.era, parseInt(fields.bike_id)])
+  db.none('update bike_info set color = $1, era = $2 where bike_id = $3', [fields.color, fields.era, parseInt(fields.bike_id)])
     .then(function () {
       console.log('seemed successful.');
       callback(null);
