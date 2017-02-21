@@ -88,7 +88,11 @@ body {
 }
 
 .container {
- min-width: 480px;
+ min-width: 320px;
+}
+
+.bike-detail-container {
+  text-align: center;
 }
 
 .title {
@@ -310,18 +314,29 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 
 }
 
-@media (min-width: 542px) and (max-width: 767px) {
+@media (min-width: 601px) and (max-width: 767px) {
   .card-photo-wrapper {
     height: 381px;
     width: 508px;
   }
 }
 
-/* just between min (480) and 541 */
-@media (max-width: 541px) {
+@media (max-width: 600px) {
   .card-photo-wrapper {
-    height: 335px;
-    width: 448px;
+    width: 100%;
+    overflow: auto;
+    height: auto;
+  }
+  .card-photo {
+    width: 100%;
+    height: auto;
+  }
+  .container {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .title {
+    font-size: smaller;
   }
 }
 

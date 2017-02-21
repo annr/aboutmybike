@@ -119,13 +119,13 @@ function getFormEras(era) {
    Ex. return "1980s Road Bike"
 */
 function getTitle(bike) {
-  var title;
+  var title = '';
 
-  if(bike.era !== 'Recent' && bike.era !== '2000s' ) { // too recent to be interesting.
+  if(bike.era && bike.era !== 'Recent' && bike.era !== '2000s' ) { // too recent to be interesting.
     title += bike.era;
   }
 
-  title += bike.type ? ' ' + bike.type : '';
+  title += bike.type ? (' ' + bike.type) : '';
 
   // add ' Bike' for most bike types OR neither era or type
   if(bike.type || title === '') {

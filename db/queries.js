@@ -2,7 +2,7 @@ var db = require('./db');
 
 // add query functions
 function getAllBikes(callback) {
-  db.any('select * from bike')
+  db.any('select * from bike where status != 0')
     .then(function (data) {
       callback(null, data);
     })
