@@ -2,7 +2,6 @@
   {{#each results}}
   <div class="col-md-4">
 
-
   <div class="card">
     <a href="/bike/{{id}}" class="card-photo-wrapping-link">
 
@@ -17,14 +16,15 @@
   </div>
 
   </div>
-
-
   </div>
-
   {{/each}}
+
+  {{#unless results}}
+   No bikes yet.
+  {{/unless}}
 </div>
 
-        <br><br>
+  <br><br>
   <div class="bike-detail-container">
      <p><a class="btn btn-lg btn-youll-grow-out-of-it" href="/add" role="button">+ Add Your Bike</a></p>
   </div>

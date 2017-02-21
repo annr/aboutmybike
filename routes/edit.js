@@ -26,7 +26,7 @@ router.get(['/', '/:id'], function(req, res, next) {
     });
   } else {
     let id = req.params.id;
-    page_title = 'Edit Bike Details';
+    page_title = 'Edit Bike';
     page_heading = page_title;
 
     queries.getBike(id, function(err, data) {

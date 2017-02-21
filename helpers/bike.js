@@ -10,7 +10,7 @@ let reasons = [
   { "id" : 6, "label": "style"},
   { "id" : 7, "label": "adventure"},
   { "id" : 8, "label": "thrill"},
-  { "id" : 9, "label": "The feeling of being in motion again. It's the most extraordinatry thing in the world."}
+  { "id" : 9, "label": "freedom"}
 ];
 
 let eras = [
@@ -53,7 +53,11 @@ function transformForDisplay(data) {
 
 function getReasonsList(reason_ids) {
   if(!reason_ids) return '';
-  var reasonsSaved = _.map(_.filter(reasons, function(reason) { return reason_ids.indexOf(reason.id) !== -1 } ), 'label');
+  // override label for reason id 9:
+  var reasonsSaved = _.map(_.filter(reasons, function(reason) {
+    return reason_ids.indexOf(reason.id) !== -1
+  }), 'label');
+
   return reasonsSaved.join(', ');
 }
 
@@ -85,6 +89,9 @@ function getFormReasons(reason_ids) {
   // transform reasons to add checked state
   _.map(reasons, function(r) {
     var z = { id: r.id, label: r.label };
+    if(z.label === "freedom") {
+      z.label = "The feeling of being in motion again. It's the most extraordinatry thing in the world.";
+    }
     if(reason_ids && reason_ids.indexOf(r.id) !== -1) {
       z.checked = true;
     }
@@ -105,7 +112,34 @@ function getFormEras(era) {
   return formEras;
 }
 
+
+/* if available add era, bike type and " Bike". 
+   otherwise just return " Bike".
+
+   Ex. return "1980s Road Bike"
+*/
 function getTitle(bike) {
+  var title;
+
+  if(bike.era !== 'Recent' && bike.era !== '2000s' ) { // too recent to be interesting.
+    title += bike.era;
+  }
+
+  title += bike.type ? ' ' + bike.type : '';
+
+  // add ' Bike' for most bike types OR neither era or type
+  if(bike.type || title === '') {
+    if(!/cycle|bike|bicycle|cruiser|mixte/i.test(bike.type)) {
+      title +=' Bike';
+    }
+  }
+  // title might have an space at the beginning; in front of type or " Bike"
+  return title.trim();
+}
+
+
+/* get brand and model if brand exists + bike type + " Bike" */
+function getTitleWithBrandAndModel(bike) {
   var title = '';
   var type = bike.type;
 
@@ -129,7 +163,7 @@ function getTitle(bike) {
   title += type ? ' ' + type : '';
 
   if(type || title === '') {
-    if(!/cycle|bike|bicycle/i.test(type)) {
+    if(!/cycle|bike|bicycle|cruiser|mixte/i.test(type)) {
       title +=' Bike';
     }
   }

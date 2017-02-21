@@ -56,27 +56,24 @@
   color: inherit;
 }
 
-.foo {
-  @include absolute(0, 0, auto, auto);
-}
-
 a {
   color: #007dbc;
 }
 
+.nav-link-hack li a {
+    padding: 0 1em 1em;
+}
 
 /* START JUMBOTRON NARROW OVERRIDE STYLES */
 
 /* Space out content a bit */
 body {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding: 1.5rem;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 /* currently the AMB layout gets padding from "container". this is commented.
 .header,
-.marketing,
 .footer {
   padding-right: 1rem;
   padding-left: 1rem;
@@ -89,98 +86,41 @@ body {
   border-bottom: .05rem solid #e5e5e5;
   margin-bottom: 2rem;
 }
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 3rem;
-}
-
-/* Custom page footer */
-.footer {
-  padding-top: 1.5rem;
-  color: #777;
-  border-top: .05rem solid #e5e5e5;
-}
 
 .container {
  min-width: 480px;
 }
 
-/* Customize container */
-@media (min-width: 48em) {
-  .container {
-   /* max-width: 46rem; */
-  }
-}
-.container-narrow > hr {
-  margin: 2rem 0;
+.title {
+  margin-bottom: 1.0rem;
+  display: inline-block;
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
+.edit-link-align-to-title {
+  line-height: 200%;
+}
+
+.bike-column {
+  padding-bottom: 1.0rem;
+}
+
+.cta-wrapper {
   text-align: center;
-  border-bottom: .05rem solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: .75rem 1.5rem;
-  font-size: 1.5rem;
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 3rem 0;
-}
-.marketing p + h4 {
-  margin-top: 1.5rem;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 48em) {
   /* Remove the padding we set earlier */
   .header,
-  .marketing,
   .footer {
     padding-right: 0;
     padding-left: 0;
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 3rem;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
+    margin-bottom: 2.5rem;
   }
 }
-
-/* END JUMBOTRON NARROW OVERRIDE STYLES */
-
-/* THIS MAY BE A TEST */
-/* THE HTML IS COMMENTED OUT IN ADD.HBS */
-/*
-.wheel-hint {
-  position: absolute;
-  display: none;
-  line-height: 120%;
-}
-
-@media (min-width: 768px) {
-  .wheel-hint {
-    display: block;
-  }
-
-  #right-wheel {
-    top: 431px;
-    left: 450px;
-  }
-
-  #left-wheel {
-    top: 160px;
-    left: 20px;
-  }
-}
-*/
 
 .curly-big {
   position: absolute;
@@ -216,53 +156,22 @@ body {
   border-color: #f963bc;
 }
 
-.bike-add-link {
-  color: #fd48b3;
-}
-
-.bike-add-link:hover {
-  color: #e2369c;
-}
-
-.generic-container {
-  padding: 0.9rem;
-  margin: 0 auto;
-}
-
-.form-check-label {
-  padding-left: 1.25rem;
-  cursor: pointer;
-}
-
-input[type="radio"] {
-  margin: 0 1em;
-  font-size: 1.4rem;
+.tab-content {
+  padding: 1.0rem 0;
 }
 
 input[type="file"].form-control-file {
   display: none;
 }
 
-.form-control-number {
-  width: 70px;
-}
-
 label {
   font-weight: normal;
-}
-
-legend {
-  font-size: 1.6rem;
-}
-
-.add-bike-photo {
-  width: 100%;
-  cursor: pointer;
 }
 
 .upload-placeholder {
   opacity: 0.25;
 }
+
 .upload-placeholder:hover {
   opacity: 0.18;
 }
@@ -292,19 +201,24 @@ dl.bike-details dt {
   color: #737373;
 }
 
-.bike-detail-container {
-  text-align: center;
-  margin-top: 10px;
-}
-
 .color-input {
   padding: 0;
   height: 36px;
   cursor: pointer;
 }
 
+.color-block {
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 2px;
+}
+
 .fixed-width-inline-form-control  {
   width: 165px;
+}
+
+.form-control-number {
+  width: 70px;
 }
 
 /* CARD STYLES */
@@ -413,16 +327,20 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 
 /* END CARD STYLE */
 
-
-
-
-.bike-detail, .add-bike-photo {
+.bike-photo {
   max-width: 700px;
   max-height: 500px;
+  width: 100%;
+}
+
+.add-bike-photo {
+  cursor: pointer;
+}.add-bike-photo {
+  cursor: pointer;
 }
 
 @media (max-width: 767px) {
-  .bike-detail, .add-bike-photo  {
+  .bike-photo  {
     max-width: none;
     max-height: none;
     width: 100%;
@@ -437,26 +355,56 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 
 /*
 @media (min-width: 543px) and (max-width: 767px) {
-  .bike-detail, .add-bike-photo  {
+  .bike-photo {
     width: 460px;
   }
 }
 
 @media (min-width: 500px) and (max-width: 543px) {
-  .bike-detail, .add-bike-photo  {
+  .bike-photo {
     width: 400px;
   }
 }
 
 @media (min-width: 390px) and (max-width: 499px) {
-  .bike-detail, .add-bike-photo  {
+  .bike-photo {
     width: 350px;
   }
 }
 
 @media (max-width: 389px) {
-  .bike-detail, .add-bike-photo  {
+  .bike-photo {
     width: 270px;
   }
 }
 */
+
+
+/* UNUSED??? */
+
+/* THE HTML IS COMMENTED OUT IN ADD.HBS */
+/*
+.wheel-hint {
+  position: absolute;
+  display: none;
+  line-height: 120%;
+}
+
+@media (min-width: 768px) {
+  .wheel-hint {
+    display: block;
+  }
+
+  #right-wheel {
+    top: 431px;
+    left: 450px;
+  }
+
+  #left-wheel {
+    top: 160px;
+    left: 20px;
+  }
+}
+*/
+
+
