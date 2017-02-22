@@ -26,7 +26,7 @@ function getBike(bikeID, callback) {
 
 function createBike(fields, photoPath, callback) {
   db.one('insert into bike(user_id, main_photo_path, status) ' +
-      'values($1, $2, -1) returning id', [parseInt(fields.user_id), photoPath])
+      'values($1, $2, 1) returning id', [parseInt(fields.user_id), photoPath])
     .then(function (data) {
       db.one('insert into bike_info(bike_id) ' +
           'values($1) returning bike_id as id', [data.id])
