@@ -77,7 +77,6 @@ CREATE TABLE bike (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     user_id integer NOT NULL,
     description text,
-    system_message text,
     notes text,
     nickname text,
     manufacturer_id integer,
@@ -85,7 +84,8 @@ CREATE TABLE bike (
     serial_number text,
     main_photo_path text,
     type_ids integer[],
-    reason_ids integer[]
+    reason_ids integer[],
+    status integer
 );
 
 
@@ -418,27 +418,6 @@ CREATE TABLE type (
 ALTER TABLE type OWNER TO arobson;
 
 --
--- Name: type_id_seq; Type: SEQUENCE; Schema: public; Owner: arobson
---
-
-CREATE SEQUENCE type_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE type_id_seq OWNER TO arobson;
-
---
--- Name: type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: arobson
---
-
-ALTER SEQUENCE type_id_seq OWNED BY type.id;
-
-
---
 -- Name: user; Type: TABLE; Schema: public; Owner: arobson
 --
 
@@ -537,13 +516,6 @@ ALTER TABLE ONLY theft ALTER COLUMN id SET DEFAULT nextval('theft_id_seq'::regcl
 
 
 --
--- Name: type id; Type: DEFAULT; Schema: public; Owner: arobson
---
-
-ALTER TABLE ONLY type ALTER COLUMN id SET DEFAULT nextval('type_id_seq'::regclass);
-
-
---
 -- Name: user id; Type: DEFAULT; Schema: public; Owner: arobson
 --
 
@@ -554,66 +526,7 @@ ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regcl
 -- Data for Name: bike; Type: TABLE DATA; Schema: public; Owner: arobson
 --
 
-COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, description, system_message, notes, nickname, manufacturer_id, model_id, serial_number, main_photo_path, type_ids, reason_ids) FROM stdin;
-108	\N	\N	2017-02-15 23:55:48.809785-08	2017-02-15 23:55:48.809785-08	1	The sea is calm to-night.\r\nThe tide is full, the moon lies fair\r\nUpon the straits; - on the French coast the light\r\nGleams and is gone; the cliffs of England stand,\r\nGlimmering and vast, out in the tranquil bay.\r\nCome to the window, sweet is the night-air! \r\nOnly, from the long line of spray\r\nWhere the sea meets the moon-blanch'd land,\r\nListen! you hear the grating roar\r\nOf pebbles which the waves draw back, and fling,\r\nAt their return, up the high strand,\r\nBegin, and cease, and then again begin,\r\nWith tremulous cadence slow, and bring\r\nThe eternal note of sadness in.	\N	\N	Ocean Breeze	\N	\N	\N	/dev/2017-001/aboutmybike-1487231747351.png	{14}	{1,6,7}
-66	\N	Unknkown	2017-02-09 13:52:46.138076-08	2017-02-09 13:52:46.138076-08	1	super modern future bike!	\N	\N	Wow	6582	\N	\N	/photos/bike4.jpg	{1}	{1}
-67	\N	\N	2017-02-09 20:04:00.017107-08	2017-02-09 20:04:00.017107-08	1	It's like clouds	\N	\N	Plastic	\N	\N	\N	/dev/2017-001/aboutmybike-1486699435356.png	{1}	{1}
-68	\N	\N	2017-02-09 20:04:41.437167-08	2017-02-09 20:04:41.437167-08	1	It's like clouds	\N	\N	Plastic	\N	\N	\N	/dev/2017-001/aboutmybike-1486699476373.png	{1}	{1}
-58	\N	\N	2017-02-09 06:43:29.037108-08	2017-02-09 06:43:29.037108-08	1	City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	Pink Odyssey	\N	\N	332	/dev/2017-001/aboutmybike-1487234011703.png	{15}	{1,4,5,6,8,7}
-81	\N	\N	2017-02-15 11:33:08.337725-08	2017-02-15 11:33:08.337725-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187183432.png	\N	\N
-86	\N	\N	2017-02-15 11:45:48.279354-08	2017-02-15 11:45:48.279354-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187947031.png	\N	\N
-92	\N	\N	2017-02-15 11:55:13.61907-08	2017-02-15 11:55:13.61907-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188512209.png	\N	\N
-97	\N	\N	2017-02-15 12:07:35.529806-08	2017-02-15 12:07:35.529806-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487189254216.png	\N	\N
-102	\N	\N	2017-02-15 13:04:36.652587-08	2017-02-15 13:04:36.652587-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487192673276.png	\N	\N
-56	\N	\N	2017-02-08 21:38:45.301127-08	2017-02-08 21:38:45.301127-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487197373874.png	{1}	{1}
-78	\N	\N	2017-02-13 13:48:46.216632-08	2017-02-13 13:48:46.216632-08	1	Fits two. Is from the 70s.	\N	\N	Banana Boat	\N	\N	11111	/dev/2017-001/aboutmybike-1487022524272.png	{20}	{1}
-82	\N	\N	2017-02-15 11:35:04.369092-08	2017-02-15 11:35:04.369092-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187303458.png	\N	\N
-87	\N	\N	2017-02-15 11:46:48.646761-08	2017-02-15 11:46:48.646761-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188007402.png	\N	\N
-93	\N	\N	2017-02-15 11:59:04.777261-08	2017-02-15 11:59:04.777261-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188743157.png	\N	\N
-98	\N	\N	2017-02-15 12:14:56.694593-08	2017-02-15 12:14:56.694593-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487189695684.png	\N	\N
-103	\N	\N	2017-02-15 13:08:19.788484-08	2017-02-15 13:08:19.788484-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487192898457.png	\N	\N
-109	\N	\N	2017-02-16 00:00:49.249331-08	2017-02-16 00:00:49.249331-08	1	Searching for that perfect color has never been easier, use our HTML color picker to browse millions of colors and color harmonies.	\N	\N	Red	\N	\N	334	/dev/2017-001/aboutmybike-1487232042036.png	{28}	{1,2,5,6,7}
-72	\N	\N	2017-02-13 13:33:43.689924-08	2017-02-13 13:33:43.689924-08	1	This is a rare, retro tandem bike.	\N	\N	Banana Boat	\N	\N	66666666666	/dev/2017-001/aboutmybike-1487021351883.png	\N	{1}
-73	\N	\N	2017-02-13 13:33:43.882957-08	2017-02-13 13:33:43.882957-08	1	This is a rare, retro tandem bike.	\N	\N	Banana Boat	\N	\N	66666666666	/dev/2017-001/aboutmybike-1487021471904.png	\N	{1}
-79	\N	\N	2017-02-13 14:19:28.670231-08	2017-02-13 14:19:28.670231-08	1	Simple fixie with custom paint	\N	\N	Ocean sunshine love	\N	\N	\N	/dev/2017-001/aboutmybike-1487024364212.png	{14}	\N
-83	\N	\N	2017-02-15 11:36:52.96745-08	2017-02-15 11:36:52.96745-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187410691.png	\N	\N
-88	\N	\N	2017-02-15 11:48:53.641097-08	2017-02-15 11:48:53.641097-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188132263.png	\N	\N
-94	\N	\N	2017-02-15 11:59:47.980025-08	2017-02-15 11:59:47.980025-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188786877.png	\N	\N
-99	\N	\N	2017-02-15 12:45:52.429357-08	2017-02-15 12:45:52.429357-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487191551081.png	\N	\N
-104	\N	\N	2017-02-15 13:12:19.972259-08	2017-02-15 13:12:19.972259-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487193138951.png	\N	\N
-110	\N	\N	2017-02-16 12:08:21.997091-08	2017-02-16 12:08:21.997091-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487275697612.png	\N	{7}
-59	\N	\N	2017-02-09 06:48:13.920676-08	2017-02-09 06:48:13.920676-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1486651693606.jpg	{1}	{1}
-65	\N	\N	2017-02-09 12:46:27.682464-08	2017-02-09 12:46:27.682464-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1486673187078.jpg	{1}	{1}
-63	\N	\N	2017-02-09 12:32:12.858679-08	2017-02-09 12:32:12.858679-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6186	\N	\N	/dev/2017-001/aboutmybike-1487097625274.png	{1}	{1}
-84	\N	\N	2017-02-15 11:39:37.5731-08	2017-02-15 11:39:37.5731-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187576306.png	\N	\N
-62	\N	\N	2017-02-09 12:28:11.766489-08	2017-02-09 12:28:11.766489-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487185307583.jpg	{1}	{1}
-89	\N	\N	2017-02-15 11:50:53.952942-08	2017-02-15 11:50:53.952942-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188252286.png	\N	\N
-90	\N	\N	2017-02-15 11:51:15.896367-08	2017-02-15 11:51:15.896367-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188274173.png	\N	\N
-95	\N	\N	2017-02-15 12:01:16.046739-08	2017-02-15 12:01:16.046739-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188874493.png	\N	\N
-100	\N	\N	2017-02-15 12:51:57.141189-08	2017-02-15 12:51:57.141189-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487191915999.png	\N	\N
-105	\N	\N	2017-02-15 13:16:43.701502-08	2017-02-15 13:16:43.701502-08	1	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis, est quis congue blandit, elit neque vulputate justo, iaculis venenatis nibh ex ac elit. Suspendisse tristique risus at nisl fringilla interdum. Proin mi felis, aliquam at sodales vel, varius sed eros. Fusce venenatis posuere sapien, nec dapibus metus maximus eget. Nullam ultricies consequat ante, at accumsan enim gravida non. Duis vulputate eget nibh quis mollis. Integer quis lorem non felis maximus semper non quis purus.\r\n\r\n	\N	\N	lorem	\N	\N	aa	/dev/2017-001/aboutmybike-1487195855009.png	{7}	\N
-64	\N	\N	2017-02-09 12:34:07.918514-08	2017-02-09 12:34:07.918514-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6168	5023	\N	/dev/2017-001/aboutmybike-1486672447648.jpg	{1}	{1}
-70	\N	\N	2017-02-09 20:05:35.183928-08	2017-02-09 20:05:35.183928-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1486699530750.png	{1}	{1}
-54	\N	\N	2017-02-08 14:24:11.163547-08	2017-02-08 14:24:11.163547-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1486592643810.jpg	{1}	{1}
-2	Laguna BMX	Super Cruiser	2016-09-16 18:18:21.902632-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/photos/bike2.jpg	{1}	{1}
-6	Mongoose	Custom Trials Bike	2016-09-16 21:33:55.323714-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	\N	\N	/photos/bike6.jpg	{1}	{1}
-74	\N	\N	2017-02-13 13:41:19.440109-08	2017-02-13 13:41:19.440109-08	1	Fits two. Is from the 70s.	\N	\N	Banana Boat	\N	\N	11111	/dev/2017-001/aboutmybike-1487022077571.png	\N	{1}
-80	\N	\N	2017-02-13 16:18:45.774122-08	2017-02-13 16:18:45.774122-08	1	Just a practical bike.	\N	\N	Stewart	\N	\N	111	/dev/2017-001/aboutmybike-1487031524548.png	{7}	{1,2,4,9}
-1	Fuji	Cambridge III	2016-09-16 18:13:22.682023-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more ...	\N	\N	\N	\N	\N	\N	/photos/bike1.jpg	{1}	{1}
-85	\N	\N	2017-02-15 11:42:33.214708-08	2017-02-15 11:42:33.214708-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487187751607.png	\N	\N
-91	\N	\N	2017-02-15 11:53:16.699933-08	2017-02-15 11:53:16.699933-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487188394193.png	\N	\N
-96	\N	\N	2017-02-15 12:05:17.696409-08	2017-02-15 12:05:17.696409-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487189116628.png	\N	\N
-101	\N	\N	2017-02-15 12:57:54.320747-08	2017-02-15 12:57:54.320747-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487192272710.png	\N	\N
-106	\N	\N	2017-02-15 13:38:49.490999-08	2017-02-15 13:38:49.490999-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487194728255.png	\N	\N
-107	\N	\N	2017-02-15 13:39:05.154038-08	2017-02-15 13:39:05.154038-08	1	\N	\N	\N	\N	\N	\N	\N	/dev/2017-001/aboutmybike-1487194915871.png	\N	\N
-71	\N	\N	2017-02-13 11:59:02.034924-08	2017-02-13 11:59:02.034924-08	1	This is a mudders bike. I like to ride it in the mud....and sand.	\N	\N	Muddy Waters II	\N	\N	111122	/dev/2017-001/aboutmybike-1487015933269.png	{7}	{1,4}
-57	\N	Small Bike	2017-02-08 21:49:03.189296-08	2017-02-08 21:49:03.189296-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	5024	\N	/dev/2017-001/aboutmybike-1486619238393.jpg	{1}	{1}
-60	\N	\N	2017-02-09 06:50:31.582714-08	2017-02-09 06:50:31.582714-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	\N	5024	\N	/dev/2017-001/aboutmybike-1486651831031.jpg	{1}	{1}
-3	Raleigh	Technium	2016-09-16 18:24:52.781274-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6167	\N	\N	/photos/bike3.jpg	{1}	{1}
-4	Surly	Straggler	2016-09-16 18:27:28.759123-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6108	\N	\N	/photos/bike4.jpg	{1}	{1}
-5	State Bicycle Company	Megalith Blah Blah Blah	2016-09-16 21:31:49.890723-07	2016-09-27 06:22:32.468796-07	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6201	\N	\N	/photos/bike5.jpg	{1}	{1}
-69	\N	NO SHOW	2017-02-09 20:05:13.301206-08	2017-02-09 20:05:13.301206-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	\N	6168	8089	\N	/dev/2017-001/aboutmybike-1486699509071.png	{1}	{1}
-61	\N	\N	2017-02-09 08:21:04.102698-08	2017-02-09 08:21:04.102698-08	1	The city bike differs from the familiar European city bike in its mountain bike heritage, gearing, and strong yet lightweight frame construction. It usually features mountain bike-sized (26-inch) wheels, a more upright seating position, and fairly wide 1.5 - 1.95-inch (38 – 50 mm) heavy belted tires designed to shrug off road hazards commonly found in the city, such as broken glass. Using a sturdy welded chromoly or aluminum frame derived from the mountain bike, the city bike is more capable at handling urban hazards such as deep potholes, drainage grates, and jumps off city curbs. City bikes are designed to have reasonably quick, yet solid and predictable handling, and are normally fitted with full fenders for use in all weather conditions. A few city bikes may have enclosed chainguards, while others may be equipped with suspension forks, similar to mountain bikes. City bikes may also come with front and rear lighting systems for use at night or in bad weather.	\N	\N	Squigly	6168	5024	\N	/dev/2017-001/aboutmybike-1486657187009.jpg	{1}	{1,5,6,8}
+COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, description, notes, nickname, manufacturer_id, model_id, serial_number, main_photo_path, type_ids, reason_ids, status) FROM stdin;
 \.
 
 
@@ -621,7 +534,7 @@ COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, 
 -- Name: bike_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('bike_id_seq', 110, true);
+SELECT pg_catalog.setval('bike_id_seq', 115, true);
 
 
 --
@@ -629,10 +542,6 @@ SELECT pg_catalog.setval('bike_id_seq', 110, true);
 --
 
 COPY bike_info (bike_id, year, era, speeds, handlebars, brakes, color, details) FROM stdin;
-71	\N	Recent	\N	\N	\N	\N	\N
-110	\N	2000s	\N	\N	\N	\N	\N
-109	\N	Mid-Century	\N	\N	\N	#f00	\N
-108	\N	\N	\N	\N	\N	#ff0000	\N
 \.
 
 
@@ -7412,52 +7321,6 @@ SELECT pg_catalog.setval('model_id_seq', 10023, true);
 --
 
 COPY photo (id, original_filename, file_path, bike_id, user_id, metadata, created_at) FROM stdin;
-1	\N	/dev/2017-001/aboutmybike-1487183359437.png	62	1	\N	2017-02-15 10:29:20.547292-08
-2	\N	/dev/2017-001/aboutmybike-1487183599128.png	62	1	\N	2017-02-15 10:33:26.621672-08
-3	\N	/dev/2017-001/aboutmybike-1487185143111.png	62	1	\N	2017-02-15 10:59:04.902591-08
-4	\N	/dev/2017-001/aboutmybike-1487185187555.jpg	62	1	\N	2017-02-15 10:59:49.484838-08
-5	\N	/dev/2017-001/aboutmybike-1487185263126.png	62	1	\N	2017-02-15 11:01:05.452938-08
-6	\N	/dev/2017-001/aboutmybike-1487185307583.jpg	62	1	\N	2017-02-15 11:01:50.329741-08
-7	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487187183432.png	81	1	\N	2017-02-15 11:33:08.346424-08
-8	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487187303458.png	82	1	\N	2017-02-15 11:35:04.374215-08
-9	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487187410691.png	83	1	\N	2017-02-15 11:36:52.974512-08
-10	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487187576306.png	84	1	\N	2017-02-15 11:39:37.581878-08
-11	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487187751607.png	85	1	\N	2017-02-15 11:42:33.221752-08
-12	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487187947031.png	86	1	\N	2017-02-15 11:45:48.286186-08
-13	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487188007402.png	87	1	\N	2017-02-15 11:46:48.651549-08
-14	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487188132263.png	88	1	\N	2017-02-15 11:48:53.644547-08
-15	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487188252286.png	89	1	\N	2017-02-15 11:50:53.958347-08
-16	Screen Shot 2017-02-09 at 1.37.13 PM.png	/dev/2017-001/aboutmybike-1487188274173.png	90	1	\N	2017-02-15 11:51:15.899899-08
-17	Screen Shot 2017-02-09 at 1.37.13 PM.png	/dev/2017-001/aboutmybike-1487188394193.png	91	1	\N	2017-02-15 11:53:16.703792-08
-18	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487188512209.png	92	1	\N	2017-02-15 11:55:13.625805-08
-19	Screen Shot 2017-02-09 at 1.37.29 PM.png	/dev/2017-001/aboutmybike-1487188743157.png	93	1	\N	2017-02-15 11:59:04.784341-08
-20	Screen Shot 2017-02-09 at 1.37.29 PM.png	/dev/2017-001/aboutmybike-1487188786877.png	94	1	\N	2017-02-15 11:59:47.984941-08
-21	Screen Shot 2017-02-09 at 1.37.29 PM.png	/dev/2017-001/aboutmybike-1487188874493.png	95	1	\N	2017-02-15 12:01:16.05385-08
-22	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487189116628.png	96	1	\N	2017-02-15 12:05:17.703062-08
-23	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-1487189254216.png	97	1	\N	2017-02-15 12:07:35.536949-08
-24	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487189695684.png	98	1	\N	2017-02-15 12:14:56.702422-08
-25	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487189695684.png	98	1	\N	2017-02-15 12:14:56.704873-08
-26	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-1487191551081.png	99	1	\N	2017-02-15 12:45:52.436468-08
-27	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-1487191551081.png	99	1	\N	2017-02-15 12:45:52.438932-08
-29	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487191915999.png	100	1	\N	2017-02-15 12:51:57.145759-08
-30	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487191915999.png	100	1	\N	2017-02-15 12:51:57.147754-08
-31	Screen Shot 2017-02-09 at 1.31.42 PM.png	/dev/2017-001/aboutmybike-1487192272710.png	101	1	\N	2017-02-15 12:57:54.326812-08
-33	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-1487193138951.png	104	1	\N	2017-02-15 13:12:19.981251-08
-34	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-1487193402017.png	105	1	\N	2017-02-15 13:16:43.706602-08
-35	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487194035009.png	105	1	\N	2017-02-15 13:27:21.318681-08
-36	Screen Shot 2017-02-09 at 1.31.42 PM.png	/dev/2017-001/aboutmybike-1487194263210.png	105	1	\N	2017-02-15 13:31:05.914637-08
-37	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-1487194564934.png	105	1	\N	2017-02-15 13:36:06.612697-08
-38	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487194728255.png	106	1	\N	2017-02-15 13:38:49.501474-08
-39	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-1487194742717.png	107	1	\N	2017-02-15 13:39:05.156708-08
-40	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-1487194756152.png	107	1	\N	2017-02-15 13:39:20.695534-08
-41	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487194781953.png	107	1	\N	2017-02-15 13:39:43.529734-08
-42	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-1487194915871.png	107	1	\N	2017-02-15 13:41:57.237456-08
-43	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-1487195855009.png	105	1	\N	2017-02-15 13:57:47.20491-08
-44	Screen Shot 2017-02-09 at 1.29.39 PM.png	/dev/2017-001/aboutmybike-1487197373874.png	56	1	\N	2017-02-15 14:22:55.439639-08
-45	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-1487231747351.png	108	1	\N	2017-02-15 23:55:48.822548-08
-46	Screen Shot 2017-02-09 at 1.35.59 PM.png	/dev/2017-001/aboutmybike-1487232042036.png	109	1	\N	2017-02-16 00:00:49.255298-08
-47	Screen Shot 2017-02-09 at 1.31.33 PM.png	/dev/2017-001/aboutmybike-1487234011703.png	58	1	\N	2017-02-16 00:33:32.800111-08
-48	Screen Shot 2017-02-14 at 10.39.16 AM.png	/dev/2017-001/aboutmybike-1487275697612.png	110	1	\N	2017-02-16 12:08:22.008321-08
 \.
 
 
@@ -7465,7 +7328,7 @@ COPY photo (id, original_filename, file_path, bike_id, user_id, metadata, create
 -- Name: photo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('photo_id_seq', 48, true);
+SELECT pg_catalog.setval('photo_id_seq', 53, true);
 
 
 --
@@ -7528,43 +7391,30 @@ SELECT pg_catalog.setval('theft_id_seq', 1, false);
 
 COPY type (id, label, notes, related_type_ids) FROM stdin;
 1	Road	\N	\N
-2	Racing	\N	{1}
-3	Flat Bar Road	\N	{1}
-4	Time Trial	\N	{1}
-5	Triathlon	\N	{1}
-6	Mountain	\N	\N
-7	Downhill	\N	{6}
-8	Fat	\N	{6}
-9	Hybrid	\N	\N
-10	City	\N	{9}
-11	Trekking	\N	{9}
-12	Commuter	\N	{9}
-13	Cyclo-cross	\N	{9}
-14	Fixed Gear	\N	\N
-15	BMX	\N	{14}
-16	Track	\N	{14}
-17	Cruiser	\N	\N
-18	Folding	\N	\N
-19	Recumbent	\N	\N
-20	Tandem	\N	\N
-21	Tricycle	\N	\N
-22	Unicycle	\N	\N
-23	Utility	\N	\N
-24	Freight	\N	\N
-25	Rickshaw (Taxi)	\N	\N
-26	Motorized	\N	\N
-27	Electric	\N	\N
-28	Step-Through	\N	\N
-29	Mixte	\N	{28}
-30	Cross	\N	{28}
+2	Mountain	\N	\N
+3	Downhill	\N	{2}
+4	Fat	\N	{2}
+5	Suspension	\N	{2}
+6	Hybrid	\N	\N
+7	City	\N	{6}
+8	Cyclo-cross	\N	{6}
+9	Flat Bar Road	\N	{6}
+10	Trekking	\N	{6}
+11	Step-Through	\N	\N
+12	Mixte	\N	{11}
+13	Fixed Gear	\N	\N
+14	BMX	\N	{13}
+15	Track	\N	{13}
+16	Cruiser	\N	\N
+17	Folding	\N	\N
+18	Recumbent	\N	\N
+19	Tandem	\N	\N
+20	Tricycle	\N	\N
+21	Unicycle	\N	\N
+22	Utility	\N	\N
+23	Motorized	\N	\N
+24	Electric	\N	\N
 \.
-
-
---
--- Name: type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
---
-
-SELECT pg_catalog.setval('type_id_seq', 1, false);
 
 
 --
@@ -7672,14 +7522,6 @@ ALTER TABLE ONLY theft
 
 
 --
--- Name: type type_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
---
-
-ALTER TABLE ONLY type
-    ADD CONSTRAINT type_pkey PRIMARY KEY (id);
-
-
---
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
 --
 
@@ -7688,11 +7530,11 @@ ALTER TABLE ONLY "user"
 
 
 --
--- Name: bike_info bike_id; Type: FK CONSTRAINT; Schema: public; Owner: arobson
+-- Name: bike_info bike_info_bike_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: arobson
 --
 
 ALTER TABLE ONLY bike_info
-    ADD CONSTRAINT bike_id FOREIGN KEY (bike_id) REFERENCES bike(id);
+    ADD CONSTRAINT bike_info_bike_id_fkey FOREIGN KEY (bike_id) REFERENCES bike(id) ON DELETE CASCADE;
 
 
 --
