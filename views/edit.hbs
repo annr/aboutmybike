@@ -4,14 +4,16 @@
     if (location.hash === '') {
       var defaultTab = '#intro';
       $('a[href="'+ defaultTab + '"]').tab('show');
-      history.pushState(null, null, defaultTab);
+      //history.pushState(null, null, defaultTab);
     }
     if (location.hash !== '') {
       $('a[href="' + location.hash + '"]').tab('show');
     }
 
     $('a[data-toggle="tab"]').on('click', function(e) {
-      console.log($(this).attr('href'));
+      // you may need to remove the alert, say, if the user tries to undo
+      // the desc of an existing bike and then go to the basics form
+      $('.alert-warning').remove();
       history.pushState(null, null, $(this).attr('href'));
     });
 
@@ -27,17 +29,19 @@
 
     $("#editIntro").submit(function(event) {
       event.preventDefault();
-      var desc = $(this).find('input[name=description]');
+      var desc = $('#description');
+
       var step2 = $('a[href="#basics"]');
 
       if($(this).find('input[name=bike_id]').val() === '') {
-        appendPhotoAlert('Please attach a bike photo before submitting this form.');
+        appendAlert('Please attach a bike photo before submitting this form.');
         return;
       }
+
       if(desc.val() === '') {
-        appendIntroAlert('Please enter some thoughts about your bike.');
-        // call attention to missing field
-        //desc.border...
+        //var originalBorderColor = desc.attr('border-color');
+        appendAlert('Please enter some thoughts about your bike.');
+        desc.focus();
         return;
       }
 
@@ -53,12 +57,17 @@
         type: 'POST',
         data: $(this).serialize(),
         success: function(data) {
-          // if in add bike process, go to the next tab. If not, show save success.
-          //if() {
-
-          //} else {
+          if($('#is_new').val() === '1') {
+            $('.alert-warning').remove();
+            // we hide the basics tab until they finish intro.
+            $('#basics_nav_item').show();
             step2.tab('show');
-          //}
+          } else {
+            // also can add "view bike"
+            //appendAlert('Intro saved. <a data-toggle="tab" href="/edit/' + $('#intro input[name=bike_id]').val() +'#basics">Edit basics</a>');
+            //appendAlert('Intro values saved.');
+            location.replace('/bike/' + $('#intro input[name=bike_id]').val());
+          }
         },
         error: function(err) {
           appendIntroAlert(JSON.stringify(err));
@@ -66,6 +75,8 @@
       });
 
     });
+
+
 
     $("#uploadForm").submit(function( event ) {
       event.preventDefault();
@@ -87,7 +98,7 @@
           return myXhr;
         },
         success: function(data) {
-          appendPhotoAlert('Successfully attached your bike photo.');
+          appendAlert('Successfully attached your bike photo.');
           if($('input[name=bike_id]').val() === '') {
             $('input[name=bike_id]').val(data.id);
           }
@@ -95,7 +106,7 @@
         error: function(err) {
           // be transparent and output error. 
           // but how to you get specific error and not whole page?
-          appendPhotoAlert(err);
+          appendAlert('Error attaching bike photo. Please try again later.');
         }//,
         // complete: function() {
         //   $("#submitIntro").prop("disabled",true);
@@ -103,13 +114,13 @@
       });
     });
 
-    // make curry functions for these.
-    function appendPhotoAlert(msg) {
-      $('#upload_photo_group').append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
-    }
-
-    function appendIntroAlert(msg) {
-      $('#editIntro').append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
+    function appendAlert(msg, elem) {
+      // remove any existing alert warnings
+      $('.alert-warning').remove();
+      if(!elem) {
+        elem = $('#upload_photo_group');
+      }
+      elem.append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
     }
 
     function filePreview(input, callback) {
@@ -123,15 +134,15 @@
           $('#upload-target').removeClass('upload-placeholder');
         }
         if(input.files[0].type !== 'image/jpeg' && input.files[0].type !== 'image/png') {
-          appendPhotoAlert('Bike photo must be an image.');
+          appendAlert('Bike photo must be an image.');
           return;
         }
         if(input.files[0].size <= minSize) {
-          appendPhotoAlert('Image size must be at least ' + minSize/1000 + 'K (Yours is ' + Math.round(input.files[0].size/1000) + 'K). Please attach a larger photo of your bike.');
+          appendAlert('Image size must be at least ' + minSize/1000 + 'K (Yours is ' + Math.round(input.files[0].size/1000) + 'K). Please attach a larger photo of your bike.');
           return;
         }
         if(input.files[0].size > maxSize) {
-          appendPhotoAlert('Image size must be at less than <nowrap>' + maxSize/1000000 + ' Megabytes</nowrap> (Yours is ' + (input.files[0].size/1000000).toFixed(2) + 'M). Please attach a smaller photo of your bike.');
+          appendAlert('Image size must be at less than <nowrap>' + maxSize/1000000 + ' Megabytes</nowrap> (Yours is ' + (input.files[0].size/1000000).toFixed(2) + 'M). Please attach a smaller photo of your bike.');
           return;
         }
         reader.readAsDataURL(input.files[0]);
@@ -278,7 +289,7 @@
   <li class="nav-item">
     <a class="nav-link"  data-toggle="tab" href="#intro" role="tab">Intro</a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item" id="basics_nav_item" {{#unless bike.id}}style="display:none"{{/unless}}>
     <a class="nav-link"  data-toggle="tab" href="#basics" role="tab">Basics</a>
   </li>
 {{!--   <li class="nav-item">
@@ -291,13 +302,13 @@
   <div class="tab-pane" id="intro" role="tabpanel">
   <form id="editIntro" method="post" action="/edit">
     <input type="hidden" name="step" value="1">
-    <input type="hidden" name="is_new" value="{{#if bike.id}}0{{else}}1{{/if}}">
+    <input type="hidden" name="is_new" id="is_new" value="{{#if bike.id}}0{{else}}1{{/if}}">
     <input type="hidden" name="user_id" value="1">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <div class="form-group">
 {{!--     <label for="saySomething">What about your bike?</label> --}}
-    <label for="saySomething">Say what you'd like about yourself and your bike</label>
-    <textarea class="form-control" id="saySomething" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
+    <label for="description">Say what you'd like about yourself and your bike</label>
+    <textarea class="form-control" id="description" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
 
     <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname" value="{{bike.nickname}}"></div>
 
@@ -317,12 +328,12 @@
         <label class="checkbox-inline">
           <input type="checkbox" name="reason_ids" value="{{id}}"{{#if checked}} checked{{/if}}>
           {{label}}
-        </label> &nbsp;
+        </label>
       {{/each}}
       <input type="hidden" name="reasons" id="reasons" value="">
     </div>
 
-    <button type="submit" class="btn btn-primary" id="submitIntro">Save {{#unless bike.id}} and Continue{{/unless}}</button>
+    <button type="submit" class="btn btn-primary" id="submitIntro">Save{{#if bike.id}} Intro{{else}} and Continue{{/if}}</button>
 
   </form>
   </div>
@@ -340,7 +351,7 @@
     <input type="hidden" name="bike_id" value="{{bike.id}}">
 
     <div class="form-group">
-      <label for="color">Color:</label> &nbsp;
+      <label for="color">Main Color:</label> &nbsp;
       <input type="color" class="color-input form-control" name="color" value="{{#if bike.color}}{{bike.color}}{{else}}#dcdbdf{{/if}}">
     </div>
 
@@ -378,7 +389,7 @@
       <input type="text" class="form-control" id="country" name="country">
     </div> --}}
 
-    <button type="submit" class="btn btn-primary" id="submitDetails">Save {{#unless bike.id}} and View Bike{{/unless}}</button>
+    <button type="submit" class="btn btn-primary" id="submitDetails">Save{{#if bike.id}} Basics{{else}} and View Bike{{/if}}</button>
   </form>
 
   </div>

@@ -87,10 +87,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.container {
- min-width: 320px;
-}
-
 .bike-detail-container {
   text-align: center;
 }
@@ -311,7 +307,6 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   .card-title {
     font-size: 0.9rem;
   }
-
 }
 
 @media (min-width: 601px) and (max-width: 767px) {
@@ -337,6 +332,12 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   }
   .title {
     font-size: smaller;
+  }
+  body {
+    font-size: smaller;
+  }
+  .card-text {
+    height: 30px;
   }
 }
 
