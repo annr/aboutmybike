@@ -16,7 +16,6 @@ let bike = require('./routes/bike');
 let feedback = require('./routes/feedback');
 let edit = require('./routes/edit');
 let upload = require('./routes/upload');
-let login = require('./routes/login');
 let profile = require('./routes/profile');
 
 let api = require('./api');
@@ -37,10 +36,9 @@ let passport = require('passport');
 let pgSession = require('connect-pg-simple')(session);
 
 // session stuff:
-/*
 require('./auth').init(app);
 
-app.set('trust proxy', 1) // trust first proxy
+app.set('trust proxy', 1); // trust first proxy
 
 app.use(session({
   store: new pgSession({
@@ -51,19 +49,10 @@ app.use(session({
   secret: 's3Cur3', // TO-DO make secret secret!!!
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-}))
+}));
 
-app.use(passport.initialize())
-app.use(passport.session())
-
-*/
-
-/*
-app.use(function(req,res,next){
-  //res.locals.app = {};
-  next();
-});
-*/
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

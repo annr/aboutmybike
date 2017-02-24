@@ -258,8 +258,8 @@
 
       <div class="upload-target-wrapper">
 
-        {{#if bike.photo_url}}
-        <img src="{{bike.photo_url}}" width="540" class="bike-photo add-bike-photo" id="upload-target" style="display: inline;">
+        {{#if bike.main_photo_path}}
+        <img src="{{s3Url}}{{bike.main_photo_path}}" width="540" class="bike-photo add-bike-photo" id="upload-target" style="display: inline;">
         {{else}}
         <img src="/images/example-with-upload.png" class="bike-photo add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
         {{/if}}

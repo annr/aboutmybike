@@ -14,11 +14,6 @@ router.get('/:id', function(req, res, next) {
       next(err);
     } else {
       var bike = helper.transformForDisplay(data);
-
-      bike.photo_url = req.app.locals.s3Url + bike.photo_url;
-
-      console.log(req.app.locals.s3Url);
-
       res.render('bike', {
         page_title: 'Bike Detail',
         bike: bike

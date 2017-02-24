@@ -4,8 +4,9 @@ var util = require('util');
 
 router.get('/', function(req, res, next) {
 
-/*
   var sess = req.session;
+
+  /*
   if (sess.views) {
     sess.views++;
     res.setHeader('Content-Type', 'text/html');
@@ -17,12 +18,10 @@ router.get('/', function(req, res, next) {
   }
   */
 
-  //console.log(util.inspect(res.app.locals));
-
   res.render('index', {
     page_title: 'Home',
-    //session: sess,
-    //user: req.user
+    session: sess,
+    user: req.user
   });
 });
 

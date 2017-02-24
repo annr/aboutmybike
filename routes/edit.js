@@ -33,8 +33,6 @@ router.get(['/', '/:id'], function(req, res, next) {
       if(err) {
         next(err);
       } else {
-        data.photo_url = res.locals.app.s3Url + data.main_photo_path;
-
         // Try to guess how many textarea rows will be necessary to edit the text.
         // This is hard, because responsive, but if the text is really long, you can give more editor.
         if(data.description && data.description.length) {
