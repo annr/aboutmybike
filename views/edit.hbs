@@ -125,8 +125,14 @@
 
     function filePreview(input, callback) {
       $('.alert-warning').remove();
-      var maxSize = 5000000;
-      var minSize = 200000;
+      var maxSize = {{maxPhotoSize}};
+      var minSize = {{minPhotoSize}};
+      // lame
+      var acceptedFileTypes = [];
+      {{#each acceptedFileTypes}}
+      acceptedFileTypes.push("{{this}}");
+      {{/each}}
+
       if (input.files && input.files[0]) {  
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -158,11 +164,6 @@
         $("#uploadForm").submit();
       });
     });
-
-    $('#myModal').on('shown.bs.modal', function () {
-      $('#myInput').focus()
-    });
-
 
     /* STEP 2 functions */ 
     function searchAndUpdateBrand(str) {
@@ -461,7 +462,7 @@
 
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

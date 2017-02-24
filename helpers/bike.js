@@ -1,5 +1,3 @@
-
-
 let types = require('./bike-types').types;
 let reasons = [
   { "id" : 1, "label": "fun"},

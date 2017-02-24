@@ -26,8 +26,16 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link bike-add-link" href="/add">+ Add Your Bike</a>
+              <a class="nav-link bike-add-link" href="#" data-toggle="modal" data-target="#loginModal">+ Add Your Bike</a>
             </li>
+
+            {{#if user}}
+            <li class="nav-item">
+              <a class="nav-link bike-add-link" href="/profile">{{user.username}}</a>
+            </li>
+
+            {{/if}}
+
 {{!--
             <li class="nav-item">
               <a class="nav-link" href="#login">Login</a>
@@ -65,6 +73,32 @@
 
 
   </div>
+
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{app_name}} Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+        <form action="/login" method="post">
+          <input name="username" id="username" type="text" placeholder="Your username" />
+          <input name="password" id="password" type="password" placeholder="Your password"/>
+          <input type="submit" />
+        </form>
+
+       </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- PLACEHOLDER to preload js for other pages. this hs is not used or required for main pages (home, bikes, bike and add) -->
 

@@ -19,7 +19,6 @@ router.get('/', (req, res, next) => {
         }
       }
       res.render('bikes', {
-        app_name: res.locals.app.name,
         page_title: 'Bikes',
         results: data,
       });

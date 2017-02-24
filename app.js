@@ -1,23 +1,69 @@
 let express = require('express');
 let path = require('path');
 let favicon = require('serve-favicon');
-let logger = require('morgan');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
 
+let pg = require('pg');
+let logger = require('morgan');
+let bodyParser = require('body-parser');
+let session = require('express-session');
+
+const config = require('./config').appConfig;
+
+// routes
 let index = require('./routes/index');
 let bikes = require('./routes/bikes');
 let bike = require('./routes/bike');
 let feedback = require('./routes/feedback');
-
 let edit = require('./routes/edit');
 let upload = require('./routes/upload');
+let login = require('./routes/login');
+let profile = require('./routes/profile');
 
 let api = require('./api');
 
+let util = require('util');
+
 let app = express();
 
-app.use('/api', api);
+// these are globally added values. can be used in templages like {{app_name}}
+app.locals.app_name = config.name;
+app.locals.s3Url = config.s3Url;
+
+app.locals.maxPhotoSize = config.maxPhotoSize;
+app.locals.minPhotoSize = config.minPhotoSize;
+app.locals.acceptedFileTypes = config.acceptedFileTypes;
+
+let passport = require('passport');
+let pgSession = require('connect-pg-simple')(session);
+
+// session stuff:
+/*
+require('./auth').init(app);
+
+app.set('trust proxy', 1) // trust first proxy
+
+app.use(session({
+  store: new pgSession({
+    pg: pg,                                     // Use global pg-module
+    conString: 'postgres://localhost:5432/amb', // Connect using something else than default DATABASE_URL env variable
+    tableName: 'session'                        // Use another table-name than the default "session" one
+  }),
+  secret: 's3Cur3', // TO-DO make secret secret!!!
+  resave: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+*/
+
+/*
+app.use(function(req,res,next){
+  //res.locals.app = {};
+  next();
+});
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,43 +74,23 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req,res,next){
-  res.locals.app = {
-    name : "About My Bike",
-    s3Url: "https://s3-us-west-1.amazonaws.com/amb-storage"
-  };
-
-  next();
-})
+app.use('/api', api);
 
 app.use('/', index);
 app.use('/bikes', bikes);
 app.use('/bike', bike);
-
 app.use('/feedback', feedback);
-
-//app.get('/:var(add|edit)', edit)
 app.use(['/add', '/edit'], edit);
-
-//app.use('/edit', edit);
-//app.use('/add', add);
-// app.use(['/abcd', '/xyza', /\/lmn|\/pqr/], function (req, res, next) {
-//   next();
-// });
-
 app.use('/upload', upload);
-
-// app.post('/upload', upload.single('bike_photo'), function (req, res, next) {
-//   res.writeHead(200, {"Content-Type": "application/json"});
-//   res.end(JSON.stringify({ tmp_path: req.file.path }));
-// });
+app.use('/login', login);
+app.use('/profile', profile);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  let err = new Error('404 Not Found');
+  let err = new Error('404 Not Found Boo');
   err.status = 404;
   next(err);
 });

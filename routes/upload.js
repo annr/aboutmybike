@@ -3,6 +3,7 @@ var router = express.Router();
 var formidable = require('formidable');
 var AWS = require('aws-sdk');
 var fs = require('fs');
+var util = require('util');
 
 let queries = require('../db/queries');
 
@@ -14,6 +15,7 @@ function getFilename() {
 
 /* Create bike record */
 router.post('/', function(req, res, next) {
+  var config = req.app.locals;
   var bucketName = 'amb-storage';
 
   var rootFolder = '/dev';
@@ -29,14 +31,33 @@ router.post('/', function(req, res, next) {
   var form = new formidable.IncomingForm();
 
   form.parse(req, function(err, fields, files) {
+    var photo = files.bike_photo;
+    var localPath = photo.path;
 
-    var localPath = files.bike_photo.path;
-    var isSupportedImage = (files.bike_photo.type === 'image/jpeg') || (files.bike_photo.type === 'image/png');
-    var extension = files.bike_photo.type.split('/')[1];
+    // poor express error handling. the response is. an error, but is not properly returned as a readable one.
+    // Error: /Users/arobson/Sites/aboutmybike/views/error.hbs: Can't set headers after they are sent.
+    // at tleast it will bail out without uploading.
+    // Fix this!!!!
+    if(photo.size > config.maxPhotoSize) {
+      res.status(500).json({ error: 'Photo too large.' });
+      res.end();
+    }
+
+    if(photo.size < config.minPhotoSize) {
+      res.status(500).json({ error: 'Photo too small.' });
+      res.end();
+    }
+
+    if(config.acceptedFileTypes.indexOf(photo.type) === -1) {
+      res.status(500).json({ error: 'Wrong file type.' });
+      res.end();
+    }
+
+    var extension = photo.type.split('/')[1];
     if (extension === 'jpeg') extension = 'jpg'; 
     var filename = getFilename() + '.' + extension;
 
-    if(localPath && isSupportedImage) {
+    if(localPath) {
 
       // I'm not sure if this readFile is necessary or if formidable will stream the data.
       fs.readFile(localPath, (err, data) => {

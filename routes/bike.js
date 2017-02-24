@@ -15,10 +15,11 @@ router.get('/:id', function(req, res, next) {
     } else {
       var bike = helper.transformForDisplay(data);
 
-      bike.photo_url = res.locals.app.s3Url + bike.photo_url;
+      bike.photo_url = req.app.locals.s3Url + bike.photo_url;
+
+      console.log(req.app.locals.s3Url);
 
       res.render('bike', {
-        app_name: res.locals.app.name,
         page_title: 'Bike Detail',
         bike: bike
       });

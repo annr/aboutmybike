@@ -8,6 +8,7 @@ let page_heading =  'Let\'s make your bike page!';
 let page_title = 'Add Your Bike';
 let rows = 10;
 let view = 'edit';
+let util = require('util');
 
 router.get(['/', '/:id'], function(req, res, next) {
   var maxRows = 24;
@@ -16,7 +17,6 @@ router.get(['/', '/:id'], function(req, res, next) {
 
   if (!req.params.id) {
     res.render(view, {
-      app_name: res.locals.app.name,
       page_title: page_title,
       page_heading: page_heading,
       reasons: helper.getFormReasons(),
@@ -43,9 +43,7 @@ router.get(['/', '/:id'], function(req, res, next) {
             rows = calculatedRows;
           }
         }
-
         res.render(view, {
-          app_name: res.locals.app.name,
           page_title: page_title,
           page_heading: page_heading,
           bike: data,
