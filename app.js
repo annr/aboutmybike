@@ -74,8 +74,21 @@ app.use('/bike', bike);
 app.use('/feedback', feedback);
 app.use(['/add', '/edit'], edit);
 app.use('/upload', upload);
-app.use('/login', login);
 app.use('/profile', profile);
+
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    console.log('successful I guess redirecting...');
+    // TO-DO: make this flexible so that the login goes to the correct default.
+    res.redirect('/add');
+  }
+);
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
