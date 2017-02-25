@@ -24,6 +24,11 @@ let util = require('util');
 
 let app = express();
 
+/* for testing */
+var config2 = require('./oauth');
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+
 // these are globally added values. can be used in templages like {{app_name}}
 app.locals.app_name = config.name;
 app.locals.s3Url = config.s3Url;
@@ -36,7 +41,7 @@ let passport = require('passport');
 let pgSession = require('connect-pg-simple')(session);
 
 // session stuff:
-require('./auth').init(app);
+//require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
@@ -83,6 +88,41 @@ app.use(['/add', '/edit'], edit);
 app.use('/upload', upload);
 app.use('/profile', profile);
 
+
+
+/* test code start */
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+// config
+passport.use(new FacebookStrategy({
+  clientID: config2.facebook.clientID,
+  clientSecret: config2.facebook.clientSecret,
+  callbackURL: config2.facebook.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      return done(null, profile);
+    });
+  }
+));
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook'),
+  function(req, res){});
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+// test code end....
+
+/*
 app.post('/login',
   passport.authenticate('local'),
   function(req, res) {
@@ -93,6 +133,7 @@ app.post('/login',
     res.redirect(req.body.target);
   }
 );
+*/
 
 app.get('/logout', function(req, res){
   req.logout();
@@ -105,6 +146,11 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+}
 
 // error handler
 app.use(function(err, req, res, next) {

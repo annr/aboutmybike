@@ -1,5 +1,7 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const config = require('./oauth');
+const util = require('util');
 
 const authenticationMiddleware = require('./middleware');
 
