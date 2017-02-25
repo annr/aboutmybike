@@ -15,6 +15,12 @@ router.get(['/', '/:id'], function(req, res, next) {
   var line = 60;
   var calculatedRows;
 
+  // this page requires authentication:
+  if (!req.user) {
+    console.log('redirecting...');
+    res.redirect('/');
+  }
+
   if (!req.params.id) {
     res.render(view, {
       page_title: page_title,

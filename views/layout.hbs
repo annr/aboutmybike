@@ -12,6 +12,16 @@
     <script src="/javascripts/tab.js"></script>
     <script src="/javascripts/awesomplete.js"></script>
 
+
+    <!-- I don't think this is the best way to do this, but we'll just always update the login form's target when
+      the user clicks on a link that could require login -->
+    <script>
+    $(document).ready(function() {
+      $('.auth-req-link').click(function() {
+         $('#loginForm input[name=target]').val($(this).attr('href'));
+      });
+    });
+    </script>
   </head>
 
   <body>
@@ -26,46 +36,21 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link bike-add-link" href="#" data-toggle="modal" data-target="#loginModal">+ Add Your Bike</a>
+              <a class="nav-link auth-req-link" href="/add" {{#unless user}}data-toggle="modal" data-target="#loginModal"{{/unless}}>+ Add Your Bike</a>
             </li>
 
             {{#if user}}
             <li class="nav-item">
-              <a class="nav-link bike-add-link" href="/profile">{{user.username}}</a>
+              <a class="nav-link" href="/profile">{{user.username}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link bike-add-link" href="/logout">Log out</a>
+              <a class="nav-link" href="/logout">Log out</a>
             </li>
             {{else}}
             <li class="nav-item">
-              <a class="nav-link bike-add-link" href="#">Log in</a>
+              <a class="nav-link auth-req-link" data-toggle="modal" data-target="#loginModal" href="/">Log in</a>
             </li>
             {{/if}}
-
-{{!--
-            <li class="nav-item">
-              <a class="nav-link" href="#login">Login</a>
-            </li>
-
-            <li class="nav-item">
-
-
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  arobson
-                </a>
-
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#">Your bike</a>
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Logout</a>
-                </div>
-              </div>
-
-
-            </li> --}}
-
-
 
           </ul>
         </nav>
@@ -91,9 +76,10 @@
         </div>
         <div class="modal-body">
 
-        <form action="/login" method="post">
+        <form action="/login" method="post" id="loginForm">
           <input name="username" id="username" type="text" placeholder="Your username" />
           <input name="password" id="password" type="password" placeholder="Your password"/>
+          <input type="hidden" id="target" name="target" value="/" />
           <input type="submit" />
         </form>
 

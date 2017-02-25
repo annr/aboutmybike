@@ -276,7 +276,7 @@
       </label>
     </div>
     <input type="hidden" name="bike_id" value="{{bike.id}}">
-    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="user_id" value="{{user.id}}">
   </form>
 
 
@@ -304,7 +304,7 @@
   <form id="editIntro" method="post" action="/edit">
     <input type="hidden" name="step" value="1">
     <input type="hidden" name="is_new" id="is_new" value="{{#if bike.id}}0{{else}}1{{/if}}">
-    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="user_id" value="{{user.id}}">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <div class="form-group">
 {{!--     <label for="saySomething">What about your bike?</label> --}}

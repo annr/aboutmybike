@@ -54,6 +54,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+let userValues = function(req, res, next) {
+  req.app.locals.user = req.user;
+  next();
+};
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -65,6 +70,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(userValues);
 
 app.use('/api', api);
 
@@ -79,9 +86,7 @@ app.use('/profile', profile);
 app.post('/login',
   passport.authenticate('local'),
   function(req, res) {
-    console.log('successful I guess redirecting...');
-    // TO-DO: make this flexible so that the login goes to the correct default.
-    res.redirect('/add');
+    res.redirect(req.body.target);
   }
 );
 
