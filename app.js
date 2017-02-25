@@ -86,6 +86,10 @@ app.use('/profile', profile);
 app.post('/login',
   passport.authenticate('local'),
   function(req, res) {
+    // if the target is "/" but the user does not yet have a bike,
+    // maybe redirect them to the bike page.
+
+    // also keep the add bike links around until they create one.
     res.redirect(req.body.target);
   }
 );

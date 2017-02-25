@@ -34,18 +34,22 @@
             <li class="nav-item">
               <a class="nav-link" href="/bikes">Bikes</a>
             </li>
-
+            <!-- remove this link when the user has created a bike -->
             <li class="nav-item">
               <a class="nav-link auth-req-link" href="/add" {{#unless user}}data-toggle="modal" data-target="#loginModal"{{/unless}}>+ Add Your Bike</a>
             </li>
 
             {{#if user}}
-            <li class="nav-item">
-              <a class="nav-link" href="/profile">{{user.username}}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">Log out</a>
-            </li>
+              <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown link
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="/profile">Profile</a>
+                  <a class="dropdown-item" href="/logout">Log out</a>
+                </div>
+              </div>
             {{else}}
             <li class="nav-item">
               <a class="nav-link auth-req-link" data-toggle="modal" data-target="#loginModal" href="/">Log in</a>
