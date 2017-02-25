@@ -108,6 +108,22 @@ body {
   text-align: center;
 }
 
+.custom-dropdown {
+  /* caution: text-decoration is set inline on this element */
+  text-decoration: none;
+  margin-left: 1em;
+}
+
+.custom-dropdown-menu {
+  padding: 0;
+  margin: 0;
+  min-width: inherit;
+}
+
+.custom-dropdown-menu a {
+  padding-left: 10px;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 48em) {
   /* Remove the padding we set earlier */
