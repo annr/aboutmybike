@@ -1,7 +1,6 @@
 <script type="text/javascript" defer="defer">
-
   $(document).ready(function() {
-    if (location.hash === '') {
+    if (location.hash === '' || location.hash === '#_=_') {
       var defaultTab = '#intro';
       $('a[href="'+ defaultTab + '"]').tab('show');
       //history.pushState(null, null, defaultTab);

@@ -17,11 +17,11 @@
     <!-- I don't think this is the best way to do this, but we'll just always update the login form's target when
       the user clicks on a link that could require login -->
     <script>
-    $(document).ready(function() {
-      $('.auth-req-link').click(function() {
-         $('#loginForm input[name=target]').val($(this).attr('href'));
-      });
-    });
+    // $(document).ready(function() {
+    //   $('.auth-req-link').click(function() {
+    //      $('#loginForm input[name=target]').val($(this).attr('href'));
+    //   });
+    // });
     </script>
   </head>
 
@@ -61,15 +61,13 @@
         </nav>
         <h4 class="text-muted amb-text-logo"><a href="/">{{app_name}}</a></h4>
       </div>
-      <p><a href="/auth/facebook">Facebook login.</a></p>
 
     {{{body}}}
 
 <br>
      <footer><a href="/feedback">Feedback / Questions</a><p><small>©2017 AboutMyBike.com</p></small></p></footer>
   </div>
-
-  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+ <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -78,19 +76,17 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-
+        <div class="modal-body" style="margin: 0 auto;">
+{{!-- 
         <form action="/login" method="post" id="loginForm">
           <input name="username" id="username" type="text" placeholder="Your username" />
           <input name="password" id="password" type="password" placeholder="Your password"/>
           <input type="hidden" id="target" name="target" value="/" />
           <input type="submit" />
-        </form>
+        </form> --}}
+        <a href="/auth/facebook"><img src="/images/login-with-facebook.png" width="356" height="76" alt="Log in with Facebook"></a>
 
        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
       </div>
     </div>
   </div>

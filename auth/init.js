@@ -1,49 +1,38 @@
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+var db = require('../db/db');
 
-const authenticationMiddleware = require('./middleware')
+const authenticationMiddleware = require('./middleware');
 
-const user = {
-  username: 'test-user',
-  password: 'test-password',
-  id: 1
-}
+passport.serializeUser(function (user, callback) {
+  callback(null, user.id);
+});
 
-function findUser (username, callback) {
-  if (username === user.username) {
-    return callback(null, user)
-  }
-  return callback(null)
-}
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user.username)
-})
-
-passport.deserializeUser(function (username, cb) {
-  findUser(username, cb)
-})
+passport.deserializeUser(function (id, callback) {
+  db.one('select * from amb_user where id = $1', [parseInt(id)])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error('Failed get user: (' + err + ')'));
+    });
+});
 
 function initPassport () {
   console.log('in initPassport');
   passport.use(new LocalStrategy(
-    function(username, password, done) {
-      findUser(username, function (err, user) {
-        if (err) {
-          return done(err)
-        }
-        if (!user) {
-          return done(null, false)
-        }
-        if (password !== user.password  ) {
-          return done(null, false)
-        }
-        return done(null, user)
-      })
+    function(username, password, callback) {
+      db.one('select * from amb_user where username = $1', [username])
+        .then(function (data) {
+          callback(null, data);
+        })
+        .catch(function (err) {
+          callback(new Error('Failed get user: (' + err + ')'));
+        });
     }
-  ))
+  ));
 
-  passport.authenticationMiddleware = authenticationMiddleware
+  passport.authenticationMiddleware = authenticationMiddleware;
 }
 
-module.exports = initPassport
+module.exports = initPassport;

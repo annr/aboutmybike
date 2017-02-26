@@ -66,6 +66,29 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: amb_user; Type: TABLE; Schema: public; Owner: arobson
+--
+
+CREATE TABLE amb_user (
+    id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    last_login timestamp with time zone,
+    username text,
+    facebook_id bigint,
+    name text,
+    first_name text,
+    last_name text,
+    facebook_link text,
+    gender text,
+    locale text,
+    email character varying(254),
+    website text
+);
+
+
+ALTER TABLE amb_user OWNER TO arobson;
+
+--
 -- Name: bike; Type: TABLE; Schema: public; Owner: arobson
 --
 
@@ -332,6 +355,19 @@ ALTER SEQUENCE reason_id_seq OWNED BY reason.id;
 
 
 --
+-- Name: session; Type: TABLE; Schema: public; Owner: arobson
+--
+
+CREATE TABLE session (
+    sid character varying NOT NULL,
+    sess json NOT NULL,
+    expire timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE session OWNER TO arobson;
+
+--
 -- Name: story; Type: TABLE; Schema: public; Owner: arobson
 --
 
@@ -418,27 +454,6 @@ CREATE TABLE type (
 ALTER TABLE type OWNER TO arobson;
 
 --
--- Name: user; Type: TABLE; Schema: public; Owner: arobson
---
-
-CREATE TABLE "user" (
-    id integer NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    last_login timestamp with time zone,
-    username text,
-    facebook_id integer,
-    name text,
-    first_name text,
-    last_name text,
-    facebook_link text,
-    gender text,
-    locale text
-);
-
-
-ALTER TABLE "user" OWNER TO arobson;
-
---
 -- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: arobson
 --
 
@@ -456,7 +471,14 @@ ALTER TABLE user_id_seq OWNER TO arobson;
 -- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: arobson
 --
 
-ALTER SEQUENCE user_id_seq OWNED BY "user".id;
+ALTER SEQUENCE user_id_seq OWNED BY amb_user.id;
+
+
+--
+-- Name: amb_user id; Type: DEFAULT; Schema: public; Owner: arobson
+--
+
+ALTER TABLE ONLY amb_user ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
 
 
 --
@@ -516,10 +538,12 @@ ALTER TABLE ONLY theft ALTER COLUMN id SET DEFAULT nextval('theft_id_seq'::regcl
 
 
 --
--- Name: user id; Type: DEFAULT; Schema: public; Owner: arobson
+-- Data for Name: amb_user; Type: TABLE DATA; Schema: public; Owner: arobson
 --
 
-ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
+COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_name, last_name, facebook_link, gender, locale, email, website) FROM stdin;
+1	2016-09-25 20:27:23.210233-07	\N	arobson	\N	Ann Robson	Ann	Robson	https://www.facebook.com/aerobson	female	en-us	\N	\N
+\.
 
 
 --
@@ -534,7 +558,7 @@ COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, 
 -- Name: bike_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('bike_id_seq', 115, true);
+SELECT pg_catalog.setval('bike_id_seq', 1, false);
 
 
 --
@@ -7328,7 +7352,7 @@ COPY photo (id, original_filename, file_path, bike_id, user_id, metadata, create
 -- Name: photo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('photo_id_seq', 53, true);
+SELECT pg_catalog.setval('photo_id_seq', 70, true);
 
 
 --
@@ -7353,6 +7377,20 @@ COPY reason (id, label) FROM stdin;
 --
 
 SELECT pg_catalog.setval('reason_id_seq', 9, true);
+
+
+--
+-- Data for Name: session; Type: TABLE DATA; Schema: public; Owner: arobson
+--
+
+COPY session (sid, sess, expire) FROM stdin;
+u79eVtlGh7mONkCtfjJZ2hzb3ALG0RjQ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.759Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+j-J8Rp_Xs9SFkBiExaoGX9oIrZbfAzON	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-28T16:58:26.107Z","httpOnly":true,"path":"/"},"passport":{"user":3}}	2017-03-28 09:58:27
+V1_myJsHMrGRunIliKv8A94ntbz67RrJ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.757Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+2cywolBc5FvvCd_cBu5-6ZCoIbEbMijK	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.756Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+EcL-Tw3Vw-bL1YhgD384KVLkr0v2tuMe	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.758Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+Fe3VpVxuAmhb3P56mJL2rS8jTRZAFTYs	{"cookie":{"originalMaxAge":2591999999,"expires":"2017-03-27T23:27:17.754Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+\.
 
 
 --
@@ -7418,19 +7456,10 @@ COPY type (id, label, notes, related_type_ids) FROM stdin;
 
 
 --
--- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: arobson
---
-
-COPY "user" (id, created_at, last_login, username, facebook_id, name, first_name, last_name, facebook_link, gender, locale) FROM stdin;
-1	2016-09-25 20:27:23.210233-07	\N	arobson	123	Ann Robson	Ann	Robson	https://www.facebook.com/aerobson	female	en-us
-\.
-
-
---
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('user_id_seq', 1, false);
+SELECT pg_catalog.setval('user_id_seq', 2, true);
 
 
 --
@@ -7506,6 +7535,14 @@ ALTER TABLE ONLY reason
 
 
 --
+-- Name: session session_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
+--
+
+ALTER TABLE ONLY session
+    ADD CONSTRAINT session_pkey PRIMARY KEY (sid);
+
+
+--
 -- Name: story story_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
 --
 
@@ -7522,10 +7559,10 @@ ALTER TABLE ONLY theft
 
 
 --
--- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
+-- Name: amb_user user_pkey; Type: CONSTRAINT; Schema: public; Owner: arobson
 --
 
-ALTER TABLE ONLY "user"
+ALTER TABLE ONLY amb_user
     ADD CONSTRAINT user_pkey PRIMARY KEY (id);
 
 
@@ -7582,7 +7619,7 @@ ALTER TABLE ONLY photo
 --
 
 ALTER TABLE ONLY photo
-    ADD CONSTRAINT photo_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE;
+    ADD CONSTRAINT photo_user_id_fkey FOREIGN KEY (user_id) REFERENCES amb_user(id) ON DELETE CASCADE;
 
 
 --
@@ -7590,7 +7627,7 @@ ALTER TABLE ONLY photo
 --
 
 ALTER TABLE ONLY story
-    ADD CONSTRAINT story_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE;
+    ADD CONSTRAINT story_user_id_fkey FOREIGN KEY (user_id) REFERENCES amb_user(id) ON DELETE CASCADE;
 
 
 --
@@ -7606,7 +7643,7 @@ ALTER TABLE ONLY theft
 --
 
 ALTER TABLE ONLY theft
-    ADD CONSTRAINT theft_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES "user"(id);
+    ADD CONSTRAINT theft_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES amb_user(id);
 
 
 --
@@ -7614,7 +7651,7 @@ ALTER TABLE ONLY theft
 --
 
 ALTER TABLE ONLY bike
-    ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+    ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES amb_user(id);
 
 
 --

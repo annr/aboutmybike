@@ -28,8 +28,7 @@ function transformForDisplay(data) {
   var bike = data;
   var detailString = [];
 
-  bike.title = "user's " + getTitle(bike);
-  //bike.title = parseInt(bike.user_id) + "'s " + getTitle(bike);
+  bike.title = getTitle(bike);
 
   bike.for = getReasonsList(bike.reason_ids);
 
