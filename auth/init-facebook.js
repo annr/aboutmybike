@@ -1,7 +1,6 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const config = require('./oauth');
-const util = require('util');
 var db = require('../db/db');
 
 const authenticationMiddleware = require('./middleware');
@@ -28,14 +27,9 @@ function initPassport () {
       profileFields: ['id', 'first_name', 'last_name', 'gender', 'website', 'email']
     },
     function(accessToken, refreshToken, profile, callback) {
-      console.log('PROFILE: ');
-      console.log(util.inspect(profile));
-
       db.one('select * from amb_user where facebook_id = $1', profile.id)
         .then(function (data) {
-          // update last login.
-          console.log('GOT USER: ');
-          console.log(util.inspect(data));
+          // TO-DO: update last login.
           callback(null, data);
         })
         .catch(function (err) {

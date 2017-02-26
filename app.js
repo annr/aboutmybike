@@ -20,8 +20,6 @@ let profile = require('./routes/profile');
 
 let api = require('./api');
 
-let util = require('util');
-
 let app = express();
 
 // these are globally added values. can be used in templages like {{app_name}}
