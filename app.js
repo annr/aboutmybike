@@ -38,11 +38,17 @@ require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
+var connectionString = 'postgres://localhost:5432/amb';
+
+if (process.env.RDS_HOSTNAME !== undefined) {
+  connectionString = 'postgres://' + process.env.RDS_USERNAME + ':' + process.env.RDS_PASSWORD + '@' + process.env.RDS_HOSTNAME + ':' + process.env.RDS_PORT + '/' + process.env.RDS_DB_NAME;
+}
+
 app.use(session({
   store: new pgSession({
-    pg: pg,                                     // Use global pg-module
-    conString: 'postgres://localhost:5432/amb', // Connect using something else than default DATABASE_URL env variable
-    tableName: 'session'                        // Use another table-name than the default "session" one
+    pg: pg,                          // Use global pg-module
+    conString: connectionString,     // Connect using something else than default DATABASE_URL env variable
+    tableName: 'session'             // Use another table-name than the default "session" one
   }),
   secret: 's3Cur3', // TO-DO make secret secret!!!
   resave: false,
