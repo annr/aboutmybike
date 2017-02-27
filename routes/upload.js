@@ -3,7 +3,6 @@ var router = express.Router();
 var formidable = require('formidable');
 var AWS = require('aws-sdk');
 var fs = require('fs');
-var util = require('util');
 
 let queries = require('../db/queries');
 
