@@ -39,9 +39,11 @@ require('./auth').init(app);
 app.set('trust proxy', 1); // trust first proxy
 
 var connectionString = 'postgres://localhost:5432/amb';
+var iconFile = 'favicon-dev.ico';
 
 if (process.env.RDS_HOSTNAME !== undefined) {
   connectionString = 'postgres://' + process.env.RDS_USERNAME + ':' + process.env.RDS_PASSWORD + '@' + process.env.RDS_HOSTNAME + ':' + process.env.RDS_PORT + '/' + process.env.RDS_DB_NAME;
+  iconFile = 'favicon.ico';
 }
 
 app.use(session({
@@ -67,7 +69,7 @@ let userValues = function(req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', iconFile)));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

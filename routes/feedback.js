@@ -12,7 +12,6 @@ AWS.config.region = 'us-west-1'; // Region
 /* GET bike listing. */
 router.get('/', function(req, res, next) {
   res.render('feedback', {
-    app_name: res.locals.app.name,
     page_title: 'Feedback / Questions',
     formSubmissionSuccess: false // just being explicit. when it's a get we don't show confirmation 
   });
@@ -21,7 +20,6 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var feedback = sendFeedback(req.body.email, req.body.comments);  
   res.render('feedback', {
-    app_name: res.locals.app.name,
     page_title: 'Feedback / Questions',
     formSubmissionSuccess: true
   });
