@@ -37,9 +37,15 @@
               <a class="nav-link" href="/bikes">Bikes</a>
             </li>
             <!-- remove this link when the user has created a bike -->
+            {{#if user.bike_id}}
+            <li class="nav-item">
+              <a class="nav-link auth-req-link" href="/edit/{{user.bike_id}}">Edit Your Bike</a>
+            </li>
+            {{else}}
             <li class="nav-item">
               <a class="nav-link auth-req-link" href="/add" {{#unless user}}data-toggle="modal" data-target="#loginModal"{{/unless}}>+ Add Your Bike</a>
             </li>
+            {{/if}}
 
             {{#if user}}
               <div class="dropdown">

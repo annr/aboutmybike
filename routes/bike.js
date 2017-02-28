@@ -7,8 +7,7 @@ let helper = require('../helpers/bike');
 /* GET bike listing */
 router.get('/:id', function(req, res, next) {
 
-  var id = req.params.id;
-
+  var id = parseInt(req.params.id);
   queries.getBike(id, function(err, data) {
     if(err) {
       next(err);
@@ -16,7 +15,8 @@ router.get('/:id', function(req, res, next) {
       var bike = helper.transformForDisplay(data);
       res.render('bike', {
         page_title: 'Bike Detail',
-        bike: bike
+        bike: bike,
+        is_users_bike: req.user && (req.user.bike_id === id)
       });
     }
   });

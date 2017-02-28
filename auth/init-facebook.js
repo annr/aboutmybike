@@ -10,7 +10,7 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-  db.one('select * from amb_user where id = $1', id)
+  db.one('select u.*, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id where u.id = $1 limit 1;', id)
     .then(function (data) {
       callback(null, data);
     })
@@ -28,7 +28,6 @@ function initPassport () {
   } else {
     keys = config.localhost;
   }
-  console.log('AMB: AUTH callback url: ' + keys.callbackURL);
   passport.use(new FacebookStrategy({
       clientID: keys.clientID,
       clientSecret: keys.clientSecret,
@@ -36,7 +35,7 @@ function initPassport () {
       profileFields: ['id', 'first_name', 'last_name', 'gender', 'website', 'email']
     },
     function(accessToken, refreshToken, profile, callback) {
-      db.one('select * from amb_user where facebook_id = $1', profile.id)
+      db.one('select u.*, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id where u.facebook_id = $1 limit 1;', profile.id)
         .then(function (data) {
           // var user = {
           //   id: data.id,

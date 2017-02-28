@@ -302,7 +302,7 @@
   <div class="tab-pane" id="intro" role="tabpanel">
   <form id="editIntro" method="post" action="/edit">
     <input type="hidden" name="step" value="1">
-    <input type="hidden" name="is_new" id="is_new" value="{{#if bike.id}}0{{else}}1{{/if}}">
+    <input type="hidden" name="is_new" id="is_new" value="{{#if is_new}}1{{else}}0{{/if}}">
     <input type="hidden" name="user_id" value="{{user.id}}">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <div class="form-group">
@@ -346,7 +346,7 @@
   <p>Here are a few more details you might add.</p> --}}
 
     <input type="hidden" name="step" value="2">
-    <input type="hidden" name="is_new" value="{{#if bike.id}}0{{else}}1{{/if}}">
+    <input type="hidden" name="is_new" value="{{#if is_new}}1{{else}}0{{/if}}">
     <input type="hidden" name="user_id" value="{{user.id}}">
     <input type="hidden" name="bike_id" value="{{bike.id}}">
 

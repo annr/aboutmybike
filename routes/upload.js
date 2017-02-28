@@ -80,6 +80,8 @@ router.post('/', function(req, res, next) {
                     if(err) {
                       next(err);
                     } else {
+                      req.user.bike_id = fields.bike_id;
+                      console.log('setting bike_id on user...' + fields.bike_id + ' :: ' + req.user);
                       res.json({success : "Created bike and added photo", status : 200, id: fields.bike_id, photo_id: data.id });
                     }
                   });

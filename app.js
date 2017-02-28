@@ -15,11 +15,11 @@ let bikes = require('./routes/bikes');
 let bike = require('./routes/bike');
 let feedback = require('./routes/feedback');
 let edit = require('./routes/edit');
+let add = require('./routes/add');
 let upload = require('./routes/upload');
 let profile = require('./routes/profile');
 
 let api = require('./api');
-
 let app = express();
 
 // these are globally added values. can be used in templages like {{app_name}}
@@ -85,7 +85,9 @@ app.use('/', index);
 app.use('/bikes', bikes);
 app.use('/bike', bike);
 app.use('/feedback', feedback);
-app.use(['/add', '/edit'], edit);
+//app.use(['/add', '/edit'], edit);
+app.use('/edit', edit);
+app.use('/add', add);
 app.use('/upload', upload);
 app.use('/profile', profile);
 
