@@ -284,4 +284,3 @@ var Dropdown = function ($) {
 
   return Dropdown;
 }(jQuery);
-//# sourceMappingURL=dropdown.js.map

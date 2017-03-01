@@ -141,7 +141,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // if prod, publish SNS error:
-  //if(process.env.RDS_HOSTNAME !== undefined) {
+  if(process.env.RDS_HOSTNAME !== undefined) {
     params = {
       Message: err.message + "\n\n" + err.message.stack,
       Subject: 'Express Error: ' + err.message.substring(0, 20),
@@ -152,7 +152,7 @@ app.use(function(err, req, res, next) {
         console.err('Error sending SNS: ' + err);
       }
     });
-  //}
+  }
 
   // render the error page
   res.status(err.status || 500);
