@@ -1,4 +1,24 @@
-<form class="generic-container" action="/feedback" method="post">
+
+<script>
+  $(document).ready(function() {
+    $("#postFeedback").submit(function( event ) {
+      event.preventDefault();
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function() {
+          $('footer').prepend('<div class="alert alert-warning" role="alert">Thank you for your inquiry.</div>');
+        },
+        error: function(err) {
+          $('footer').prepend('<div class="alert alert-danger" role="alert">Could not complete request. Please try again later.</div>');
+        }
+      });
+    });
+  });
+</script>
+
+<form class="generic-container" id="postFeedback" action="/feedback" method="post">
 
 <h4>{{page_title}}</h4>
 <p>This is a work in progress. An interest or help you have for me is appreciated.</p>
@@ -17,8 +37,5 @@
 
 <button type="submit" class="btn btn-primary" required>Submit</button>
 
-{{#if formSubmissionSuccess}}
-<Thanks!
-{{/if}}
 
 </form>

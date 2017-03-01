@@ -43,7 +43,6 @@ function initPassport () {
           //   amb: data
           // }
           // TO-DO: update last login.
-          console.log('AMB: getting user from local db.');
           callback(null, data);
         })
         .catch(function (err) {

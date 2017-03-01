@@ -1,43 +1,35 @@
-
 var express = require('express');
 var router = express.Router();
-
+const config = require('../config').appConfig;
 var AWS = require('aws-sdk');
-// Initialize the Amazon Cognito credentials provider
-AWS.config.region = 'us-west-1'; // Region
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-//     IdentityPoolId: 'eu-west-1:e4c24108-5050-42f8-ac0b-761c46aa947f',
-// });
+AWS.config.region = config.awsRegion;
 
 /* GET bike listing. */
 router.get('/', function(req, res, next) {
   res.render('feedback', {
     page_title: 'Feedback / Questions',
-    formSubmissionSuccess: false // just being explicit. when it's a get we don't show confirmation 
+    is_feedback_page: true
   });
 });
 
 router.post('/', function(req, res, next) {
-  var feedback = sendFeedback(req.body.email, req.body.comments);  
-  res.render('feedback', {
-    page_title: 'Feedback / Questions',
-    formSubmissionSuccess: true
+  var email = req.body.email;
+  var comments = req.body.comments;
+  var sns = new AWS.SNS();
+  var params = {
+    Message: comments + "\n\nFrom:\n" + email,
+    Subject: email + ' says ' + comments + '...',
+    TopicArn: config.topicArn
+  };
+  sns.publish(params, function(err, data) {
+    if (err) {
+      throw new Error('Contact form submission error: ' + err)
+      res.json({error : err, status : 500 });
+    }
+    else {
+      res.json({success : "Feedback sent.", status : 200 });
+    }
   });
 });
-
-sendFeedback = function(email, comments) {
-    var sns = new AWS.SNS();
-    var params = {
-        Message: comments + "\n\nFrom:\n" + email,
-        Subject: 'AMB Feedback / Questions Submission',
-        TopicArn: process.env.SNS_CONTACT_FORM_TOPIC_ARN
-    };
-    sns.publish(params, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else return true;
-    });
-};
-
-
 
 module.exports = router;

@@ -19,7 +19,6 @@ passport.deserializeUser(function (id, callback) {
 });
 
 function initPassport () {
-  console.log('in initPassport');
   passport.use(new LocalStrategy(
     function(username, password, callback) {
       db.one('select * from amb_user where username = $1', [username])
