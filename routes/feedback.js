@@ -6,7 +6,6 @@ AWS.config.region = config.awsRegion;
 
 /* GET bike listing. */
 router.get('/', function(req, res, next) {
-  throw new Error('fake error');
   res.render('feedback', {
     page_title: 'Feedback / Questions',
     is_feedback_page: true
