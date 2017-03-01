@@ -6,6 +6,7 @@ AWS.config.region = config.awsRegion;
 
 /* GET bike listing. */
 router.get('/', function(req, res, next) {
+  throw new Error('fake error');
   res.render('feedback', {
     page_title: 'Feedback / Questions',
     is_feedback_page: true
@@ -19,7 +20,7 @@ router.post('/', function(req, res, next) {
   var params = {
     Message: comments + "\n- - -\n\nFrom:\n" + email,
     Subject: 'Inquiry from ' + email,
-    TopicArn: config.topicArn
+    TopicArn: config.topicArn + config.snsContactFormTopicName
   };
   sns.publish(params, function(err, data) {
     if (err) {

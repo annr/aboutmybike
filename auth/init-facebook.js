@@ -1,7 +1,9 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const config = require('./oauth');
+const oauth = require('./oauth');
+const config = require('../config').appConfig;
 var db = require('../db/db');
+var AWS = require('aws-sdk');
 
 const authenticationMiddleware = require('./middleware');
 
@@ -24,9 +26,9 @@ function initPassport () {
   // we should have a better way to determine if env is prod.
   // at least extract this into a helper funtion
   if(process.env.RDS_HOSTNAME !== undefined) {
-    keys = config.production;
+    keys = oauth.production;
   } else {
-    keys = config.localhost;
+    keys = oauth.localhost;
   }
   passport.use(new FacebookStrategy({
       clientID: keys.clientID,
@@ -46,6 +48,20 @@ function initPassport () {
           callback(null, data);
         })
         .catch(function (err) {
+          // send SNS alerting there is a new user.
+          var sns = new AWS.SNS();
+          var params;
+          params = {
+            Message: JSON.stringify(profile),
+            Subject: 'User Signup',
+            TopicArn: config.topicArn + config.snsUserSignupTopicName
+          };
+          sns.publish(params, function(err, data) {
+            if (err) {
+              console.err('Error sending User Signup SNS: ' + err);
+            }
+          });
+
           var first_name = null;
           var last_name = null;
           var gender = null;

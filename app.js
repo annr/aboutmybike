@@ -1,7 +1,7 @@
 let express = require('express');
 let path = require('path');
 let favicon = require('serve-favicon');
-
+var AWS = require('aws-sdk');
 let pg = require('pg');
 let logger = require('morgan');
 let bodyParser = require('body-parser');
@@ -134,10 +134,25 @@ function ensureAuthenticated(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-
+  var sns = new AWS.SNS();
+  var params;
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // if prod, publish SNS error:
+  //if(process.env.RDS_HOSTNAME !== undefined) {
+    params = {
+      Message: err.message + "\n\n" + err.message.stack,
+      Subject: 'Express Error: ' + err.message.substring(0, 20),
+      TopicArn: config.topicArn + config.snsExpressErrorTopicName
+    };
+    sns.publish(params, function(err, data) {
+      if (err) {
+        console.err('Error sending SNS: ' + err);
+      }
+    });
+  //}
 
   // render the error page
   res.status(err.status || 500);
