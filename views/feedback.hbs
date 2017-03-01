@@ -9,6 +9,9 @@
         data: $(this).serialize(),
         success: function() {
           $('footer').prepend('<div class="alert alert-warning" role="alert">Thank you for your inquiry.</div>');
+          // unset form values:
+          $('#email').val('');
+          $('#comments').val('');
         },
         error: function(err) {
           $('footer').prepend('<div class="alert alert-danger" role="alert">Could not complete request. Please try again later.</div>');

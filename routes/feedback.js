@@ -17,8 +17,8 @@ router.post('/', function(req, res, next) {
   var comments = req.body.comments;
   var sns = new AWS.SNS();
   var params = {
-    Message: comments + "\n\nFrom:\n" + email,
-    Subject: email + ' says ' + comments + '...',
+    Message: comments + "\n- - -\n\nFrom:\n" + email,
+    Subject: 'Inquiry from ' + email,
     TopicArn: config.topicArn
   };
   sns.publish(params, function(err, data) {
