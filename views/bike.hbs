@@ -1,6 +1,5 @@
-
 {{#if bike.title}}
-  <h4 class="title">XXX's {{bike.title}}</h4>{{#if is_users_bike}}<div class="float-right edit-link-align-to-title"><a href="/edit/{{bike.id}}">Edit Bike</a></div>{{/if}}
+  <h4 class="title">{{#if bike.username}}{{bike.username}}'s {{/if}}{{bike.title}}</h4>{{#if is_users_bike}}<div class="float-right edit-link-align-to-title"><a href="/edit/{{bike.id}}">Edit Bike</a></div>{{/if}}
 {{/if}}
 <div class="row">
 
@@ -10,12 +9,12 @@
 
    <div class="col-md-6">
 
-{{!--       {{#if bike.title}}
+{{!--     {{#if bike.title}}
         <h4 class="title">{{bike.title}} &nbsp;<span class="title-edit-link-wrapper">(<a href="/edit/{{bike.id}}">Edit Bike</a>)</span></h4>
       {{/if}} --}}
 
     {{#if bike.description}}
-      <p>{{bike.description}}</p>
+      <pre>{{bike.description}}</pre>
     {{/if}}
 
 		<dl class="row">

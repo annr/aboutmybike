@@ -15,7 +15,7 @@ function getAllBikes(callback) {
 
 function getBike(bikeID, callback) {
 //  db.one('select * from bike where id = $1', bikeID)
-  db.one('select b.*, type.label as type, type.id as type_id, Coalesce(manufacturer.name, b.brand_unlinked) as manufacturer_name, Coalesce(model.name, b.model_unlinked) as model_name, bike_info.era as era, bike_info.color as color from bike b left join bike_info on b.id = bike_info.bike_id left join manufacturer on b.manufacturer_id=manufacturer.id left join model on b.model_id=model.id left join type on b.type_ids[1]=type.id where b.id = $1', bikeID)
+  db.one('select b.*, type.label as type, amb_user.username as username, type.id as type_id, Coalesce(manufacturer.name, b.brand_unlinked) as manufacturer_name, Coalesce(model.name, b.model_unlinked) as model_name, bike_info.era as era, bike_info.color as color from bike b left join bike_info on b.id = bike_info.bike_id left join manufacturer on b.manufacturer_id=manufacturer.id left join model on b.model_id=model.id left join type on b.type_ids[1]=type.id left join amb_user on b.user_id=amb_user.id where b.id = $1', bikeID)
     .then(function (data) {
       callback(null, data);
     })
