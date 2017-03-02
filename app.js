@@ -120,7 +120,11 @@ app.get('/logout', function(req, res){
 app.use(function(req, res, next) {
   let err = new Error('404 Not Found');
   err.status = 404;
-  res.render('404', { layout: 'error-layout' });
+  if(process.env.RDS_HOSTNAME !== undefined) {
+    res.render('404', { layout: 'error-layout' });
+  } else {
+    next(err);
+  }
 });
 
 // error handler
