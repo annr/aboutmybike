@@ -46,7 +46,9 @@ function transformForDisplay(data) {
 
   bike.photo_url = bike.main_photo_path;
 
-  bike.description = bike.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+  if(bike.description) {
+    bike.description = bike.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+  }
   return bike;
 }
 
