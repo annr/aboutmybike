@@ -12,7 +12,7 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-  db.one('select u.*, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id where u.id = $1 limit 1;', id)
+  db.one('select u.*, user_photo.web_url as picture, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id left join user_photo on user_photo.user_id = u.id where u.id = $1 limit 1;', id)
     .then(function (data) {
       callback(null, data);
     })
@@ -34,10 +34,10 @@ function initPassport () {
       clientID: keys.clientID,
       clientSecret: keys.clientSecret,
       callbackURL: keys.callbackURL,
-      profileFields: ['id', 'first_name', 'last_name', 'gender', 'website', 'email']
+      profileFields: ['id', 'first_name', 'last_name', 'gender', 'website', 'email', 'photos']
     },
     function(accessToken, refreshToken, profile, callback) {
-      db.one('select u.*, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id where u.facebook_id = $1 limit 1;', profile.id)
+      db.one('select u.*, user_photo.web_url as picture, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id left join user_photo on user_photo.user_id = u.id where u.facebook_id = $1 limit 1;', profile.id)
         .then(function (data) {
           // var user = {
           //   id: data.id,
@@ -79,17 +79,20 @@ function initPassport () {
           db.one('insert into amb_user(facebook_id, first_name, last_name, gender, email) ' +
               'values($1, $2, $3, $4, $5) returning *', [profile.id, first_name, last_name, gender, profile.emails[0].value])
             .then(function (data) {
-              // var user = {
-              //   id: data.id,
-              //   facebook: profile,
-              //   amb: data
-              // }
-              // TO-DO: update last login.
+              // add profile photo:
+              db.one('insert into user_photo(user_id, web_url) ' +
+                  'values($1, $2) returning *', [data.id, profile.photos[0].value])
+                .then(function (data) {
+                  callback(null, data);
+                })
+                .catch(function (err) {
+                  callback(new Error('Failed to create new user and user photo records. (' + err + ')'));
+                });
               console.log('AMB: creating new user.');
               callback(null, data);
             })
             .catch(function (err) {
-              callback(new Error('Failed to get user and create bike record: (' + err + ')'));
+              callback(new Error('Failed to create new user. (' + err + ')'));
             });
         });
     }

@@ -50,7 +50,12 @@
             {{#if user}}
               <div class="dropdown">
                 <a class="dropdown-toggle custom-dropdown" href="/profile" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-decoration: none;">
+                  {{#if user.picture}}
+                  <img class="round-avatar" src="{{user.picture}}" alt="User Profile Icon">
+                  <div style="width: 40px; display: inline-block;">&nbsp;</div>
+                  {{else}}
                   <img src="/images/user-sm.png" width="30" height="30" alt="User Profile Icon">
+                  {{/if}}
                 </a>
 
                 <div class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuLink">
