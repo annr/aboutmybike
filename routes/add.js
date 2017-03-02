@@ -13,11 +13,6 @@ router.get(['/', '/:id'], function(req, res, next) {
   var line = 60;
   var calculatedRows;
 
-  // this page requires authentication:
-  if (!req.user) {
-    res.redirect('/');
-  }
-
   // if logged in user has added created a bike record by uploading a photo, make sure that bike record is used.
   // we need to preserve add/edit versions.
   if (!req.user.bike_id) {

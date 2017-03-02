@@ -15,11 +15,6 @@ router.get(['/', '/:id'], function(req, res, next) {
   var calculatedRows;
   let id = req.params.id;
 
-  // this page requires authentication:
-  if (!req.user || req.user.bike_id != parseInt(req.params.id)) {
-    res.redirect('/');
-  }
-
   page_title = 'Edit Bike';
   page_heading = page_title;
 

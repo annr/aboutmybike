@@ -62,10 +62,27 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/auth/facebook',
+  passport.authenticate('facebook', { scope: ['email'] }),
+  function(req, res){});
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/add');
+  });
+
+/* MIDDLEWARE */
+let ensureAuthenticated = function(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+};
+
 let userValues = function(req, res, next) {
   req.app.locals.user = req.user;
   next();
 };
+
+/* END MIDDLEWARE */
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -87,33 +104,12 @@ app.use('/', index);
 app.use('/bikes', bikes);
 app.use('/bike', bike);
 app.use('/feedback', feedback);
-//app.use(['/add', '/edit'], edit);
-app.use('/edit', edit);
-app.use('/add', add);
-app.use('/upload', upload);
-app.use('/profile', profile);
 
-app.get('/auth/facebook',
-  passport.authenticate('facebook', { scope: ['email'] }),
-  function(req, res){});
-app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/add');
-  });
-
-/*
-app.post('/login',
-  passport.authenticate('local'),
-  function(req, res) {
-    // if the target is "/" but the user does not yet have a bike,
-    // maybe redirect them to the bike page.
-
-    // also keep the add bike links around until they create one.
-    res.redirect(req.body.target);
-  }
-);
-*/
+// these routes need to be authenticated:
+app.use('/edit', ensureAuthenticated, edit);
+app.use('/add', ensureAuthenticated, add);
+app.use('/upload', ensureAuthenticated, upload);
+app.use('/profile', ensureAuthenticated, profile);
 
 app.get('/logout', function(req, res){
   req.logout();
@@ -124,15 +120,8 @@ app.get('/logout', function(req, res){
 app.use(function(req, res, next) {
   let err = new Error('404 Not Found');
   err.status = 404;
-  next(err);
+  res.render('404', { layout: 'error-layout' });
 });
-
-
-/* TO-DO: use this middleware for the routes that reqiuire auth. */
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/');
-}
 
 // error handler
 app.use(function(err, req, res, next) {
