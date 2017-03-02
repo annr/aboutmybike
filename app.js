@@ -54,7 +54,9 @@ app.use(session({
   }),
   secret: 's3Cur3', // TO-DO make secret secret!!!
   resave: false,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+  resave: false,
+  saveUninitialized: false // TO-DO: Understand this setting better.
 }));
 
 app.use(passport.initialize());
