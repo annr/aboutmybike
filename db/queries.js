@@ -24,9 +24,9 @@ function getBike(bikeID, callback) {
     });
 }
 
-function createBike(fields, photoPath, callback) {
-  db.one('insert into bike(user_id, main_photo_path, status) ' +
-      'values($1, $2, 1) returning id', [parseInt(fields.user_id), photoPath])
+function createBike(fields, callback) {
+  db.one('insert into bike(user_id, status) ' +
+      'values($1, 1) returning id', [parseInt(fields.user_id)])
     .then(function (data) {
       db.one('insert into bike_info(bike_id) ' +
           'values($1) returning bike_id as id', [data.id])
@@ -55,6 +55,17 @@ function updateBikeIntro(fields, callback) {
     })
     .catch(function (err) {
       callback(new Error('Failed to update bike record: (' + err + ')'));
+    });
+}
+
+
+function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
+  db.none('update bike set main_photo_path = $1 where id = $2', [main_photo_path, bike_id])
+    .then(function () {
+      callback(null);
+    })
+    .catch(function (err) {
+      callback(new Error('Failed to update main bike photo: (' + err + ')'));
     });
 }
 
@@ -110,22 +121,12 @@ function updateBikeBasicsInfo(fields, callback) {
 
 function createBikePhoto(fields, photoPath, callback) {
   db.one('insert into photo(user_id, bike_id, original_filename, file_path) ' +
-      'values($1, $2, $3, $4) returning id', [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
+      'values($1, $2, $3, $4) returning *', [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (data) {
-      callback(null, data);
+      updateBikeMainPhoto(data.bike_id, data.file_path, callback);
     })
     .catch(function (err) {
-      callback(new Error('Failed to create photo record: (' + err + ')'));
-    });
-}
-
-function updateMainPhoto(fields, photoPath, callback) {
-  db.none('update bike set main_photo_path = $1 where id = $2', [photoPath, parseInt(fields.bike_id)])
-    .then(function () {
-      callback(null);
-    })
-    .catch(function (err) {
-      callback(new Error('Failed to update main bike photo: (' + err + ')'));
+      callback(new Error('Failed to create photo record. May have orphaned photo on server. (' + err + ')'));
     });
 }
 
@@ -145,10 +146,9 @@ module.exports = {
   getBike: getBike,
   createBike: createBike,
   updateBikeIntro: updateBikeIntro,
-  updateBikeBasics: updateBikeBasics,
+  updateBikeMainPhoto: updateBikeMainPhoto,
   updateBikeBasics: updateBikeBasics,
   updateBikeBasicsInfo: updateBikeBasicsInfo,
   createBikePhoto: createBikePhoto,
-  updateMainPhoto: updateMainPhoto,
   getManufacturer: getManufacturer
 };

@@ -6,10 +6,11 @@ var fs = require('fs');
 
 let queries = require('../db/queries');
 
-function getFilename() {
-  var ts = new Date().getTime();
+function getFilename(bike_id) {
+  var ts = new Date();
+  var dayTs = ts.setHours(0,0,0,0);
   // TO-DO: Limit timestamp to a day or so.
-  return "aboutmybike-" + ts;
+  return "aboutmybike-" + bike_id + "-" + dayTs;
 }
 
 /* Create bike record */
@@ -54,58 +55,85 @@ router.post('/', function(req, res, next) {
 
     var extension = photo.type.split('/')[1];
     if (extension === 'jpeg') extension = 'jpg'; 
-    var filename = getFilename() + '.' + extension;
+
+    // we need to get bike_id before we create the bike record.
+    // RACE CONDITION ALERT!!!!!
+    //var filename = getFilename() + '.' + extension;
 
     if(localPath) {
 
       // I'm not sure if this readFile is necessary or if formidable will stream the data.
       fs.readFile(localPath, (err, data) => {
 
+        var fileData = data;
+        var filename;
+
+        // we have to create the records before we upload the photo because the file name will include the bike_id
+        // we do this so that we can overwrite the bike photo on the server for a single bike.
+
         if (err) throw err;
 
-        var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: data};
-        s3.putObject(params, function(err, data) {
-          if (err) {
-            console.log(err)
-          }
-          else {
-            //if there is no bike id, we must create the bike record.
-            if(!fields.bike_id) {
-              queries.createBike(fields, destinationFolder + '/' + filename, function(err, data) {
-                if(err) {
-                  next(err);
-                } else {
-                  fields.bike_id = data.id;
+        // 1) Create records if necessary. 
+        //if there is no bike id, we must create the bike record.
+        if(!fields.bike_id) {
+          queries.createBike(fields, function(err, data) {
+            if(err) {
+              next(err);
+            } else {
+              filename = getFilename(data.id) + '.' + extension;
+              fields.bike_id = data.id;
+              var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
+              s3.putObject(params, function(err, fileData) {
+                if (err) {
+                  console.log(err)
+                }
+                else {
                   queries.createBikePhoto(fields, destinationFolder + '/' + filename, function(err, data) {
                     if(err) {
                       next(err);
                     } else {
+                      // set bike_id on session user
                       req.user.bike_id = fields.bike_id;
-                      console.log('setting bike_id on user...' + fields.bike_id + ' :: ' + req.user);
-                      res.json({success : "Created bike and added photo", status : 200, id: fields.bike_id, photo_id: data.id });
-                    }
-                  });
-                }
-              });
-            } else {
-              queries.createBikePhoto(fields, destinationFolder + '/' + filename, function(err, data) {
-                if(err) {
-                  next(err);
-                } else {
-                  console.log(fields, destinationFolder + '/' + filename);
-                  queries.updateMainPhoto(fields, destinationFolder + '/' + filename, function(err, data) {
-                    if(err) {
-                      next(err);
-                    } else {
-                      res.json({success : "Added photo and updated main image", status : 200, id: fields.bike_id });
+                      res.json({success : "Created bike, added photo, and updated bike photo with the name.", status : 200, id: fields.bike_id});
                     }
                   });
                 }
               });
             }
-          }
+          });
+        } else {
 
-        });
+          filename = getFilename(fields.bike_id) + '.' + extension;
+          var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
+          s3.putObject(params, function(err, fileData) {
+            if (err) {
+              console.log(err)
+            }
+            else {
+              queries.createBikePhoto(fields, destinationFolder + '/' + filename, function(err, data) {
+                if(err) {
+                  next(err);
+                } else {
+                  // set bike_id on session user
+                  req.user.bike_id = fields.bike_id;
+                  // bike record exists, and there is probably an associated photo.
+                  // For now, we'll just create a new record in the db; this does not mean we have a duplicate photo on S3.
+                  // The justification is that we'll have a new created_at value and it will show us the most recent like an update_at value.
+                  // since the path is stored on the bike table, we don't have to worry about selecting the wrong one.
+                  queries.createBikePhoto(fields, destinationFolder + '/' + filename, function(err, data) {
+                    if(err) {
+                      next(err);
+                    } else {
+                      console.log('created redundant bike photo record....' + fields, destinationFolder + '/' + filename);
+                      res.json({success : "Created another record for the main photo", status : 200, id: fields.bike_id});
+                    }
+                  });
+                }
+              });
+            }
+          });
+
+        }
 
       });
 

@@ -88,7 +88,6 @@ function initPassport () {
                 .catch(function (err) {
                   callback(new Error('Failed to create new user and user photo records. (' + err + ')'));
                 });
-              console.log('AMB: creating new user.');
               callback(null, data);
             })
             .catch(function (err) {

@@ -12,7 +12,7 @@
     $('a[data-toggle="tab"]').on('click', function(e) {
       // you may need to remove the alert, say, if the user tries to undo
       // the desc of an existing bike and then go to the basics form
-      $('.alert-warning').remove();
+      $('.alert').remove();
       history.pushState(null, null, $(this).attr('href'));
     });
 
@@ -57,7 +57,7 @@
         data: $(this).serialize(),
         success: function(data) {
           if($('#is_new').val() === '1') {
-            $('.alert-warning').remove();
+            $('.alert').remove();
             // we hide the basics tab until they finish intro.
             $('#basics_nav_item').show();
             step2.tab('show');
@@ -69,7 +69,7 @@
           }
         },
         error: function(err) {
-          appendIntroAlert(JSON.stringify(err));
+          appendAlert(JSON.stringify(err));
         }
       });
 
@@ -79,6 +79,9 @@
 
     $("#uploadForm").submit(function( event ) {
       event.preventDefault();
+      $('.alert').remove();
+
+      appendAlert('Uploading...', null, 'info');
       //disable submit until photo is updated.
       // is this nec?? If they've attached a new image it will get updated even if the user
       // navigates away, right?
@@ -105,7 +108,7 @@
         error: function(err) {
           // be transparent and output error. 
           // but how to you get specific error and not whole page?
-          appendAlert('Error attaching bike photo. Please try again later.');
+          appendAlert('Error attaching bike photo. Please try again later.', null, 'danger');
         }//,
         // complete: function() {
         //   $("#submitIntro").prop("disabled",true);
@@ -113,17 +116,17 @@
       });
     });
 
-    function appendAlert(msg, elem) {
+    function appendAlert(msg, elem, type) {
       // remove any existing alert warnings
-      $('.alert-warning').remove();
+      $('.alert').remove();
       if(!elem) {
         elem = $('#upload_photo_group');
       }
-      elem.append('<div class="alert alert-warning" role="alert">' + msg + '</div>');
+      elem.append('<div class="alert alert-' + (type || 'warning') + '" role="alert">' + msg + '</div>');
     }
 
     function filePreview(input, callback) {
-      $('.alert-warning').remove();
+      $('.alert').remove();
       var maxSize = {{maxPhotoSize}};
       var minSize = {{minPhotoSize}};
       // lame
