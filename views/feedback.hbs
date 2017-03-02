@@ -8,7 +8,7 @@
         type: 'POST',
         data: $(this).serialize(),
         success: function() {
-          $('footer').prepend('<div class="alert alert-warning" role="alert">Thank you for your inquiry.</div>');
+          $('footer').prepend('<div class="alert alert-warning" role="alert">Thanks! 🌈 &nbsp; 🚴‍♀️  🌈</div>');
           // unset form values:
           $('#email').val('');
           $('#comments').val('');
@@ -24,7 +24,6 @@
 <form class="generic-container" id="postFeedback" action="/feedback" method="post">
 
 <h4>{{page_title}}</h4>
-<p>This is a work in progress. An interest or help you have for me is appreciated.</p>
 <div class="form-group">
 
 <label for="email">Email</label><input type="email" class="form-control" id="email" name="email">
