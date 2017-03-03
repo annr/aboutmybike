@@ -6,6 +6,7 @@ let pg = require('pg');
 let logger = require('morgan');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+let hbs = require('hbs');
 
 const config = require('./config').appConfig;
 
@@ -91,6 +92,17 @@ let userValues = function(req, res, next) {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+hbs.registerHelper('preserve-linebreaks', function(str) {
+  // we have to escape all the special chars and then conver line breaks to brs.
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+    .replace(/(?:\r\n|\r|\n)/g, '<br />');
+});
 
 app.use(favicon(path.join(__dirname, 'public', iconFile)));
 
