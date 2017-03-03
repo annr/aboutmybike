@@ -124,7 +124,6 @@ router.post('/', function(req, res, next) {
                     if(err) {
                       next(err);
                     } else {
-                      console.log('created redundant bike photo record....' + fields, destinationFolder + '/' + filename);
                       res.json({success : "Created another record for the main photo", status : 200, id: fields.bike_id});
                     }
                   });

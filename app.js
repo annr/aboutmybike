@@ -68,7 +68,11 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/add');
+    if(req.user.bike_id) {
+      res.redirect('/bike/' + req.user.bike_id);
+    } else {
+      res.redirect('/add');
+    }
   });
 
 /* MIDDLEWARE */
