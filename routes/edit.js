@@ -4,8 +4,8 @@ let router = express.Router();
 const formidable = require('formidable');
 const queries = require('../db/queries');
 const helper = require('../helpers/bike');
-let page_heading =  'Let\'s make your bike page!';
-let page_title = 'Add Your Bike';
+let page_title = 'Edit Bike';
+let page_heading = page_title;
 let rows = 10;
 let view = 'edit';
 
@@ -14,9 +14,6 @@ router.get(['/', '/:id'], function(req, res, next) {
   var line = 60;
   var calculatedRows;
   let id = req.params.id;
-
-  page_title = 'Edit Bike';
-  page_heading = page_title;
 
   queries.getBike(id, function(err, data) {
     if(err) {
