@@ -100,7 +100,7 @@
           return myXhr;
         },
         success: function(data) {
-          appendAlert('Successfully attached your bike photo.');
+          appendAlert('Successfully stored your bike photo.');
           if($('input[name=bike_id]').val() === '') {
             $('input[name=bike_id]').val(data.id);
           }

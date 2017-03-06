@@ -34,7 +34,7 @@ router.post('/', function(req, res, next) {
     var photo = files.bike_photo;
     var localPath = photo.path;
 
-    // poor express error handling. the response is. an error, but is not properly returned as a readable one.
+    // poor express error handling. the response is an error, but is not properly returned as a readable one.
     // Error: /Users/arobson/Sites/aboutmybike/views/error.hbs: Can't set headers after they are sent.
     // at tleast it will bail out without uploading.
     // Fix this!!!!
@@ -54,17 +54,18 @@ router.post('/', function(req, res, next) {
     }
 
     var extension = photo.type.split('/')[1];
-    if (extension === 'jpeg') extension = 'jpg'; 
-
-    // we need to get bike_id before we create the bike record.
-    // RACE CONDITION ALERT!!!!!
-    //var filename = getFilename() + '.' + extension;
+    if (extension === 'jpeg') extension = 'jpg';
 
     if(localPath) {
+
+      // 
 
       // I'm not sure if this readFile is necessary or if formidable will stream the data.
       fs.readFile(localPath, (err, data) => {
 
+        // upload file to amb-processing and use rekognition to determine if it is most likely a bike
+
+        
         var fileData = data;
         var filename;
 
