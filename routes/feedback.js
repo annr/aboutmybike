@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 const config = require('../config').appConfig;
-var AWS = require('aws-sdk');
+let AWS = require('aws-sdk');
 AWS.config.region = config.awsRegion;
 
 /* GET bike listing. */
@@ -13,10 +13,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  var email = req.body.email;
-  var comments = req.body.comments;
-  var sns = new AWS.SNS();
-  var params = {
+  let email = req.body.email;
+  let comments = req.body.comments;
+  let sns = new AWS.SNS();
+  let params = {
     Message: comments + "\n- - -\n\nFrom:\n" + email,
     Subject: 'Inquiry from ' + email,
     TopicArn: config.topicArn + config.snsContactFormTopicName

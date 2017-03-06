@@ -25,8 +25,8 @@ let eras = [
 let _ = require('../public/javascripts/lodash');
 
 function transformForDisplay(data) {
-  var bike = data;
-  var detailString = [];
+  let bike = data;
+  let detailString = [];
 
   bike.title = getTitle(bike);
 
@@ -52,7 +52,7 @@ function transformForDisplay(data) {
 function getReasonsList(reason_ids) {
   if(!reason_ids) return '';
   // override label for reason id 9:
-  var reasonsSaved = _.map(_.filter(reasons, function(reason) {
+  let reasonsSaved = _.map(_.filter(reasons, function(reason) {
     return reason_ids.indexOf(reason.id) !== -1
   }), 'label');
 
@@ -67,7 +67,7 @@ function getFormTypes(type_id) {
   let formTypes = [];
 
   _.map(types, function(t) {
-    var z = { id: t.id, label: t.label };
+    let z = { id: t.id, label: t.label };
     if(type_id && t.id === type_id) {
       z.selected = true;
     }
@@ -86,7 +86,7 @@ function getFormReasons(reason_ids) {
   if(!reason_ids) reason_ids = [9];
   // transform reasons to add checked state
   _.map(reasons, function(r) {
-    var z = { id: r.id, label: r.label };
+    let z = { id: r.id, label: r.label };
     if(z.label === "freedom") {
       z.label = "The feeling of being in motion again. It's the most extraordinary thing in the world.";
     }
@@ -101,7 +101,7 @@ function getFormReasons(reason_ids) {
 function getFormEras(era) {
   let formEras = [];
   _.map(eras, function(e) {
-    var z = { label: e.label };
+    let z = { label: e.label };
     if(era === e.label) {
       z.selected = true;
     }
@@ -117,7 +117,7 @@ function getFormEras(era) {
    Ex. return "1980s Road Bike"
 */
 function getTitle(bike) {
-  var title = '';
+  let title = '';
 
   if(bike.era && bike.era !== 'Recent' && bike.era !== '2000s' ) { // too recent to be interesting.
     title += bike.era;
@@ -138,8 +138,8 @@ function getTitle(bike) {
 
 /* get brand and model if brand exists + bike type + " Bike" */
 function getTitleWithBrandAndModel(bike) {
-  var title = '';
-  var type = bike.type;
+  let title = '';
+  let type = bike.type;
 
   if(!!bike.manufacturer_name) {
     title += bike.manufacturer_name;

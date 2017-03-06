@@ -17,7 +17,7 @@
 
     function filePreview(input) {
       if (input.files && input.files[0]) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function (e) {
           $('#upload-target').removeClass('upload-graphic');
           $('#upload-target').attr('src', e.target.result);
@@ -32,11 +32,11 @@
     });
 
     function searchAndUpdateBrand(str) {
-      var searchBrandAjax = new XMLHttpRequest();
+      let searchBrandAjax = new XMLHttpRequest();
       // use the value they entered to try to figure out the brand.
       searchBrandAjax.open("GET", "/api/brand_by_name/" + str, true);
       searchBrandAjax.onload = function() {
-        var result = JSON.parse(searchBrandAjax.responseText);
+        let result = JSON.parse(searchBrandAjax.responseText);
         if (result.status === 'success') {
           $('#brand_id').val(result.data.id);
           // for some brands you may want to transform the #brand field text
@@ -52,11 +52,11 @@
     }
 
     function getBrandModels(brand_id) {
-      var getModelsAjax = new XMLHttpRequest();
+      let getModelsAjax = new XMLHttpRequest();
       // use the value they entered to try to figure out the brand.
       getModelsAjax.open("GET", "/api/models_by_brand/" + brand_id, true);
       getModelsAjax.onload = function() {
-        var list = JSON.parse(getModelsAjax.responseText);
+        let list = JSON.parse(getModelsAjax.responseText);
         if(list.length > 0) {
           new Awesomplete(
             document.querySelector("#model"),
@@ -69,10 +69,10 @@
       getModelsAjax.send();
     }
 
-    var ajax = new XMLHttpRequest();
+    let ajax = new XMLHttpRequest();
     ajax.open("GET", "/api/brands", true);
     ajax.onload = function() {
-      var list = JSON.parse(ajax.responseText);
+      let list = JSON.parse(ajax.responseText);
       new Awesomplete(
         document.querySelector("#brand"),
         { 
@@ -93,7 +93,7 @@
       if(e.target.name === 'brand') {
         getBrandModels(e.text.value);
       }
-      var hiddenFieldToUpdate = '#' + e.target.name + '_id';
+      let hiddenFieldToUpdate = '#' + e.target.name + '_id';
       $(hiddenFieldToUpdate).val(e.text.value);
     }, false);
 

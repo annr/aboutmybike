@@ -9,9 +9,9 @@ let rows = 10;
 let view = 'edit';
 
 router.get(['/', '/:id'], function(req, res, next) {
-  var maxRows = 24;
-  var line = 60;
-  var calculatedRows;
+  let maxRows = 24;
+  let line = 60;
+  let calculatedRows;
 
   // if logged in user has added created a bike record by uploading a photo, make sure that bike record is used.
   // we need to preserve add/edit versions.

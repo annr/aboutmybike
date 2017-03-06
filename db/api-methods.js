@@ -1,4 +1,4 @@
-var db = require('./db');
+let db = require('./db');
 
 // add query functions
 
@@ -18,7 +18,7 @@ function getAllBikes(req, res, next) {
 }
 
 function getBike(req, res, next) {
-  var bikeID = parseInt(req.params.id);
+  let bikeID = parseInt(req.params.id);
   db.one('select * from bike where id = $1', bikeID)
     .then(function (data) {
       res.status(200)
@@ -66,7 +66,7 @@ function updateBike(req, res, next) {
 }
 
 function removeBike(req, res, next) {
-  var bikeID = parseInt(req.params.id);
+  let bikeID = parseInt(req.params.id);
   db.result('delete from bike where id = $1', bikeID)
     .then(function (result) {
       /* jshint ignore:start */
@@ -93,7 +93,7 @@ function getAllManufacturers(req, res, next) {
 }
 
 function getManufacturerByName(req, res, next) {
-  var name = req.params.name;
+  let name = req.params.name;
   db.one("select * from manufacturer where name ilike " + "'" + name + "%' limit 1")
     .then(function (data) {
       res.status(200)
@@ -117,7 +117,7 @@ function getManufacturerByName(req, res, next) {
 }
 
 function getModelsByBrandId(req, res, next) {
-  var manuID = parseInt(req.params.id);
+  let manuID = parseInt(req.params.id);
   db.any('select id as value, name as label from model where manufacturer_id = $1', manuID)
     .then(function (data) {
       res.status(200).json(data);

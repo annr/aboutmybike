@@ -1,4 +1,6 @@
-var db = require('./db');
+/* DEPRECATED. THIS FILE WILL BE REMOVED. */
+
+let db = require('./db');
 
 // add query functions
 function getAllBikes(callback) {
@@ -72,10 +74,10 @@ function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
 function updateBikeBasics(fields, callback) {
   if(!fields.serial_number) { fields.serial_number = null; }
   //model/brand
-  var brand = null;
-  var model = null;
-  var brand_id = null;
-  var model_id = null;
+  let brand = null;
+  let model = null;
+  let brand_id = null;
+  let model_id = null;
 
   // careful. you can't parseInt(null)
   if(fields.brand_id !== "") {

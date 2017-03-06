@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-var db = require('../db/db');
+let db = require('../db/db');
 
 const authenticationMiddleware = require('./middleware');
 

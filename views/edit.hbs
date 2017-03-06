@@ -1,7 +1,7 @@
 <script type="text/javascript" defer="defer">
   $(document).ready(function() {
     if (location.hash === '' || location.hash === '#_=_') {
-      var defaultTab = '#intro';
+      let defaultTab = '#intro';
       $('a[href="'+ defaultTab + '"]').tab('show');
       //history.pushState(null, null, defaultTab);
     }
@@ -18,7 +18,7 @@
 
     window.addEventListener("popstate", function(e) {
       // this assumes that the URL has changed and this gets the right one.
-      var activeTab = $('a[href="' + location.hash + '"]');
+      let activeTab = $('a[href="' + location.hash + '"]');
       if (activeTab.length) {
         activeTab.tab('show');
       } else {
@@ -28,9 +28,9 @@
 
     $("#editIntro").submit(function(event) {
       event.preventDefault();
-      var desc = $('#description');
+      let desc = $('#description');
 
-      var step2 = $('a[href="#basics"]');
+      let step2 = $('a[href="#basics"]');
 
       if($(this).find('input[name=bike_id]').val() === '') {
         appendAlert('Please attach a bike photo before submitting this form.');
@@ -38,13 +38,13 @@
       }
 
       if(desc.val() === '') {
-        //var originalBorderColor = desc.attr('border-color');
+        //let originalBorderColor = desc.attr('border-color');
         appendAlert('Please enter some thoughts about your bike.');
         desc.focus();
         return;
       }
 
-      var reasons = [];
+      let reasons = [];
       $("input[name='reason_ids']:checkbox:checked").each(function(){
         reasons.push($(this).val());
       })
@@ -96,7 +96,7 @@
         contentType: false,
         processData: false,
         xhr: function() {
-          var myXhr = $.ajaxSettings.xhr();
+          let myXhr = $.ajaxSettings.xhr();
           return myXhr;
         },
         success: function(data) {
@@ -127,16 +127,16 @@
 
     function filePreview(input, callback) {
       $('.alert').remove();
-      var maxSize = {{maxPhotoSize}};
-      var minSize = {{minPhotoSize}};
+      let maxSize = {{maxPhotoSize}};
+      let minSize = {{minPhotoSize}};
       // lame
-      var acceptedFileTypes = [];
+      let acceptedFileTypes = [];
       {{#each acceptedFileTypes}}
       acceptedFileTypes.push("{{this}}");
       {{/each}}
 
       if (input.files && input.files[0]) {  
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function (e) {
           $('#upload-target').attr('src', e.target.result);
           $('#upload-target').removeClass('upload-placeholder');
@@ -169,11 +169,11 @@
 
     /* STEP 2 functions */ 
     function searchAndUpdateBrand(str) {
-      var searchBrandAjax = new XMLHttpRequest();
+      let searchBrandAjax = new XMLHttpRequest();
       // use the value they entered to try to figure out the brand.
       searchBrandAjax.open("GET", "/api/brand_by_name/" + str, true);
       searchBrandAjax.onload = function() {
-        var result = JSON.parse(searchBrandAjax.responseText);
+        let result = JSON.parse(searchBrandAjax.responseText);
         if (result.status === 'success') {
           $('#brand_id').val(result.data.id);
           // for some brands you may want to transform the #brand field text
@@ -189,11 +189,11 @@
     }
 
     function getBrandModels(brand_id) {
-      var getModelsAjax = new XMLHttpRequest();
+      let getModelsAjax = new XMLHttpRequest();
       // use the value they entered to try to figure out the brand.
       getModelsAjax.open("GET", "/api/models_by_brand/" + brand_id, true);
       getModelsAjax.onload = function() {
-        var list = JSON.parse(getModelsAjax.responseText);
+        let list = JSON.parse(getModelsAjax.responseText);
         if(list.length > 0) {
           new Awesomplete(
             document.querySelector("#model"),
@@ -206,10 +206,10 @@
       getModelsAjax.send();
     }
 
-    var ajax = new XMLHttpRequest();
+    let ajax = new XMLHttpRequest();
     ajax.open("GET", "/api/brands", true);
     ajax.onload = function() {
-      var list = JSON.parse(ajax.responseText);
+      let list = JSON.parse(ajax.responseText);
       new Awesomplete(
         document.querySelector("#brand"),
         { 
@@ -230,7 +230,7 @@
       if(e.target.name === 'brand') {
         getBrandModels(e.text.value);
       }
-      var hiddenFieldToUpdate = '#' + e.target.name + '_id';
+      let hiddenFieldToUpdate = '#' + e.target.name + '_id';
       $(hiddenFieldToUpdate).val(e.text.value);
     }, false);
 

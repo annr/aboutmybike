@@ -1,27 +1,28 @@
-let express = require('express');
-let path = require('path');
-let favicon = require('serve-favicon');
-var AWS = require('aws-sdk');
-let pg = require('pg');
-let logger = require('morgan');
-let bodyParser = require('body-parser');
-let session = require('express-session');
-let hbs = require('hbs');
-
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const AWS = require('aws-sdk');
+const pg = require('pg');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const hbs = require('hbs');
 const config = require('./config').appConfig;
+const api = require('./api');
+const passport = require('passport');
+const PGSession = require('connect-pg-simple')(session);
 
 // routes
-let index = require('./routes/index');
-let bikes = require('./routes/bikes');
-let bike = require('./routes/bike');
-let feedback = require('./routes/feedback');
-let edit = require('./routes/edit');
-let add = require('./routes/add');
-let upload = require('./routes/upload');
-let profile = require('./routes/profile');
+const index = require('./routes/index');
+const bikes = require('./routes/bikes');
+const bike = require('./routes/bike');
+const feedback = require('./routes/feedback');
+const edit = require('./routes/edit');
+const add = require('./routes/add');
+const upload = require('./routes/upload');
+const profile = require('./routes/profile');
 
-let api = require('./api');
-let app = express();
+const app = express();
 
 // these are globally added values. can be used in templages like {{app_name}}
 app.locals.app_name = config.name;
@@ -31,27 +32,30 @@ app.locals.maxPhotoSize = config.maxPhotoSize;
 app.locals.minPhotoSize = config.minPhotoSize;
 app.locals.acceptedFileTypes = config.acceptedFileTypes;
 
-let passport = require('passport');
-let pgSession = require('connect-pg-simple')(session);
-
 // session stuff:
 require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
-var connectionString = 'postgres://localhost:5432/amb';
-var iconFile = 'favicon-dev.ico';
+const HOST = process.env.RDS_HOSTNAME || 'localhost';
+const PORT = process.env.RDS_PORT || '5432';
+const DB_NAME = process.env.RDS_DB_NAME || 'amb';
+const DB_USER = process.env.RDS_USERNAME || 'arobson';
+const DB_PASSWORD = process.env.RDS_PASSWORD;
+
+let connectionString = `postgres://${HOST}:${PORT}/${DB_NAME}`;
+let iconFile = 'favicon-dev.ico';
 
 if (process.env.RDS_HOSTNAME !== undefined) {
-  connectionString = 'postgres://' + process.env.RDS_USERNAME + ':' + process.env.RDS_PASSWORD + '@' + process.env.RDS_HOSTNAME + ':' + process.env.RDS_PORT + '/' + process.env.RDS_DB_NAME;
+  connectionString = 'postgres://' + DB_USER + ':' + DB_PASSWORD + '@' + HOST + ':' + PORT + '/' + DB_NAME;
   iconFile = 'favicon.ico';
 }
 
 app.use(session({
-  store: new pgSession({
-    pg: pg,                          // Use global pg-module
-    conString: connectionString,     // Connect using something else than default DATABASE_URL env variable
-    tableName: 'session'             // Use another table-name than the default "session" one
+  store: new PGSession({
+    pg: pg,
+    conString: connectionString,
+    tableName: 'session'
   }),
   secret: 's3Cur3', // TO-DO make secret secret!!!
   resave: false,
@@ -77,12 +81,12 @@ app.get('/auth/facebook/callback',
   });
 
 /* MIDDLEWARE */
-let ensureAuthenticated = function(req, res, next) {
+const ensureAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/');
 };
 
-let userValues = function(req, res, next) {
+const userValues = function(req, res, next) {
   req.app.locals.user = req.user;
   next();
 };
@@ -145,8 +149,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  var sns = new AWS.SNS();
-  var params;
+  let sns = new AWS.SNS();
+  let params;
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

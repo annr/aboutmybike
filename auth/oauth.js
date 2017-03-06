@@ -1,4 +1,4 @@
-var ids = {
+let ids = {
   production: {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,

@@ -1,15 +1,17 @@
-var promise = require('bluebird');
-var fs = require('fs');
+/* DEPRECATED. THIS FILE WILL BE REMOVED. */
 
-var options = {
+let promise = require('bluebird');
+let fs = require('fs');
+
+let options = {
   // Initialization Options
   promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
+let pgp = require('pg-promise')(options);
 
 // default (development) options:
-var connectionObject = {
+let connectionObject = {
   host: 'localhost',
   port: 5432,
   database: 'amb',
@@ -27,6 +29,6 @@ if(process.env.RDS_HOSTNAME !== undefined) {
   };
 }
 
-var db = pgp(connectionObject);
+let db = pgp(connectionObject);
 
 module.exports = db;

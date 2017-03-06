@@ -1,38 +1,38 @@
-var express = require('express');
-var router = express.Router();
-var formidable = require('formidable');
-var AWS = require('aws-sdk');
-var fs = require('fs');
+let express = require('express');
+let router = express.Router();
+let formidable = require('formidable');
+let AWS = require('aws-sdk');
+let fs = require('fs');
 
 let queries = require('../db/queries');
 
 function getFilename(bike_id) {
-  var ts = new Date();
-  var dayTs = ts.setHours(0,0,0,0);
+  let ts = new Date();
+  let dayTs = ts.setHours(0,0,0,0);
   // TO-DO: Limit timestamp to a day or so.
   return "aboutmybike-" + bike_id + "-" + dayTs;
 }
 
 /* Create bike record */
 router.post('/', function(req, res, next) {
-  var config = req.app.locals;
-  var bucketName = 'amb-storage';
+  let config = req.app.locals;
+  let bucketName = 'amb-storage';
 
-  var rootFolder = '/dev';
+  let rootFolder = '/dev';
   if(process.env.RDS_HOSTNAME !== undefined) {
     rootFolder = '/photos';
   }
-  var destinationFolder = rootFolder + '/2017-001';
+  let destinationFolder = rootFolder + '/2017-001';
 
   // TO-DO: add user id to file name so that the amount of photo uploads are controlled 
   // (the last uploaded be the user is overwritten)
   // Create an S3 client
-  var s3 = new AWS.S3();
-  var form = new formidable.IncomingForm();
+  let s3 = new AWS.S3();
+  let form = new formidable.IncomingForm();
 
   form.parse(req, function(err, fields, files) {
-    var photo = files.bike_photo;
-    var localPath = photo.path;
+    let photo = files.bike_photo;
+    let localPath = photo.path;
 
     // poor express error handling. the response is an error, but is not properly returned as a readable one.
     // Error: /Users/arobson/Sites/aboutmybike/views/error.hbs: Can't set headers after they are sent.
@@ -53,7 +53,7 @@ router.post('/', function(req, res, next) {
       res.end();
     }
 
-    var extension = photo.type.split('/')[1];
+    let extension = photo.type.split('/')[1];
     if (extension === 'jpeg') extension = 'jpg';
 
     if(localPath) {
@@ -66,8 +66,8 @@ router.post('/', function(req, res, next) {
         // upload file to amb-processing and use rekognition to determine if it is most likely a bike
 
         
-        var fileData = data;
-        var filename;
+        let fileData = data;
+        let filename;
 
         // we have to create the records before we upload the photo because the file name will include the bike_id
         // we do this so that we can overwrite the bike photo on the server for a single bike.
@@ -83,7 +83,7 @@ router.post('/', function(req, res, next) {
             } else {
               filename = getFilename(data.id) + '.' + extension;
               fields.bike_id = data.id;
-              var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
+              let params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
               s3.putObject(params, function(err, fileData) {
                 if (err) {
                   console.log(err)
@@ -105,7 +105,7 @@ router.post('/', function(req, res, next) {
         } else {
 
           filename = getFilename(fields.bike_id) + '.' + extension;
-          var params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
+          let params = {Bucket: bucketName + destinationFolder, Key: filename, Body: fileData};
           s3.putObject(params, function(err, fileData) {
             if (err) {
               console.log(err)

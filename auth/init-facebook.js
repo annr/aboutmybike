@@ -2,8 +2,8 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const oauth = require('./oauth');
 const config = require('../config').appConfig;
-var db = require('../db/db');
-var AWS = require('aws-sdk');
+let db = require('../db/db');
+let AWS = require('aws-sdk');
 
 const authenticationMiddleware = require('./middleware');
 
@@ -22,7 +22,7 @@ passport.deserializeUser(function (id, callback) {
 });
 
 function initPassport () {
-  var keys;
+  let keys;
   // we should have a better way to determine if env is prod.
   // at least extract this into a helper funtion
   if(process.env.RDS_HOSTNAME !== undefined) {
@@ -39,7 +39,7 @@ function initPassport () {
     function(accessToken, refreshToken, profile, callback) {
       db.one('select u.*, user_photo.web_url as picture, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id left join user_photo on user_photo.user_id = u.id where u.facebook_id = $1 limit 1;', profile.id)
         .then(function (data) {
-          // var user = {
+          // let user = {
           //   id: data.id,
           //   facebook: profile,
           //   amb: data
@@ -49,8 +49,8 @@ function initPassport () {
         })
         .catch(function (err) {
           // send SNS alerting there is a new user.
-          var sns = new AWS.SNS();
-          var params;
+          let sns = new AWS.SNS();
+          let params;
           params = {
             Message: JSON.stringify(profile),
             Subject: 'User Signup',
@@ -62,9 +62,9 @@ function initPassport () {
             }
           });
 
-          var first_name = null;
-          var last_name = null;
-          var gender = null;
+          let first_name = null;
+          let last_name = null;
+          let gender = null;
           if(profile.gender) {
             gender = profile.gender;
           }
