@@ -5,7 +5,7 @@ let fs = require('fs');
 
 let options = {
   // Initialization Options
-  promiseLib: promise
+  promiseLib: promise,
 };
 
 let pgp = require('pg-promise')(options);
@@ -15,17 +15,17 @@ let connectionObject = {
   host: 'localhost',
   port: 5432,
   database: 'amb',
-  user: 'arobson'
+  user: 'arobson',
 };
 
 // if any AWS-configured values are set, it's prod
-if(process.env.RDS_HOSTNAME !== undefined) {
+if (process.env.RDS_HOSTNAME !== undefined) {
   connectionObject = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
     database: process.env.RDS_DB_NAME,
     user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD
+    password: process.env.RDS_PASSWORD,
   };
 }
 

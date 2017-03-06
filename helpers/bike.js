@@ -1,25 +1,25 @@
 let types = require('./bike-types').types;
 let reasons = [
-  { 'id' : 1, 'label': 'fun'},
-  { 'id' : 2, 'label': 'commute'},
-  { 'id' : 3, 'label': 'work'},
-  { 'id' : 4, 'label': 'exercise'},
-  { 'id' : 5, 'label': 'social'},
-  { 'id' : 6, 'label': 'style'},
-  { 'id' : 7, 'label': 'adventure'},
-  { 'id' : 8, 'label': 'thrill'},
-  { 'id' : 9, 'label': 'freedom'}
+  { id: 1, label: 'fun' },
+  { id: 2, label: 'commute' },
+  { id: 3, label: 'work' },
+  { id: 4, label: 'exercise' },
+  { id: 5, label: 'social' },
+  { id: 6, label: 'style' },
+  { id: 7, label: 'adventure' },
+  { id: 8, label: 'thrill' },
+  { id: 9, label: 'freedom' },
 ];
 
 let eras = [
-  { 'label': 'Recent'},
-  { 'label': '2000s'},
-  { 'label': '1990s'},
-  { 'label': '1980s'},
-  { 'label': '1970s'},
-  { 'label': 'Mid-Century'},
-  { 'label': 'Early 1900s'},
-  { 'label': 'Late 1800s'}
+  { label: 'Recent' },
+  { label: '2000s' },
+  { label: '1990s' },
+  { label: '1980s' },
+  { label: '1970s' },
+  { label: 'Mid-Century' },
+  { label: 'Early 1900s' },
+  { label: 'Late 1800s' },
 ];
 
 let _ = require('../public/javascripts/lodash');
@@ -33,14 +33,14 @@ function transformForDisplay(data) {
   bike.for = getReasonsList(bike.reason_ids);
 
   detailString.push(bike.era);
-  if(bike.speeds) {
-    detailString.push(bike.speeds + ' speed');
+  if (bike.speeds) {
+    detailString.push(`${bike.speeds} speed`);
   }
-  if(bike.handlebars) {
-    detailString.push(bike.handlebars + ' handlebars');
+  if (bike.handlebars) {
+    detailString.push(`${bike.handlebars} handlebars`);
   }
-  if(bike.brakes) {
-    detailString.push(bike.brakes + ' brakes');
+  if (bike.brakes) {
+    detailString.push(`${bike.brakes} brakes`);
   }
   bike.details = detailString.join(', ');
 
@@ -50,10 +50,10 @@ function transformForDisplay(data) {
 }
 
 function getReasonsList(reason_ids) {
-  if(!reason_ids) return '';
+  if (!reason_ids) return '';
   // override label for reason id 9:
-  let reasonsSaved = _.map(_.filter(reasons, function(reason) {
-    return reason_ids.indexOf(reason.id) !== -1
+  let reasonsSaved = _.map(_.filter(reasons, function (reason) {
+    return reason_ids.indexOf(reason.id) !== -1;
   }), 'label');
 
   return reasonsSaved.join(', ');
@@ -66,13 +66,13 @@ function getFormTypes(type_id) {
 
   let formTypes = [];
 
-  _.map(types, function(t) {
+  _.map(types, function (t) {
     let z = { id: t.id, label: t.label };
-    if(type_id && t.id === type_id) {
+    if (type_id && t.id === type_id) {
       z.selected = true;
     }
-    if(t.related_type_ids) {
-      z.label = ' - ' + t.label;
+    if (t.related_type_ids) {
+      z.label = ` - ${t.label}`;
     }
     formTypes.push(z);
   });
@@ -83,14 +83,14 @@ function getFormTypes(type_id) {
 function getFormReasons(reason_ids) {
   let formReasons = [];
   // default reason 'adventure' !
-  if(!reason_ids) reason_ids = [9];
+  if (!reason_ids) reason_ids = [9];
   // transform reasons to add checked state
-  _.map(reasons, function(r) {
+  _.map(reasons, function (r) {
     let z = { id: r.id, label: r.label };
-    if(z.label === 'freedom') {
+    if (z.label === 'freedom') {
       z.label = 'The feeling of being in motion again. It\'s the most extraordinary thing in the world.';
     }
-    if(reason_ids && reason_ids.indexOf(r.id) !== -1) {
+    if (reason_ids && reason_ids.indexOf(r.id) !== -1) {
       z.checked = true;
     }
     formReasons.push(z);
@@ -100,9 +100,9 @@ function getFormReasons(reason_ids) {
 
 function getFormEras(era) {
   let formEras = [];
-  _.map(eras, function(e) {
+  _.map(eras, function (e) {
     let z = { label: e.label };
-    if(era === e.label) {
+    if (era === e.label) {
       z.selected = true;
     }
     formEras.push(z);
@@ -111,7 +111,7 @@ function getFormEras(era) {
 }
 
 
-/* if available add era, bike type and ' Bike'. 
+/* if available add era, bike type and ' Bike'.
    otherwise just return ' Bike'.
 
    Ex. return '1980s Road Bike'
@@ -119,16 +119,16 @@ function getFormEras(era) {
 function getTitle(bike) {
   let title = '';
 
-  if(bike.era && bike.era !== 'Recent' && bike.era !== '2000s' ) { // too recent to be interesting.
+  if (bike.era && bike.era !== 'Recent' && bike.era !== '2000s') { // too recent to be interesting.
     title += bike.era;
   }
 
-  title += bike.type ? (' ' + bike.type) : '';
+  title += bike.type ? (` ${bike.type}`) : '';
 
   // add ' Bike' for most bike types OR neither era or type
-  if(bike.type || title === '') {
-    if(!/cycle|bike|bicycle|cruiser|mixte/i.test(bike.type)) {
-      title +=' Bike';
+  if (bike.type || title === '') {
+    if (!/cycle|bike|bicycle|cruiser|mixte/i.test(bike.type)) {
+      title += ' Bike';
     }
   }
   // title might have an space at the beginning; in front of type or ' Bike'
@@ -141,39 +141,39 @@ function getTitleWithBrandAndModel(bike) {
   let title = '';
   let type = bike.type;
 
-  if(!!bike.manufacturer_name) {
+  if (bike.manufacturer_name) {
     title += bike.manufacturer_name;
-    if(!!bike.model_name) {
-      title += ' ' + bike.model_name;
-    } else if (bike.model_unlinked !== '') { 
+    if (bike.model_name) {
+      title += ` ${bike.model_name}`;
+    } else if (bike.model_unlinked !== '') {
       // complicated, but they could have an
       // unlinked model name with a stored manufacturer
-      title += ' ' + bike.model_unlinked;
+      title += ` ${bike.model_unlinked}`;
     }
-  } else if (!!bike.brand_unlinked) {
+  } else if (bike.brand_unlinked) {
     title += bike.brand_unlinked;
-    if(!!bike.model_unlinked) {
-      title += ' ' + bike.model_unlinked;
+    if (bike.model_unlinked) {
+      title += ` ${bike.model_unlinked}`;
     }
   }
 
   // add 'bike' when there is an associated type on nothing
-  title += type ? ' ' + type : '';
+  title += type ? ` ${type}` : '';
 
-  if(type || title === '') {
-    if(!/cycle|bike|bicycle|cruiser|mixte/i.test(type)) {
-      title +=' Bike';
+  if (type || title === '') {
+    if (!/cycle|bike|bicycle|cruiser|mixte/i.test(type)) {
+      title += ' Bike';
     }
   }
-  //(bike.brand + ' ' + bike.model).trim();
+  // (bike.brand + ' ' + bike.model).trim();
   return title.trim();
 }
 
 
 module.exports = {
-  getTitle: getTitle,
-  transformForDisplay: transformForDisplay,
-  getFormReasons: getFormReasons,
-  getFormTypes: getFormTypes,
-  getFormEras: getFormEras
+  getTitle,
+  transformForDisplay,
+  getFormReasons,
+  getFormTypes,
+  getFormEras,
 };

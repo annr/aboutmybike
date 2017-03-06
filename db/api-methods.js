@@ -8,8 +8,8 @@ function getAllBikes(req, res, next) {
       res.status(200)
         .json({
           status: 'success',
-          data: data,
-          message: 'Retrieved ALL bikes'
+          data,
+          message: 'Retrieved ALL bikes',
         });
     })
     .catch(function (err) {
@@ -24,8 +24,8 @@ function getBike(req, res, next) {
       res.status(200)
         .json({
           status: 'success',
-          data: data,
-          message: 'Retrieved ONE bike'
+          data,
+          message: 'Retrieved ONE bike',
         });
     })
     .catch(function (err) {
@@ -41,7 +41,7 @@ function createBike(req, res, next) {
         .json({
           status: 'success',
           data: data.id,
-          message: 'Added bike'
+          message: 'Added bike',
         });
     })
     .catch(function (err) {
@@ -57,7 +57,7 @@ function updateBike(req, res, next) {
       res.status(200)
         .json({
           status: 'success',
-          message: 'Updated bike'
+          message: 'Updated bike',
         });
     })
     .catch(function (err) {
@@ -73,7 +73,7 @@ function removeBike(req, res, next) {
       res.status(200)
         .json({
           status: 'success',
-          message: `Removed ${result.rowCount} bike`
+          message: `Removed ${result.rowCount} bike`,
         });
       /* jshint ignore:end */
     })
@@ -94,13 +94,13 @@ function getAllManufacturers(req, res, next) {
 
 function getManufacturerByName(req, res, next) {
   let name = req.params.name;
-  db.one("select * from manufacturer where name ilike " + "'" + name + "%' limit 1")
+  db.one(`${'select * from manufacturer where name ilike ' + "'"}${name}%' limit 1`)
     .then(function (data) {
       res.status(200)
         .json({
           status: 'success',
-          data: data,
-          message: 'Retrieved Brand'
+          data,
+          message: 'Retrieved Brand',
         });
     })
     .catch(function (err) {
@@ -110,8 +110,8 @@ function getManufacturerByName(req, res, next) {
           message: 'No data returned',
           data: {
             id: 0,
-            name: "New or Unknown Brand"
-          }
+            name: 'New or Unknown Brand',
+          },
         });
     });
 }
@@ -128,12 +128,12 @@ function getModelsByBrandId(req, res, next) {
 }
 
 module.exports = {
-  getAllBikes: getAllBikes,
-  getBike: getBike,
-  createBike: createBike,
-  updateBike: updateBike,
-  removeBike: removeBike,
-  getAllManufacturers: getAllManufacturers,
-  getManufacturerByName: getManufacturerByName,
-  getModelsByBrandId: getModelsByBrandId
+  getAllBikes,
+  getBike,
+  createBike,
+  updateBike,
+  removeBike,
+  getAllManufacturers,
+  getManufacturerByName,
+  getModelsByBrandId,
 };

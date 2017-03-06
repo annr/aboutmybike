@@ -1,10 +1,10 @@
 let express = require('express');
 let router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.render('profile', { 
+router.get('/', function (req, res, next) {
+  res.render('profile', {
     page_title: 'Profile',
-    username: req.user.username
+    username: req.user.username,
   });
 });
 

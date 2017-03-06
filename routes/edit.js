@@ -9,64 +9,60 @@ let page_heading = page_title;
 let rows = 10;
 let view = 'edit';
 
-router.get(['/', '/:id'], function(req, res, next) {
+router.get(['/', '/:id'], function (req, res, next) {
   let maxRows = 24;
   let line = 60;
   let calculatedRows;
   let id = req.params.id;
 
-  queries.getBike(id, function(err, data) {
-    if(err) {
+  queries.getBike(id, function (err, data) {
+    if (err) {
       next(err);
     } else {
       // Try to guess how many textarea rows will be necessary to edit the text.
       // This is hard, because responsive, but if the text is really long, you can give more editor.
-      if(data.description && data.description.length) {
-        calculatedRows = Math.round(data.description.length/line);
-        if(calculatedRows < maxRows && calculatedRows > rows) {
+      if (data.description && data.description.length) {
+        calculatedRows = Math.round(data.description.length / line);
+        if (calculatedRows < maxRows && calculatedRows > rows) {
           rows = calculatedRows;
         }
       }
       res.render(view, {
-        page_title: page_title,
-        page_heading: page_heading,
+        page_title,
+        page_heading,
         bike: data,
         reasons: helper.getFormReasons(data.reason_ids),
         types: helper.getFormTypes(data.type_id),
         eras: helper.getFormEras(data.era),
-        rows: rows,
-        is_new: false
+        rows,
+        is_new: false,
       });
     }
   });
-
 });
 
 /* Populate basic details */
-router.post('/', function(req, res, next) {
-
-  if(req.body.step === '1') {
-    queries.updateBikeIntro(req.body, function(err) {
-      if(err) {
+router.post('/', function (req, res, next) {
+  if (req.body.step === '1') {
+    queries.updateBikeIntro(req.body, function (err) {
+      if (err) {
         next(err);
       } else {
-        res.json({success : 'Updated bike intro', status : 200});
+        res.json({ success: 'Updated bike intro', status: 200 });
       }
     });
-
   } else if (req.body.step === '2') {
-    queries.updateBikeBasics(req.body, function(err) {
-      if(err) {
+    queries.updateBikeBasics(req.body, function (err) {
+      if (err) {
         next(err);
       } else {
-        //res.json({success : 'Updated bike basics', status : 200});
-        res.redirect('/bike/' + req.body.bike_id);
+        // res.json({success : 'Updated bike basics', status : 200});
+        res.redirect(`/bike/${req.body.bike_id}`);
       }
     });
   } else {
     throw err;
   }
-
 });
 
 module.exports = router;

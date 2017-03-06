@@ -11,7 +11,7 @@ function getAllBikes(callback) {
       callback(null, data);
     })
     .catch(function (err) {
-      callback(new Error('Failed to retrieve bicycles: (' + err + ')'));
+      callback(new Error(`Failed to retrieve bicycles: (${err})`));
     });
 }
 
@@ -22,7 +22,7 @@ function getBike(bikeID, callback) {
       callback(null, data);
     })
     .catch(function (err) {
-      callback(new Error('Failed get bike record: (' + err + ')'));
+      callback(new Error(`Failed get bike record: (${err})`));
     });
 }
 
@@ -36,27 +36,27 @@ function createBike(fields, callback) {
           callback(null, data);
         })
         .catch(function (err) {
-          callback(new Error('Failed to create bike info record: (' + err + ')'));
+          callback(new Error(`Failed to create bike info record: (${err})`));
         });
     })
     .catch(function (err) {
-      callback(new Error('Failed to create bike record: (' + err + ')'));
+      callback(new Error(`Failed to create bike record: (${err})`));
     });
 }
 
 function updateBikeIntro(fields, callback) {
-  fields.type_id = (fields.type_id) ? 'ARRAY[' + fields.type_id + ']' : null;
-  fields.reasons = (fields.reasons) ? 'ARRAY[' + fields.reasons + ']' : null;
+  fields.type_id = (fields.type_id) ? `ARRAY[${fields.type_id}]` : null;
+  fields.reasons = (fields.reasons) ? `ARRAY[${fields.reasons}]` : null;
 
-  if(!fields.description) { fields.description = null; }
-  if(!fields.nickname) { fields.nickname = null; }
- 
-  db.none('update bike set description = $1, nickname = $2, type_ids = ' + fields.type_id + ', reason_ids = ' + fields.reasons + ' where id = $3', [fields.description, fields.nickname, parseInt(fields.bike_id)])
+  if (!fields.description) { fields.description = null; }
+  if (!fields.nickname) { fields.nickname = null; }
+
+  db.none(`update bike set description = $1, nickname = $2, type_ids = ${fields.type_id}, reason_ids = ${fields.reasons} where id = $3`, [fields.description, fields.nickname, parseInt(fields.bike_id)])
     .then(function () {
       callback(null);
     })
     .catch(function (err) {
-      callback(new Error('Failed to update bike record: (' + err + ')'));
+      callback(new Error(`Failed to update bike record: (${err})`));
     });
 }
 
@@ -67,33 +67,33 @@ function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
       callback(null);
     })
     .catch(function (err) {
-      callback(new Error('Failed to update main bike photo: (' + err + ')'));
+      callback(new Error(`Failed to update main bike photo: (${err})`));
     });
 }
 
 function updateBikeBasics(fields, callback) {
-  if(!fields.serial_number) { fields.serial_number = null; }
-  //model/brand
+  if (!fields.serial_number) { fields.serial_number = null; }
+  // model/brand
   let brand = null;
   let model = null;
   let brand_id = null;
   let model_id = null;
 
   // careful. you can't parseInt(null)
-  if(fields.brand_id !== "") {
+  if (fields.brand_id !== '') {
     brand_id = parseInt(fields.brand_id);
   }
-  if(fields.model_id !== "") {
+  if (fields.model_id !== '') {
     model_id = parseInt(fields.model_id);
   }
 
-  if(!fields.description) { fields.description = null; }
-  if(!fields.nickname) { fields.nickname = null; }
+  if (!fields.description) { fields.description = null; }
+  if (!fields.nickname) { fields.nickname = null; }
 
-  if(!fields.brand_id && fields.brand !== '') {
+  if (!fields.brand_id && fields.brand !== '') {
     brand = fields.brand;
   }
-  if(!fields.model_id && fields.model !== '') {
+  if (!fields.model_id && fields.model !== '') {
     model = fields.model;
   }
 
@@ -103,21 +103,21 @@ function updateBikeBasics(fields, callback) {
       updateBikeBasicsInfo(fields, callback);
     })
     .catch(function (err) {
-      callback(new Error('Failed to create bike record: (' + err + ')'));
+      callback(new Error(`Failed to create bike record: (${err})`));
     });
 }
 
 function updateBikeBasicsInfo(fields, callback) {
   // #dcdbdf is the color input  default; they did not select any color.
-  if(!fields.color || fields.color === '#dcdbdf') { fields.color = null; }
+  if (!fields.color || fields.color === '#dcdbdf') { fields.color = null; }
 
-  if(!fields.era) { fields.era = null; }
+  if (!fields.era) { fields.era = null; }
   db.none('update bike_info set color = $1, era = $2 where bike_id = $3', [fields.color, fields.era, parseInt(fields.bike_id)])
     .then(function () {
       callback(null);
     })
     .catch(function (err) {
-      callback(new Error('Failed to update bike info record: (' + err + ')'));
+      callback(new Error(`Failed to update bike info record: (${err})`));
     });
 }
 
@@ -128,7 +128,7 @@ function createBikePhoto(fields, photoPath, callback) {
       updateBikeMainPhoto(data.bike_id, data.file_path, callback);
     })
     .catch(function (err) {
-      callback(new Error('Failed to create photo record. May have orphaned photo on server. (' + err + ')'));
+      callback(new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`));
     });
 }
 
@@ -138,19 +138,19 @@ function getManufacturer(manuId, callback) {
       callback(null, data);
     })
     .catch(function (err) {
-      callback(new Error('Failed to get manufacturer record: (' + err + ')'));
+      callback(new Error(`Failed to get manufacturer record: (${err})`));
     });
 }
 
 
 module.exports = {
-  getAllBikes: getAllBikes,
-  getBike: getBike,
-  createBike: createBike,
-  updateBikeIntro: updateBikeIntro,
-  updateBikeMainPhoto: updateBikeMainPhoto,
-  updateBikeBasics: updateBikeBasics,
-  updateBikeBasicsInfo: updateBikeBasicsInfo,
-  createBikePhoto: createBikePhoto,
-  getManufacturer: getManufacturer
+  getAllBikes,
+  getBike,
+  createBike,
+  updateBikeIntro,
+  updateBikeMainPhoto,
+  updateBikeBasics,
+  updateBikeBasicsInfo,
+  createBikePhoto,
+  getManufacturer,
 };

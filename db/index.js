@@ -1,4 +1,4 @@
-'use strict';
+
 
 // Bluebird is the best promise library available today,
 // and is the one recommended here:
@@ -7,28 +7,27 @@ let promise = require('bluebird');
 // Loading all the database repositories separately,
 // because event 'extend' is called multiple times:
 let repos = {
-    bike: require('./repos/bike')
+  bike: require('./repos/bike'),
 };
 
 // pg-promise initialization options:
 let options = {
 
     // Use a custom promise library, instead of the default ES6 Promise:
-    promiseLib: promise,
+  promiseLib: promise,
 
     // Extending the database protocol with our custom repositories:
-    extend: obj => {
-
+  extend: (obj) => {
         // Do not use 'require()' here, because this event occurs for every task
         // and transaction being executed, which should be as fast as possible.
-        obj.bike = repos.bike(obj, pgp);
+    obj.bike = repos.bike(obj, pgp);
 
         // Alternatively, you can set all repositories in a loop:
         //
         // for (let r in repos) {
         //    obj[r] = repos[r](obj, pgp);
         // }
-    }
+  },
 
 };
 
@@ -37,18 +36,18 @@ let connectionObject = {
   host: 'localhost',
   port: 5432,
   database: 'amb',
-  user: 'arobson'
+  user: 'arobson',
 };
 
 
 // if any AWS-configured values are set, it's prod
-if(process.env.RDS_HOSTNAME !== undefined) {
+if (process.env.RDS_HOSTNAME !== undefined) {
   connectionObject = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
     database: process.env.RDS_DB_NAME,
     user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD
+    password: process.env.RDS_PASSWORD,
   };
 }
 
