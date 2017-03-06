@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
   let comments = req.body.comments;
   let sns = new AWS.SNS();
   let params = {
-    Message: comments + "\n- - -\n\nFrom:\n" + email,
+    Message: comments + '\n- - -\n\nFrom:\n' + email,
     Subject: 'Inquiry from ' + email,
     TopicArn: config.topicArn + config.snsContactFormTopicName
   };
@@ -27,7 +27,7 @@ router.post('/', function(req, res, next) {
       res.json({error : err, status : 500 });
     }
     else {
-      res.json({success : "Feedback sent.", status : 200 });
+      res.json({success : 'Feedback sent.', status : 200 });
     }
   });
 });

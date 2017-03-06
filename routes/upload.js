@@ -10,7 +10,7 @@ function getFilename(bike_id) {
   let ts = new Date();
   let dayTs = ts.setHours(0,0,0,0);
   // TO-DO: Limit timestamp to a day or so.
-  return "aboutmybike-" + bike_id + "-" + dayTs;
+  return 'aboutmybike-' + bike_id + '-' + dayTs;
 }
 
 /* Create bike record */
@@ -95,7 +95,7 @@ router.post('/', function(req, res, next) {
                     } else {
                       // set bike_id on session user
                       req.user.bike_id = fields.bike_id;
-                      res.json({success : "Created bike, added photo, and updated bike photo with the name.", status : 200, id: fields.bike_id});
+                      res.json({success : 'Created bike, added photo, and updated bike photo with the name.', status : 200, id: fields.bike_id});
                     }
                   });
                 }
@@ -125,7 +125,7 @@ router.post('/', function(req, res, next) {
                     if(err) {
                       next(err);
                     } else {
-                      res.json({success : "Created another record for the main photo", status : 200, id: fields.bike_id});
+                      res.json({success : 'Created another record for the main photo', status : 200, id: fields.bike_id});
                     }
                   });
                 }

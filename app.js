@@ -47,47 +47,51 @@ let connectionString = `postgres://${HOST}:${PORT}/${DB_NAME}`;
 let iconFile = 'favicon-dev.ico';
 
 if (process.env.RDS_HOSTNAME !== undefined) {
-  connectionString = 'postgres://' + DB_USER + ':' + DB_PASSWORD + '@' + HOST + ':' + PORT + '/' + DB_NAME;
+  connectionString = `postgres://${DB_USER}:${DB_PASSWORD}@${HOST}:${PORT}/${DB_NAME}`;
   iconFile = 'favicon.ico';
 }
 
 app.use(session({
   store: new PGSession({
-    pg: pg,
+    pg,
     conString: connectionString,
-    tableName: 'session'
+    tableName: 'session',
   }),
   secret: 's3Cur3', // TO-DO make secret secret!!!
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-  resave: false,
-  saveUninitialized: false // TO-DO: Understand this setting better.
+  saveUninitialized: false, // TO-DO: Understand this setting better.
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/auth/facebook',
+app.get(
+  '/auth/facebook',
   passport.authenticate('facebook', { scope: ['email'] }),
-  function(req, res){});
+);
+
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/' }),
-  function(req, res) {
-    if(req.user.bike_id) {
-      res.redirect('/bike/' + req.user.bike_id);
+  function (req, res) {
+    if (req.user.bike_id) {
+      res.redirect(`/bike/${req.user.bike_id}`);
     } else {
       res.redirect('/add');
     }
-  });
+  },
+);
 
 /* MIDDLEWARE */
-const ensureAuthenticated = function(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+const ensureAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
   res.redirect('/');
 };
 
-const userValues = function(req, res, next) {
-  req.app.locals.user = req.user;
+const userValues = function (req, res, next) {
+  req.app.locals.user = req.user; // eslint-disable-line no-param-reassign
   next();
 };
 
@@ -97,14 +101,14 @@ const userValues = function(req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-hbs.registerHelper('preserve-linebreaks', function(str) {
+hbs.registerHelper('preserve-linebreaks', function (str) {
   // we have to escape all the special chars and then conver line breaks to brs.
   return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;")
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
     .replace(/(?:\r\n|\r|\n)/g, '<br />');
 });
 
@@ -131,16 +135,16 @@ app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/profile', ensureAuthenticated, profile);
 
-app.get('/logout', function(req, res){
+app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   let err = new Error('404 Not Found');
   err.status = 404;
-  if(process.env.RDS_HOSTNAME !== undefined) {
+  if (process.env.RDS_HOSTNAME !== undefined) {
     res.render('404', { layout: 'error-layout' });
   } else {
     next(err);
@@ -148,23 +152,25 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+// there is no next()
+// app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   let sns = new AWS.SNS();
   let params;
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message; // eslint-disable-line no-param-reassign
+  res.locals.error = req.app.get('env') === 'development' ? err : {}; // eslint-disable-line no-param-reassign
 
   // if prod, publish SNS error:
-  if(process.env.RDS_HOSTNAME !== undefined) {
+  if (process.env.RDS_HOSTNAME !== undefined) {
     params = {
-      Message: err.message + "\n\n" + err.message.stack,
-      Subject: 'Express Error: ' + err.message.substring(0, 20),
-      TopicArn: config.topicArn + config.snsExpressErrorTopicName
+      Message: `${err.message}\n\n${err.message.stack}`,
+      Subject: `Express Error: ${err.message.substring(0, 20)}`,
+      TopicArn: config.topicArn + config.snsExpressErrorTopicName,
     };
-    sns.publish(params, function(err, data) {
+    sns.publish(params, function (err) {
       if (err) {
-        console.err('Error sending SNS: ' + err);
+        console.err(`Error sending SNS: ${err}`);
       }
     });
   }

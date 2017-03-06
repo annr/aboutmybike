@@ -1,25 +1,25 @@
 let types = require('./bike-types').types;
 let reasons = [
-  { "id" : 1, "label": "fun"},
-  { "id" : 2, "label": "commute"},
-  { "id" : 3, "label": "work"},
-  { "id" : 4, "label": "exercise"},
-  { "id" : 5, "label": "social"},
-  { "id" : 6, "label": "style"},
-  { "id" : 7, "label": "adventure"},
-  { "id" : 8, "label": "thrill"},
-  { "id" : 9, "label": "freedom"}
+  { 'id' : 1, 'label': 'fun'},
+  { 'id' : 2, 'label': 'commute'},
+  { 'id' : 3, 'label': 'work'},
+  { 'id' : 4, 'label': 'exercise'},
+  { 'id' : 5, 'label': 'social'},
+  { 'id' : 6, 'label': 'style'},
+  { 'id' : 7, 'label': 'adventure'},
+  { 'id' : 8, 'label': 'thrill'},
+  { 'id' : 9, 'label': 'freedom'}
 ];
 
 let eras = [
-  { "label": "Recent"},
-  { "label": "2000s"},
-  { "label": "1990s"},
-  { "label": "1980s"},
-  { "label": "1970s"},
-  { "label": "Mid-Century"},
-  { "label": "Early 1900s"},
-  { "label": "Late 1800s"}
+  { 'label': 'Recent'},
+  { 'label': '2000s'},
+  { 'label': '1990s'},
+  { 'label': '1980s'},
+  { 'label': '1970s'},
+  { 'label': 'Mid-Century'},
+  { 'label': 'Early 1900s'},
+  { 'label': 'Late 1800s'}
 ];
 
 let _ = require('../public/javascripts/lodash');
@@ -87,8 +87,8 @@ function getFormReasons(reason_ids) {
   // transform reasons to add checked state
   _.map(reasons, function(r) {
     let z = { id: r.id, label: r.label };
-    if(z.label === "freedom") {
-      z.label = "The feeling of being in motion again. It's the most extraordinary thing in the world.";
+    if(z.label === 'freedom') {
+      z.label = 'The feeling of being in motion again. It's the most extraordinary thing in the world.';
     }
     if(reason_ids && reason_ids.indexOf(r.id) !== -1) {
       z.checked = true;
@@ -111,10 +111,10 @@ function getFormEras(era) {
 }
 
 
-/* if available add era, bike type and " Bike". 
-   otherwise just return " Bike".
+/* if available add era, bike type and ' Bike'. 
+   otherwise just return ' Bike'.
 
-   Ex. return "1980s Road Bike"
+   Ex. return '1980s Road Bike'
 */
 function getTitle(bike) {
   let title = '';
@@ -131,12 +131,12 @@ function getTitle(bike) {
       title +=' Bike';
     }
   }
-  // title might have an space at the beginning; in front of type or " Bike"
+  // title might have an space at the beginning; in front of type or ' Bike'
   return title.trim();
 }
 
 
-/* get brand and model if brand exists + bike type + " Bike" */
+/* get brand and model if brand exists + bike type + ' Bike' */
 function getTitleWithBrandAndModel(bike) {
   let title = '';
   let type = bike.type;
@@ -144,16 +144,16 @@ function getTitleWithBrandAndModel(bike) {
   if(!!bike.manufacturer_name) {
     title += bike.manufacturer_name;
     if(!!bike.model_name) {
-      title += " " + bike.model_name;
+      title += ' ' + bike.model_name;
     } else if (bike.model_unlinked !== '') { 
       // complicated, but they could have an
       // unlinked model name with a stored manufacturer
-      title += " " + bike.model_unlinked;
+      title += ' ' + bike.model_unlinked;
     }
   } else if (!!bike.brand_unlinked) {
     title += bike.brand_unlinked;
     if(!!bike.model_unlinked) {
-      title += " " + bike.model_unlinked;
+      title += ' ' + bike.model_unlinked;
     }
   }
 
@@ -165,7 +165,7 @@ function getTitleWithBrandAndModel(bike) {
       title +=' Bike';
     }
   }
-  //(bike.brand + " " + bike.model).trim();
+  //(bike.brand + ' ' + bike.model).trim();
   return title.trim();
 }
 

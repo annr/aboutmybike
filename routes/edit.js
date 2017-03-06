@@ -45,21 +45,21 @@ router.get(['/', '/:id'], function(req, res, next) {
 /* Populate basic details */
 router.post('/', function(req, res, next) {
 
-  if(req.body.step === "1") {
+  if(req.body.step === '1') {
     queries.updateBikeIntro(req.body, function(err) {
       if(err) {
         next(err);
       } else {
-        res.json({success : "Updated bike intro", status : 200});
+        res.json({success : 'Updated bike intro', status : 200});
       }
     });
 
-  } else if (req.body.step === "2") {
+  } else if (req.body.step === '2') {
     queries.updateBikeBasics(req.body, function(err) {
       if(err) {
         next(err);
       } else {
-        //res.json({success : "Updated bike basics", status : 200});
+        //res.json({success : 'Updated bike basics', status : 200});
         res.redirect('/bike/' + req.body.bike_id);
       }
     });
