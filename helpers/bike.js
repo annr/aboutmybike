@@ -88,7 +88,7 @@ function getFormReasons(reason_ids) {
   _.map(reasons, function(r) {
     let z = { id: r.id, label: r.label };
     if(z.label === 'freedom') {
-      z.label = 'The feeling of being in motion again. It's the most extraordinary thing in the world.';
+      z.label = 'The feeling of being in motion again. It\'s the most extraordinary thing in the world.';
     }
     if(reason_ids && reason_ids.indexOf(r.id) !== -1) {
       z.checked = true;

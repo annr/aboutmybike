@@ -66,10 +66,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get(
-  '/auth/facebook',
+app.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['email'] }),
-);
+  function (req, res) {});
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/' }),
@@ -79,8 +78,7 @@ app.get('/auth/facebook/callback',
     } else {
       res.redirect('/add');
     }
-  },
-);
+  });
 
 /* MIDDLEWARE */
 const ensureAuthenticated = function (req, res, next) {
