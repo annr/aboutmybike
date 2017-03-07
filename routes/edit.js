@@ -15,6 +15,13 @@ router.get(['/', '/:id'], function (req, res, next) {
   let id = req.params.id;
 
   helper.getBike(id, function (err, data) {
+
+    // must be user's bike for them to edit
+    if (data.user_id != req.user.id) {
+      console.log('redirecting...');
+      res.redirect(`/bike/${data.id}`);
+    }
+
     if (err) {
       next(err);
     } else {
