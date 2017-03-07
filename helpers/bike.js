@@ -79,7 +79,6 @@ function updateIntro(fields, callback) {
 
   db.bike.update([fields.description, fields.nickname, type_id, reasons, parseInt(fields.bike_id)])
     .then(function (data) {
-      console.log('success updating bike ' + data);
       callback(null);
     })
     .catch(function (err) {
@@ -87,9 +86,8 @@ function updateIntro(fields, callback) {
     });
 }
 
-
 function updateMainPhoto(bike_id, main_photo_path, callback) {
-  db.none('update bike set main_photo_path = $1 where id = $2', [main_photo_path, bike_id])
+  db.bike.update_main_photo([main_photo_path, bike_id])
     .then(function () {
       callback(null);
     })
@@ -148,17 +146,9 @@ function updateBasicsInfo(fields, callback) {
 }
 
 function createPhoto(fields, photoPath, callback) {
-  console.log('values ' + [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath]);
   db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (bike_id) {
-      console.log('succcessfully added photo. updating bike table with main photo... ID set??? ' + bike_id);
-      db.bike.update_main_photo([photoPath, bike_id])
-        .then(function () {
-          callback(null);
-        })
-        .catch(function (err) {
-          callback(new Error(`Failed to update main bike photo: (${err})`));
-        });
+      updateMainPhoto(photoPath, bike_id, callback);
     })
     .catch(function (err) {
       callback(new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`));
@@ -316,7 +306,6 @@ module.exports = {
   getBike,
   createBike,
   updateIntro,
-  updateMainPhoto,
   updateBasics,
   updateBasicsInfo,
   createPhoto,
