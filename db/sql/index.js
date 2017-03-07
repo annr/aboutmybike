@@ -24,10 +24,15 @@ module.exports = {
     all: sql('bike/all.sql'),
     select: sql('bike/select.sql'),
     update: sql('bike/update.sql'),
+    update_basics: sql('bike/update_basics.sql'),
+    update_main_photo: sql('bike/update_main_photo.sql'),
   },
   bike_info: {
     add: sql('bike_info/add.sql'),
     update: sql('bike_info/update.sql'),
+  },
+  photo: {
+    add: sql('photo/add.sql'),
   },
   manufacturer: {
     select: sql('manufacturer/select.sql'),

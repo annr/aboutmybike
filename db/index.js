@@ -7,6 +7,7 @@ let promise = require('bluebird');
 let repos = {
   bike: require('./repos/bike'),
   bike_info: require('./repos/bike_info'),
+  photo: require('./repos/photo'),
   manufacturer: require('./repos/manufacturer'),
 };
 
@@ -22,6 +23,7 @@ let options = {
         // and transaction being executed, which should be as fast as possible.
     obj.bike = repos.bike(obj, pgp);
     obj.bike_info = repos.bike_info(obj, pgp);
+    obj.photo = repos.photo(obj, pgp);
     obj.manufacturer = repos.manufacturer(obj, pgp);
 
         // Alternatively, you can set all repositories in a loop:

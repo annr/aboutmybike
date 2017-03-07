@@ -1,7 +1,5 @@
 let express = require('express');
 let router = express.Router();
-let queries = require('../db/queries');
-
 let helper = require('../helpers/bike');
 
 /* GET bike listing */

@@ -4,7 +4,6 @@ let formidable = require('formidable');
 let AWS = require('aws-sdk');
 let fs = require('fs');
 
-let queries = require('../db/queries');
 let helper = require('../helpers/bike');
 
 function getFilename(bike_id) {
@@ -76,18 +75,18 @@ router.post('/', function (req, res, next) {
         // 1) Create records if necessary.
         // if there is no bike id, we must create the bike record.
         if (!fields.bike_id) {
-          helper.createBike(fields, function (err, data) {
+          helper.createBike(fields, function (err, bike_id) {
             if (err) {
               next(err);
             } else {
               filename = `${getFilename(data.id)}.${extension}`;
-              fields.bike_id = data.id;
+              fields.bike_id = bike_id;
               let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: fileData };
               s3.putObject(params, function (err, fileData) {
                 if (err) {
                   console.log(err);
                 } else {
-                  queries.createBikePhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
+                  helper.createPhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
                     if (err) {
                       next(err);
                     } else {
@@ -107,7 +106,7 @@ router.post('/', function (req, res, next) {
             if (err) {
               console.log(err);
             } else {
-              queries.createBikePhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
+              helper.createPhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
                 if (err) {
                   next(err);
                 } else {
@@ -117,7 +116,7 @@ router.post('/', function (req, res, next) {
                   // For now, we'll just create a new record in the db; this does not mean we have a duplicate photo on S3.
                   // The justification is that we'll have a new created_at value and it will show us the most recent like an update_at value.
                   // since the path is stored on the bike table, we don't have to worry about selecting the wrong one.
-                  queries.createBikePhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
+                  helper.createPhoto(fields, `${destinationFolder}/${filename}`, function (err, data) {
                     if (err) {
                       next(err);
                     } else {

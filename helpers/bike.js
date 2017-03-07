@@ -51,11 +51,8 @@ function getBike(bikeID, callback) {
 function createBike(fields, callback) {
   db.bike.add(parseInt(fields.user_id))
     .then(function (data) {
-      console.log(data);
-      console.log('add to bike returning ' + data.id);
       db.bike_info.add(data.id)
         .then(function (data) {
-          console.log('add to bike_info returning ' + data);          
           callback(null, data);
         })
         .catch(function (err) {
@@ -67,15 +64,22 @@ function createBike(fields, callback) {
     });
 }
 
-function updateBikeIntro(fields, callback) {
-  fields.type_id = (fields.type_id) ? `ARRAY[${fields.type_id}]` : null;
-  fields.reasons = (fields.reasons) ? `ARRAY[${fields.reasons}]` : null;
+function updateIntro(fields, callback) {
+  var reasons = (fields.reasons) ? fields.reasons.split(',') : null;
+  var type_id = (fields.type_id) ? [parseInt(fields.type_id)] : null;
+  // turn reasons into integers if nec.
+  if (reasons) {
+    reasons = reasons.map(function(r) {
+      return parseInt(r);
+    });
+  }
 
   if (!fields.description) { fields.description = null; }
   if (!fields.nickname) { fields.nickname = null; }
 
-  db.none(`update bike set description = $1, nickname = $2, type_ids = ${fields.type_id}, reason_ids = ${fields.reasons} where id = $3`, [fields.description, fields.nickname, parseInt(fields.bike_id)])
-    .then(function () {
+  db.bike.update([fields.description, fields.nickname, type_id, reasons, parseInt(fields.bike_id)])
+    .then(function (data) {
+      console.log('success updating bike ' + data);
       callback(null);
     })
     .catch(function (err) {
@@ -84,7 +88,7 @@ function updateBikeIntro(fields, callback) {
 }
 
 
-function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
+function updateMainPhoto(bike_id, main_photo_path, callback) {
   db.none('update bike set main_photo_path = $1 where id = $2', [main_photo_path, bike_id])
     .then(function () {
       callback(null);
@@ -94,7 +98,7 @@ function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
     });
 }
 
-function updateBikeBasics(fields, callback) {
+function updateBasics(fields, callback) {
   if (!fields.serial_number) { fields.serial_number = null; }
   // model/brand
   let brand = null;
@@ -120,22 +124,21 @@ function updateBikeBasics(fields, callback) {
     model = fields.model;
   }
 
-  db.none('update bike set serial_number = $1, manufacturer_id = $2, model_id = $3, brand_unlinked = $4, model_unlinked = $5 where id = $6',
-    [fields.serial_number, brand_id, model_id, brand, model, parseInt(fields.bike_id)])
+  db.bike.update_basics([fields.serial_number, brand_id, model_id, brand, model, parseInt(fields.bike_id)])
     .then(function () {
-      updateBikeBasicsInfo(fields, callback);
+      updateBasicsInfo(fields, callback);
     })
     .catch(function (err) {
       callback(new Error(`Failed to create bike record: (${err})`));
     });
 }
 
-function updateBikeBasicsInfo(fields, callback) {
+function updateBasicsInfo(fields, callback) {
   // #dcdbdf is the color input  default; they did not select any color.
   if (!fields.color || fields.color === '#dcdbdf') { fields.color = null; }
 
   if (!fields.era) { fields.era = null; }
-  db.none('update bike_info set color = $1, era = $2 where bike_id = $3', [fields.color, fields.era, parseInt(fields.bike_id)])
+  db.bike_info.update([fields.color, fields.era, parseInt(fields.bike_id)])
     .then(function () {
       callback(null);
     })
@@ -144,11 +147,18 @@ function updateBikeBasicsInfo(fields, callback) {
     });
 }
 
-function createBikePhoto(fields, photoPath, callback) {
-  db.one('insert into photo(user_id, bike_id, original_filename, file_path) ' +
-      'values($1, $2, $3, $4) returning *', [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
-    .then(function (data) {
-      updateBikeMainPhoto(data.bike_id, data.file_path, callback);
+function createPhoto(fields, photoPath, callback) {
+  console.log('values ' + [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath]);
+  db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
+    .then(function (bike_id) {
+      console.log('succcessfully added photo. updating bike table with main photo... ID set??? ' + bike_id);
+      db.bike.update_main_photo([photoPath, bike_id])
+        .then(function () {
+          callback(null);
+        })
+        .catch(function (err) {
+          callback(new Error(`Failed to update main bike photo: (${err})`));
+        });
     })
     .catch(function (err) {
       callback(new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`));
@@ -305,11 +315,11 @@ module.exports = {
   getAllBikes,
   getBike,
   createBike,
-  updateBikeIntro,
-  updateBikeMainPhoto,
-  updateBikeBasics,
-  updateBikeBasicsInfo,
-  createBikePhoto,
+  updateIntro,
+  updateMainPhoto,
+  updateBasics,
+  updateBasicsInfo,
+  createPhoto,
   getTitle,
   transformForDisplay,
   getFormReasons,

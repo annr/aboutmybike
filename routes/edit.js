@@ -2,7 +2,6 @@
 let express = require('express');
 let router = express.Router();
 const formidable = require('formidable');
-const queries = require('../db/queries');
 const helper = require('../helpers/bike');
 let page_title = 'Edit Bike';
 let page_heading = page_title;
@@ -44,7 +43,7 @@ router.get(['/', '/:id'], function (req, res, next) {
 /* Populate basic details */
 router.post('/', function (req, res, next) {
   if (req.body.step === '1') {
-    queries.updateBikeIntro(req.body, function (err) {
+    helper.updateIntro(req.body, function (err) {
       if (err) {
         next(err);
       } else {
@@ -52,7 +51,7 @@ router.post('/', function (req, res, next) {
       }
     });
   } else if (req.body.step === '2') {
-    queries.updateBikeBasics(req.body, function (err) {
+    helper.updateBasics(req.body, function (err) {
       if (err) {
         next(err);
       } else {

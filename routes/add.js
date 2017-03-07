@@ -1,7 +1,6 @@
 let express = require('express');
 let router = express.Router();
 const formidable = require('formidable');
-const queries = require('../db/queries');
 const helper = require('../helpers/bike');
 let page_heading = 'Let\'s make your bike page!';
 let page_title = 'Add Your Bike';

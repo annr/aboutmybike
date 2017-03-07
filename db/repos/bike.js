@@ -18,5 +18,10 @@ module.exports = (rep, pgp) => {
     update: values => // -- [fields.description, fields.nickname, ${fields.type_id}, ${fields.reasons}  parseInt(fields.bike_id)])
       rep.result(sql.update, values),
 
+    update_basics: values =>
+      rep.result(sql.update_basics, values),
+
+    update_main_photo: (main_photo_path, bike_id) =>
+      rep.result(sql.update_main_photo, main_photo_path, bike_id),
   };
 };
