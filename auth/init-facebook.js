@@ -2,7 +2,7 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const oauth = require('./oauth');
 const config = require('../config').appConfig;
-let db = require('../db/db');
+let db = require('../db');
 let AWS = require('aws-sdk');
 
 const authenticationMiddleware = require('./middleware');

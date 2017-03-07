@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const hbs = require('hbs');
 const config = require('./config').appConfig;
-const api = require('./api');
+//const api = require('./api');
 const passport = require('passport');
 const PGSession = require('connect-pg-simple')(session);
 
@@ -120,7 +120,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(userValues);
 
-app.use('/api', api);
+//app.use('/api', api);
 
 app.use('/', index);
 app.use('/bikes', bikes);

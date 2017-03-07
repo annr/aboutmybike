@@ -15,7 +15,7 @@ router.get(['/', '/:id'], function (req, res, next) {
   let calculatedRows;
   let id = req.params.id;
 
-  queries.getBike(id, function (err, data) {
+  helper.getBike(id, function (err, data) {
     if (err) {
       next(err);
     } else {

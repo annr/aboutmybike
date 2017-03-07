@@ -5,6 +5,7 @@ let AWS = require('aws-sdk');
 let fs = require('fs');
 
 let queries = require('../db/queries');
+let helper = require('../helpers/bike');
 
 function getFilename(bike_id) {
   let ts = new Date();
@@ -75,7 +76,7 @@ router.post('/', function (req, res, next) {
         // 1) Create records if necessary.
         // if there is no bike id, we must create the bike record.
         if (!fields.bike_id) {
-          queries.createBike(fields, function (err, data) {
+          helper.createBike(fields, function (err, data) {
             if (err) {
               next(err);
             } else {

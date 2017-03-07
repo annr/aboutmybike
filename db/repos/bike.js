@@ -1,33 +1,22 @@
+'use strict';
 
+var sql = require('../sql').bike;
 
-let sql = require('../sql').bike;
+module.exports = (rep, pgp) => {
+  return {
 
-module.exports = (rep, pgp) =>
+    // Adds a new bike, and returns the new id;
+    add: user_id =>
+      rep.one(sql.add, user_id, bike => bike),
 
-    /*
-     This repository mixes hard-coded and dynamic SQL,
-     primarily to show a diverse example of using both.
-     */
+    all: () =>
+      rep.any(sql.all),
 
-     ({
+    select: id =>
+      rep.one(sql.select, id, bike => bike),
 
-        // Adds a new bike, and returns the bike record;
-       add: name =>
-            rep.one(sql.add, name, user => user.id),
+    update: values => // -- [fields.description, fields.nickname, ${fields.type_id}, ${fields.reasons}  parseInt(fields.bike_id)])
+      rep.result(sql.update, values),
 
-        // Tries to delete a user by id, and returns the number of records deleted;
-       remove: id =>
-            rep.result('DELETE FROM Users WHERE id = $1', id, r => r.rowCount),
-
-        // Tries to find a user from id;
-       find: id =>
-            rep.oneOrNone('SELECT * FROM Users WHERE id = $1', id),
-
-        // Returns all user records;
-       all: () =>
-            rep.any('SELECT * FROM Users'),
-
-        // Returns the total number of users;
-       total: () =>
-            rep.one('SELECT count(*) FROM Users', [], a => +a.count),
-     });
+  };
+};

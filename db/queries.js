@@ -1,48 +1,6 @@
 /* DEPRECATED. THIS FILE WILL BE REMOVED. */
 
-let db = require('./db');
-
-// add query functions
-function getAllBikes(callback) {
-  // for grid only, for now.
-  // the values we need for the grid are currently: era, type, description, username (placeholder for now.)
-  db.any('select b.id, b.description, b.main_photo_path, type.label as type, bike_info.era as era from bike b left join bike_info on b.id = bike_info.bike_id left join type on b.type_ids[1]=type.id where b.description is not null and b.status != -1')
-    .then(function (data) {
-      callback(null, data);
-    })
-    .catch(function (err) {
-      callback(new Error(`Failed to retrieve bicycles: (${err})`));
-    });
-}
-
-function getBike(bikeID, callback) {
-//  db.one('select * from bike where id = $1', bikeID)
-  db.one('select b.*, type.label as type, amb_user.username as username, type.id as type_id, Coalesce(manufacturer.name, b.brand_unlinked) as manufacturer_name, Coalesce(model.name, b.model_unlinked) as model_name, bike_info.era as era, bike_info.color as color from bike b left join bike_info on b.id = bike_info.bike_id left join manufacturer on b.manufacturer_id=manufacturer.id left join model on b.model_id=model.id left join type on b.type_ids[1]=type.id left join amb_user on b.user_id=amb_user.id where b.id = $1', bikeID)
-    .then(function (data) {
-      callback(null, data);
-    })
-    .catch(function (err) {
-      callback(new Error(`Failed get bike record: (${err})`));
-    });
-}
-
-function createBike(fields, callback) {
-  db.one('insert into bike(user_id, status) ' +
-      'values($1, 1) returning id', [parseInt(fields.user_id)])
-    .then(function (data) {
-      db.one('insert into bike_info(bike_id) ' +
-          'values($1) returning bike_id as id', [data.id])
-        .then(function (data) {
-          callback(null, data);
-        })
-        .catch(function (err) {
-          callback(new Error(`Failed to create bike info record: (${err})`));
-        });
-    })
-    .catch(function (err) {
-      callback(new Error(`Failed to create bike record: (${err})`));
-    });
-}
+let db = require('../db');
 
 function updateBikeIntro(fields, callback) {
   fields.type_id = (fields.type_id) ? `ARRAY[${fields.type_id}]` : null;
@@ -59,7 +17,6 @@ function updateBikeIntro(fields, callback) {
       callback(new Error(`Failed to update bike record: (${err})`));
     });
 }
-
 
 function updateBikeMainPhoto(bike_id, main_photo_path, callback) {
   db.none('update bike set main_photo_path = $1 where id = $2', [main_photo_path, bike_id])
@@ -122,7 +79,7 @@ function updateBikeBasicsInfo(fields, callback) {
 }
 
 function createBikePhoto(fields, photoPath, callback) {
-  db.one('insert into photo(user_id, bike_id, original_filename, file_path) ' +
+  db.one('insert into photo(user_id, bike_id, original_file, file_path) ' +
       'values($1, $2, $3, $4) returning *', [parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (data) {
       updateBikeMainPhoto(data.bike_id, data.file_path, callback);
@@ -144,9 +101,6 @@ function getManufacturer(manuId, callback) {
 
 
 module.exports = {
-  getAllBikes,
-  getBike,
-  createBike,
   updateBikeIntro,
   updateBikeMainPhoto,
   updateBikeBasics,

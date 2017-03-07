@@ -27,7 +27,7 @@ router.get(['/', '/:id'], function (req, res, next) {
     });
   } else {
     let id = req.user.bike_id;
-    queries.getBike(id, function (err, data) {
+    helper.getBike(id, function (err, data) {
       if (err) {
         next(err);
       } else {

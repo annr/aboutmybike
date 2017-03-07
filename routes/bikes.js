@@ -2,10 +2,10 @@ let express = require('express');
 let router = express.Router();
 
 let helper = require('../helpers/bike');
-let queries = require('../db/queries');
+let bikeHelper = require('../helpers/bike');
 
 router.get('/', (req, res, next) => {
-  queries.getAllBikes(function (err, data) {
+  bikeHelper.getAllBikes(function (err, data) {
     if (err) {
       next(err);
     } else {

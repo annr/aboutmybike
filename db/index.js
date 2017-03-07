@@ -1,5 +1,3 @@
-
-
 // Bluebird is the best promise library available today,
 // and is the one recommended here:
 let promise = require('bluebird');
@@ -8,6 +6,8 @@ let promise = require('bluebird');
 // because event 'extend' is called multiple times:
 let repos = {
   bike: require('./repos/bike'),
+  bike_info: require('./repos/bike_info'),
+  manufacturer: require('./repos/manufacturer'),
 };
 
 // pg-promise initialization options:
@@ -21,6 +21,8 @@ let options = {
         // Do not use 'require()' here, because this event occurs for every task
         // and transaction being executed, which should be as fast as possible.
     obj.bike = repos.bike(obj, pgp);
+    obj.bike_info = repos.bike_info(obj, pgp);
+    obj.manufacturer = repos.manufacturer(obj, pgp);
 
         // Alternatively, you can set all repositories in a loop:
         //
@@ -38,7 +40,6 @@ let connectionObject = {
   database: 'amb',
   user: 'arobson',
 };
-
 
 // if any AWS-configured values are set, it's prod
 if (process.env.RDS_HOSTNAME !== undefined) {

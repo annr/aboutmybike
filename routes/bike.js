@@ -7,7 +7,7 @@ let helper = require('../helpers/bike');
 /* GET bike listing */
 router.get('/:id', function (req, res, next) {
   let id = parseInt(req.params.id);
-  queries.getBike(id, function (err, data) {
+  helper.getBike(id, function (err, data) {
     if (err) {
       next(err);
     } else {
