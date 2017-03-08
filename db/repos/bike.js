@@ -21,7 +21,7 @@ module.exports = (rep, pgp) => {
     update_basics: values =>
       rep.result(sql.update_basics, values),
 
-    update_main_photo: (main_photo_path, bike_id) =>
-      rep.result(sql.update_main_photo, main_photo_path, bike_id),
+    update_main_photo: (values) =>
+      rep.result(sql.update_main_photo, values),
   };
 };

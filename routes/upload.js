@@ -3,10 +3,20 @@ let router = express.Router();
 let formidable = require('formidable');
 let AWS = require('aws-sdk');
 let fs = require('fs');
+var im = require('imagemagick');
 
 let helper = require('../helpers/bike');
 
 function getFilename(bike_id) {
+  let ts = new Date();
+  let impreciseTs = (ts.setHours(0, 0, 0, 0)/10000);
+
+  console.log('impreciseTS ' + impreciseTs);
+  // TO-DO: Limit timestamp to a day or so.
+  return `aboutmybike-${bike_id}-${impreciseTs}`;
+}
+
+function getOriginalFilePath(bike_id) {
   let ts = new Date();
   let dayTs = ts.setHours(0, 0, 0, 0);
   // TO-DO: Limit timestamp to a day or so.
@@ -23,6 +33,7 @@ router.post('/', function (req, res, next) {
     rootFolder = '/photos';
   }
   let destinationFolder = `${rootFolder}/2017-001`;
+  let originalsFolder = `${rootFolder}/2017-001/originals`;
 
   // TO-DO: add user id to file name so that the amount of photo uploads are controlled
   // (the last uploaded be the user is overwritten)
@@ -82,6 +93,16 @@ router.post('/', function (req, res, next) {
               filename = `${getFilename(data.id)}.${extension}`;
               fields.bike_id = bike_id;
               let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: fileData };
+
+              let paramsOriginal = params;
+              paramsOriginal.Bucket = bucketName + originalsFolder;
+
+              s3.putObject(paramsOriginal, function (err, fileData) {
+                if (err) {
+                  console.log('Error uploading original upon creation of new bike record. ' + err);
+                }
+              });
+
               s3.putObject(params, function (err, fileData) {
                 if (err) {
                   console.log(err);
@@ -102,6 +123,17 @@ router.post('/', function (req, res, next) {
         } else {
           filename = `${getFilename(fields.bike_id)}.${extension}`;
           let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: fileData };
+          let paramsOriginal = Object.assign({}, params);
+
+          paramsOriginal.Bucket = bucketName + originalsFolder;
+          console.log('confirm orig bucket: ' + paramsOriginal.Bucket);
+
+          s3.putObject(paramsOriginal, function (err, fileData) {
+            if (err) {
+              console.log('Error uploading original for replacement image. ' + err);
+            }
+          });
+
           s3.putObject(params, function (err, fileData) {
             if (err) {
               console.log(err);

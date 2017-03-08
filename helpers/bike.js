@@ -86,7 +86,7 @@ function updateIntro(fields, callback) {
     });
 }
 
-function updateMainPhoto(bike_id, main_photo_path, callback) {
+function updateMainPhoto(main_photo_path, bike_id, callback) {
   db.bike.update_main_photo([main_photo_path, bike_id])
     .then(function () {
       callback(null);
