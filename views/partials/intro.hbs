@@ -1,0 +1,39 @@
+<div class="tab-pane" id="intro" role="tabpanel">
+  <form id="editIntro" method="post" action="/edit">
+    <input type="hidden" name="step" value="1">
+    <input type="hidden" name="is_new" id="is_new" value="{{#if is_new}}1{{else}}0{{/if}}">
+    <input type="hidden" name="user_id" value="{{user.id}}">
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+    <div class="form-group">
+{{!--     <label for="saySomething">What about your bike?</label> --}}
+{{!--     <label for="description">Say something</label> --}}
+    <label for="description">Your bike story</label>
+    <textarea class="form-control" id="description" rows="{{rows}}" name="description">{{bike.description}}</textarea></div>
+
+    <div class="form-group"><label for="nickname">If your bike had a name it would be</label><input type="text" class="form-control" id="nickame" name="nickname" value="{{bike.nickname}}"></div>
+
+    <div class="form-group">
+      <label for="type_id">Type</label>
+      <select class="form-control" id="type_id" name="type_id">
+        <option></option>
+        {{#each types}}
+          <option value="{{id}}"{{#if selected}} selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>This bike is for:</label><br>
+      {{#each reasons}}
+        <label class="checkbox-inline">
+          <input type="checkbox" name="reason_ids" value="{{id}}"{{#if checked}} checked{{/if}}>
+          {{label}}
+        </label>
+      {{/each}}
+      <input type="hidden" name="reasons" id="reasons" value="">
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submitIntro">Save{{#if bike.id}} Intro{{else}} and Continue{{/if}}</button>
+
+  </form>
+</div>

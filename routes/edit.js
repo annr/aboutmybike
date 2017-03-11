@@ -33,6 +33,8 @@ router.get(['/', '/:id'], function (req, res, next) {
           rows = calculatedRows;
         }
       }
+      data.photo_url = data.main_photo_path.replace('{*}', 'b');
+
       res.render(view, {
         page_title,
         page_heading,
@@ -42,6 +44,7 @@ router.get(['/', '/:id'], function (req, res, next) {
         eras: helper.getFormEras(data.era),
         rows,
         is_new: false,
+        bust: new Date().getTime()
       });
     }
   });

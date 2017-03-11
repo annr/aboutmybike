@@ -20,26 +20,21 @@ router.post('/', function (req, res, next) {
   let form = new formidable.IncomingForm();
 
   form.parse(req, function (err, fields, files) {
+
     let photo = files.bike_photo;
     let localPath = photo.path;
 
+    let fileValidation = validateUpload(photo, config);
+
     // poor express error handling. the response is an error, but is not properly returned as a readable one.
     // Error: /Users/arobson/Sites/aboutmybike/views/error.hbs: Can't set headers after they are sent.
-    // at tleast it will bail out without uploading.
+    // at least it will bail out without uploading.
     // Fix this!!!!
-    if (photo.size > config.maxPhotoSize) {
-      res.status(500).json({ error: 'Photo too large.' });
-      res.end();
-    }
 
-    if (photo.size < config.minPhotoSize) {
-      res.status(500).json({ error: 'Photo too small.' });
-      res.end();
-    }
+    console.log(fileValidation.error);
 
-    if (config.acceptedFileTypes.indexOf(photo.type) === -1) {
-      res.status(500).json({ error: 'Wrong file type.' });
-      res.end();
+    if (fileValidation.error !== '') {
+      res.status(200).json({ message: fileValidation.error });
     }
 
     let extension = photo.type.split('/')[1];
@@ -88,12 +83,10 @@ router.post('/', function (req, res, next) {
                if (bikeLabel && bikeLabel.Confidence > 80) {
                  res.status(200).json({ message: 'bicycle', confidence: bikeLabel.Confidence });
                } else {
-                 res.status(200).json({ message: 'no_bicycle' });
+                 res.status(200).json({ message: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.' });
                }
              }
            });
-
-
           }
         });
       });
@@ -102,5 +95,18 @@ router.post('/', function (req, res, next) {
     }
   });
 });
+
+function validateUpload(photo, config) {
+  if (photo.size > config.maxPhotoSize) {
+    return { error: 'Photo too large.' };
+  }
+  if (photo.size < config.minPhotoSize) {
+    return { error: 'Photo too small.' };
+  }
+  if (config.acceptedFileTypes.indexOf(photo.type) === -1) {
+    return { error: `Wrong file type: ${photo.type}` };
+  }
+  return { error: '' };
+}
 
 module.exports = router;

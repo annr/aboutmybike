@@ -23,6 +23,8 @@ const upload = require('./routes/upload');
 const profile = require('./routes/profile');
 const validate_photo = require('./routes/validate_photo');
 
+const crop = require('./routes/crop');
+
 const app = express();
 
 // these are globally added values. can be used in templages like {{app_name}}
@@ -100,6 +102,7 @@ const userValues = function (req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerHelper('preserve-linebreaks', function (str) {
   // we have to escape all the special chars and then conver line breaks to brs.
   return str
@@ -134,6 +137,8 @@ app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/profile', ensureAuthenticated, profile);
 app.use('/validate_photo', ensureAuthenticated, validate_photo);
+
+app.use('/crop', crop);
 
 app.get('/logout', function (req, res) {
   req.logout();

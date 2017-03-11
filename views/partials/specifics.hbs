@@ -1,0 +1,63 @@
+<div class="tab-pane" id="specifics" role="tabpanel">
+
+<div class="alert alert-warning" role="alert">Disabled for now</div>
+
+  <form method="post" action="/edit">
+
+    <input type="hidden" name="step" value="3">
+
+    <div class="form-group">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="handlebars">Handlebars</label>
+      <select class="custom-select" id="handlebars" name="handlebars">
+        <option></option>
+        <option>Drop</option>
+        <option>Bullhorn</option>
+        <option>Flat</option>
+        <option>Riser</option>
+        <option>Cruiser / Upright</option>
+        <option>Mustache</option>
+        <option>BMX</option>
+        <option>Trekking / Butterfly</option>
+        <option>Ape Hangers</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="gears">Gears</label>
+      <select class="custom-select mb-2 mr-sm-4 mb-sm-0" id="gears" name="gears">
+        <option></option>
+        <option value="1">Derailer</option>
+        <option value="2">Single</option>
+        <option value="3">Hub</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="fixed-width-inline-form-control mb-2 mb-sm-0" for="brakes">Brakes</label>
+      <select id="brakes" name="brakes" id="brakes" class="custom-select mb-2 mr-sm-4 mb-sm-0">
+        <option></option>
+        <option value="1">Rim</option>
+        <option value="2">Disc</option>
+        <option value="3">None</option>
+      </select>
+    </div>
+
+    <div class="form-group form-inline">
+      <select class="custom-select fixed-width-inline-form-control mb-2 mb-sm-0">
+        <option>Add misc...</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+
+      <input type="text" class="form-control" name="misc_detail">
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submitSpecifics" disabled>Save</button>
+
+   </form>
+
+  </div>
+
+</div>

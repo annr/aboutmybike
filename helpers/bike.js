@@ -145,10 +145,15 @@ function updateBasicsInfo(fields, callback) {
     });
 }
 
+/* There's hardly any reason to have a photo table at this point.
+   The values are never queried and not all of the versions are in the table.
+ */
 function createPhoto(fields, photoPath, callback) {
   db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (bike_id) {
-      updateMainPhoto(photoPath, bike_id, callback);
+      // I don't love this:
+      var wildcardPath = photoPath.replace('_b', '_{*}');
+      updateMainPhoto(wildcardPath, bike_id, callback);
     })
     .catch(function (err) {
       callback(new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`));
@@ -175,8 +180,8 @@ function transformForDisplay(data) {
   }
   bike.details = detailString.join(', ');
 
-  bike.photo_url = bike.main_photo_path;
-
+  bike.photo_url = bike.main_photo_path.replace('{*}', 'b');
+  console.log('translated photo path: ' + bike.main_photo_path.replace('{*}', 'b'));
   return bike;
 }
 

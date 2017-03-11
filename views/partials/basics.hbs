@@ -1,0 +1,51 @@
+<div class="tab-pane" id="basics" role="tabpanel">
+
+  <form method="post" action="/edit">
+
+    <input type="hidden" name="step" value="2">
+    <input type="hidden" name="is_new" value="{{#if is_new}}1{{else}}0{{/if}}">
+    <input type="hidden" name="user_id" value="{{user.id}}">
+    <input type="hidden" name="bike_id" value="{{bike.id}}">
+
+    <div class="form-group">
+      <label for="color">Main Color</label> &nbsp;
+      <input type="color" class="color-input form-control" name="color" value="{{#if bike.color}}{{bike.color}}{{else}}#dcdbdf{{/if}}">
+    </div>
+
+    <div class="form-group">
+    <label for="brand">Brand</label>
+    <input type="text" class="form-control" id="brand" name="brand" placeholder="Ex. Schwinn" value="{{bike.manufacturer_name}}">
+    <input type="hidden" id="brand_id" name="brand_id">
+    </div>
+
+    <div class="form-group">
+    <label for="model">Model</label>
+    <input type="text" class="form-control" id="model" name="model" placeholder="Ex. Stingray" value="{{bike.model_name}}">
+    <input type="hidden" id="model_id" name="model_id">
+    </div>
+
+    <div class="form-group">
+      <label for="era">Era</label>
+      <select class="form-control" id="era" name="era">
+        <option></option>
+        {{#each eras}}
+          <option {{#if selected}} selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="serial_number">Serial Number</label>
+      <input type="text" class="form-control" id="serial_number" name="serial_number" value="{{bike.serial_number}}">
+      <p class="help-block">Optional but important. <a href="#" data-toggle="modal" data-target="#myModal">See why.</a></p>
+    </div>
+
+{{!--     <div class="form-group">
+      <label for="country">Country</label>
+      <input type="text" class="form-control" id="country" name="country">
+    </div> --}}
+
+    <button type="submit" class="btn btn-primary" id="submitDetails">Save{{#if bike.id}} Basics{{else}} and View Bike{{/if}}</button>
+  </form>
+
+</div>
