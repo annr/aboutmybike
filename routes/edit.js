@@ -43,8 +43,7 @@ router.get(['/', '/:id'], function (req, res, next) {
         types: helper.getFormTypes(data.type_id),
         eras: helper.getFormEras(data.era),
         rows,
-        is_new: false,
-        bust: new Date().getTime()
+        is_new: false
       });
     }
   });
