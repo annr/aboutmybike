@@ -36,12 +36,21 @@ function getExtension(photo) {
   return 'jpg';
 }
 
+//function replacePathWildcard(path, size_key) {
+function replacePathWildcard(path) {
+  return path.replace('{*}', 'b');
+}
+
 /* EXPOSED FUNCTIONS */
 
 // bike_id is required to generate filename
-let storeOriginal = function(bike_id, photo) {
+let storeOriginal = function(fields, photo) {
 
-  var filename = `${getFilename(bike_id, 'o')}.${getExtension()}`;
+  if(!fields.bike_id) {
+    throw new Error('bike_id not set');
+  }
+
+  var filename = `${getFilename(fields.bike_id, 'o')}.${getExtension()}`;
 
   fs.readFile(photo, (err, fileData) => {
 
@@ -58,14 +67,15 @@ let storeOriginal = function(bike_id, photo) {
 
 }
 
+/*
 // bike_id is required to generate filename
-let optimizeAndStoreMedium = function(bike_id, photo) {
+let optimizeAndStoreMedium = function(fields, photo) {
   var tmpDirectory = photo.substr(0, photo.lastIndexOf('/')+1);
-  var tmpFilename = tmpDirectory + bike_id + '-' + (new Date()).getTime();
+  var tmpFilename = tmpDirectory + fields.bike_id + '-' + (new Date()).getTime();
   var tmpPath = `${tmpFilename}-tmp.jpg`;
   var dstPath = `${tmpFilename}.jpg`;
 
-  var filename = `${getFilename(bike_id, 'o')}.${getExtension()}`;
+  var filename = `${getFilename(fields.fbike_id, 'm')}.${getExtension()}`;
 
   fs.readFile(photo, (err, fileData) => {
 
@@ -80,10 +90,23 @@ let optimizeAndStoreMedium = function(bike_id, photo) {
 
   });
 }
+*/
 
-let optimizeAndStoreBig = function(bike_id, photo, callback) {
+let hasCompleteCropObject = function(fields) {
+  if (fields) {
+    if (fields.cropWidth !== '' && fields.cropHeight !== '' && fields.xValue !== '' && fields.yValue !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
+let optimizeAndStoreBig = function(fields, photo, callback) {
+  if(!fields.bike_id) {
+    throw new Error('bike_id not set');
+  }
   var tmpDirectory = photo.substr(0, photo.lastIndexOf('/')+1);
-  var tmpFilename = tmpDirectory + bike_id + '-' + (new Date()).getTime();
+  var tmpFilename = tmpDirectory + fields.bike_id + '-' + (new Date()).getTime();
   var tmpPath = `${tmpFilename}-tmp.jpg`;
   var dstPath = `${tmpFilename}.jpg`;
 
@@ -145,9 +168,8 @@ let optimizeAndStoreBig = function(bike_id, photo, callback) {
 
         fs.readFile(dstPath, (err, data) => {
           // now store that new image:
-          var filename = `${getFilename(bike_id, 'b')}.${getExtension()}`;
+          var filename = `${getFilename(fields.bike_id, 'b')}.${getExtension()}`;
           let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: data };
-          console.log('storing optimized: ' + filename);
 
           if (err) throw err;
 
@@ -156,7 +178,6 @@ let optimizeAndStoreBig = function(bike_id, photo, callback) {
               console.log(`Error uploading ${filename}: ${err}`);
             } else {
               // this should next create photo
-              console.log(`this should next create photo: ${destinationFolder}/${filename}`);
               callback(`${destinationFolder}/${filename}`);
             }
           });
@@ -173,5 +194,7 @@ let optimizeAndStoreBig = function(bike_id, photo, callback) {
 module.exports = {
   storeOriginal,
   optimizeAndStoreBig,
+  hasCompleteCropObject,
+  replacePathWildcard,
 }
 
