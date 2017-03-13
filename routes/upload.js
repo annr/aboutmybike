@@ -3,6 +3,9 @@ const router = express.Router();
 const formidable = require('formidable');
 const helper = require('../helpers/bike');
 const photoHelper = require('../helpers/photo');
+const validatePhoto = require('../helpers/validate_photo');
+const cropPhoto = require('../helpers/crop_photo');
+const uploadPhoto = require('../helpers/upload_photo');
 
 /* Create bike record */
 router.post('/', function (req, res, next) {
@@ -14,60 +17,84 @@ router.post('/', function (req, res, next) {
     let localPath = photo.path;
 
     if (localPath) {
-
-      let filename;
-      // 1) Create records if necessary.
-      // if there is no bike id, we must create the bike record.
-      if (!fields.bike_id) {
-
-        helper.createBike(fields, function (err, bike_id) {
-          if (err) {
-            next(err);
-          } else {
-
-            photoHelper.storeOriginal(bike_id, localPath);
-
-            photoHelper.optimizeAndStoreBig(bike_id, localPath, function(photoPath) {
-              helper.createPhoto(fields, photoPath, function (err, data) {
-                if (err) {
-                  console.log(err);
-                  next(err);
-                } else {
-                  // set bike_id on session user
-                  req.user.bike_id = bike_id;
-                  res.json({ success: 'Created bike, added photo, and updated bike photo with the name.', status: 200, id: fields.bike_id });
-                }
-              });
-
-            });
-          
-          }
+      // upload does a few things:
+      // 1) crops image if necessary
+      if (photoHelper.hasCompleteCropObject(fields)) {
+        cropPromise(localPath, fields).then(function() {
+          validateAndUploadPhoto(localPath, fields).then(function(data) {
+            if (!data.id) throw new Error('Promise requires bike id returned as id.');
+            if (!req.user.bike_id) {
+              req.user.bike_id = data.id;
+            }
+            res.json({ success: 'Cropped photo, validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
+          }).catch(function(err) {
+            console.log(err);
+          });;
+        }).catch(function(err) {
+          console.log(err);
         });
       } else {
-
-        photoHelper.storeOriginal(fields.bike_id, localPath);
-
-        photoHelper.optimizeAndStoreBig(fields.bike_id, localPath, function(photoPath) {
-          console.log('optimized photo and now creating photo record: ');
-          helper.createPhoto(fields, photoPath, function (err, data) {
-            if (err) {
-              console.log(err);
-              next(err);
-            } else {
-              // set bike_id on session user
-              req.user.bike_id = fields.bike_id;
-              res.json({ success: 'Created bike, added photo, and updated bike photo with the name.', status: 200, id: fields.bike_id });
-            }
-          });
-
+        // two ways to get here. after crop or by default as in this case.
+        validateAndUploadPhoto(localPath, fields).then(function(data) {
+          if (!data.id) throw new Error('Promise requires bike id returned as id.');
+          if (!req.user.bike_id) {
+            req.user.bike_id = data.id;
+          }
+          res.json({ success: 'Validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
+        }).catch(function(err) {
+          console.log(err);
         });
       }
-
-     
     } else {
       throw err;
     }
+
   });
+
 });
+
+let cropPromise = function (photo_path, fields) {
+  return new Promise(function(resolve, reject){
+    cropPhoto.run(photo_path, fields, function(data) {
+      resolve('message from inside crop: ' + data.message);
+    });
+  });
+};
+
+let validatePromise = function (photo_path) {
+  return new Promise(function(resolve, reject){
+    validatePhoto.run(photo_path, function(data) {
+      resolve('message from validate: ' + data.message);
+    });
+  });
+};
+
+let uploadPromise = function (photo_path, fields) {
+  return new Promise(function(resolve, reject) {
+    uploadPhoto.run(photo_path, fields, function(data) {
+      resolve(data);
+    });
+  });
+};
+
+let validateAndUploadPhoto = function(photo_path, fields) {
+
+  return new Promise(function(resolve, reject) {
+
+    validatePromise(photo_path).then(function(successMessage) {
+
+      uploadPromise(photo_path, fields).then(function(data) {
+        resolve(data);
+      }).catch(function(err) {
+        console.log(err);
+      });
+
+    }).catch(function(err) {
+      console.log(err);
+    });
+
+  });
+;
+};
 
 module.exports = router;

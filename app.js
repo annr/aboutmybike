@@ -21,9 +21,6 @@ const edit = require('./routes/edit');
 const add = require('./routes/add');
 const upload = require('./routes/upload');
 const profile = require('./routes/profile');
-const validate_photo = require('./routes/validate_photo');
-
-const crop = require('./routes/crop');
 
 const app = express();
 
@@ -141,9 +138,6 @@ app.use('/edit', ensureAuthenticated, edit);
 app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/profile', ensureAuthenticated, profile);
-app.use('/validate_photo', ensureAuthenticated, validate_photo);
-
-app.use('/crop', crop);
 
 app.get('/logout', function (req, res) {
   req.logout();

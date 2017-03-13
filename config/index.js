@@ -11,7 +11,10 @@ config.appConfig = {
   snsContactFormTopicName: 'amb-contact-form',
   snsExpressErrorTopicName: 'amb-express-error',
   snsUserSignupTopicName: 'amb-user-signup',
-  awsRegion: 'us-west-1'
+  awsRegion: 'us-west-1',
+  s3Bucket: 'amb-storage',
+  rekognitionBucket: 'amb-processing',
+  rekognitionRegion: 'us-west-2'
 }
 
 module.exports = config

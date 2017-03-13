@@ -9,57 +9,27 @@ $(document).ready(function() {
     if(!elem) {
       elem = $('.alert-area')[0];
     }
-    elem.append('<div class="alert alert-' + (type || 'warning') + '" role="alert">' + msg + '</div>');
+    $(elem).append('<div class="alert alert-' + (type || 'warning') + '" role="alert">' + msg + '</div>');
   }
-
   
-  $("#cropForm").submit(function( event ) {
-    event.preventDefault();
-    //crop and load saved photo
-
-    $.ajax({
-      url: '/crop',
-      type: 'POST',
-      // Form data
-      data: new FormData(this),
-      cache: false,
-      contentType: false,
-      processData: false,
-      xhr: function() {
-        let myXhr = $.ajaxSettings.xhr();
-        return myXhr;
-      },
-      success: function(data) {
-        console.log('seems to have cropped. does it return data?');
-        // inline the image and automatically save it.
-        $('#upload-target').attr('src', data);
-        //$("#uploadForm").submit();
-      },
-      error: function(err) {
-        throw new Error(err)
-      }
-    });
-
-  });
-
   $("#uploadForm").submit(function( event ) {
     event.preventDefault();
     $('.alert').remove();
 
-    appendAlert('Uploading...', null, 'info');
-    //disable submit until photo is updated.
-    // is this nec?? If they've attached a new image it will get updated even if the user
-    // navigates away, right?
+    var form = this;
+    var uploadAction = $(form).attr('action');
+    var formData = new FormData(form);
 
-    //$("#submitIntro").prop("disabled",true);
-    var uploadAction = $(this).attr('action');
-    var formData = new FormData(this);
+    $('.upload-target-wrapper .progress').css('visibility', 'visible');
+
+    if($('#selectAreaModal').is(':visible')) {
+      $('#selectAreaModal').modal('hide');
+    }
 
     $.ajax({
-      url: '/validate_photo',
+      url: uploadAction,
       type: 'POST',
-      // Form data
-      data: new FormData(this),
+      data: formData,
       cache: false,
       contentType: false,
       processData: false,
@@ -68,47 +38,26 @@ $(document).ready(function() {
         return myXhr;
       },
       success: function(data) {
-        if (data.message === 'bicycle') {
-          appendAlert('Validated bicycle. (Confidence: ' + Math.floor(data.confidence) + ')', null, 'success');
-
-          $.ajax({
-            url: uploadAction,
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            xhr: function() {
-              let myXhr = $.ajaxSettings.xhr();
-              return myXhr;
-            },
-            success: function(data) {
-              appendAlert('Successfully stored your bike photo.');
-              if($('input[name=bike_id]').val() === '') {
-                $('input[name=bike_id]').val(data.id);
-              }
-            },
-            error: function(err) {
-              // be transparent and output error.
-              // but how to you get specific error and not whole page?
-              appendAlert('Error attaching bike photo. Please try again later.', null, 'danger');
-            }
-          });
-
-        } else {
-          appendAlert(data.message, null, 'warning');
+        $('.upload-target-wrapper .progress').css('visibility', 'hidden');
+        appendAlert('Successfully stored your bike photo.');
+        if($('input[name=bike_id]').val() === '') {
+          $('input[name=bike_id]').val(data.id);
         }
+        // make sure preview uses cache-busted new file
+        $('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
       },
       error: function(err) {
-        throw new Error(err)
+        // be transparent and output error.
+        // but how to you get specific error and not whole page?
+        appendAlert('Error attaching bike photo. Please try again later.', null, 'danger');
       }
     });
   });
 
-  function filePreview(input, callback) {
-    if (input.files && input.files[0]) {  
+  function filePreview(file, callback) {
+    if (file) {
       let reader = new FileReader();
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
       reader.onload = function (e) {
         var image = new Image();
         image.src = e.target.result;
@@ -117,15 +66,21 @@ $(document).ready(function() {
         image.onload = function() {
           // if ratio is close to 4:3, just crop.
           // technically is ratio between 3:2 (0.666667) and 4:5 (0.8)
-          console.log('ratio: ' + this.height/this.width);
           if(this.height/this.width > 0.66 && this.height/this.width < 0.801) {
             $('#upload-target').attr('src', e.target.result);
             $('#upload-target').removeClass('upload-placeholder');
             $("#uploadForm").submit();
           } else {
+            $('#scale').val(this.height/this.width);
             $('#crop-target').attr('src', e.target.result);
-            console.log(this.width + ': ' +  this.height);
-            setupImgAreaSelect($('#crop-target'), prepareCropPoints(this.width, this.height));
+            var points = prepareCropPoints($('#crop-target').width(), $('#crop-target').height());
+            $('#crop-target').selekter({
+              onInit: onImgAreaSelect,
+              x1: points.x1,
+              y1: points.y1,
+              x2: points.x2,
+              y2: points.y2,
+            });
             $('#selectAreaModal').modal('show');
           }
         };
@@ -136,10 +91,11 @@ $(document).ready(function() {
   $("#bike_photo").change(function () {
     // if the photo is oblong, we load it in a modal for cropping
     if(simpleValidation(this)) {
-      filePreview(this);
+      filePreview(this.files[0]);
     }
   });
 
+  // TO-DO: have all of this validation come from the backend.
   function simpleValidation(input) {
     $('.alert').remove();
     let maxSize = 5000000; // from config/index
@@ -164,27 +120,11 @@ $(document).ready(function() {
     } 
   }
 
-  function setupImgAreaSelect(img, points) {
-    $(img).imgAreaSelect({
-      handles: true,
-      aspectRatio: "4:3",
-      onSelectEnd: onImgAreaSelect,
-      onInit: onImgAreaSelect,
-      x1: points.x1,
-      y1: points.x2,
-      x2: points.y1,
-      y2: points.y2,
-    });
-  }
-
   function updateImgAreaSelectFields(selection) {
-    // set these values in a form
     $('#xValue').val(selection.x1);
     $('#yValue').val(selection.y1);
-    // must figure out height and width and send those values
-    $('#cropWidth').val(selection.x2 = selection.x1);
-    $('#cropHeight').val(selection.y2 = selection.y1);
-    console.log($('#cropHeight').val());
+    $('#cropWidth').val(selection.x2 - selection.x1);
+    $('#cropHeight').val(selection.y2 - selection.y1);
   }
 
   function onImgAreaSelect(img, selection) {
