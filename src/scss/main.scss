@@ -47,6 +47,11 @@
   padding-right:0;
 }
 
+.selekter {
+  position: absolute;
+  border: 2px solid lime;
+}
+
 .awesomplete li:hover mark {
   background: hsla(327, 100%, 81%, 0.3);
 }
@@ -207,6 +212,11 @@ dl.bike-details dt {
 
 .upload-target-wrapper  {
   position: relative;
+}
+
+.crop-target {
+  max-width: 770px;
+  width: 100%;
 }
 
 #choose_photo_help {

@@ -71,22 +71,31 @@ $(document).ready(function() {
             $('#upload-target').removeClass('upload-placeholder');
             $("#uploadForm").submit();
           } else {
-            $('#scale').val(this.height/this.width);
-            $('#crop-target').attr('src', e.target.result);
-            var points = prepareCropPoints($('#crop-target').width(), $('#crop-target').height());
-            $('#crop-target').selekter({
-              onInit: onImgAreaSelect,
-              x1: points.x1,
-              y1: points.y1,
-              x2: points.x2,
-              y2: points.y2,
-            });
+            // we'll open up the modal dialog for cropping.
+            // first unset the values:
+            $('input[name=actualHeight]').val(this.height);
+            $('input[name=actualWidth]').val(this.width);
+            $('#cropTarget').attr('src', e.target.result);
             $('#selectAreaModal').modal('show');
           }
         };
       }
     } 
   }
+
+  $('#selectAreaModal').on('shown.bs.modal', function (e) {
+    $("#uploadForm").selekter({
+      img: $('#cropTarget'),
+      actualWidth: $('input[name=actualWidth]').val(),
+      actualHeight: $('input[name=actualHeight]').val()
+    });
+  })
+
+  $('#selectAreaModal').on('hidden.bs.modal', function (e) {
+    // unset crop modal values. if the user chooses another photo to select, the old will still be attached.
+    $('#uploadForm').selekter('destroy');
+    //$('#cropTarget').attr('src', '');
+  });
 
   $("#bike_photo").change(function () {
     // if the photo is oblong, we load it in a modal for cropping
@@ -118,47 +127,6 @@ $(document).ready(function() {
       }
       return true;
     } 
-  }
-
-  function updateImgAreaSelectFields(selection) {
-    $('#xValue').val(selection.x1);
-    $('#yValue').val(selection.y1);
-    $('#cropWidth').val(selection.x2 - selection.x1);
-    $('#cropHeight').val(selection.y2 - selection.y1);
-  }
-
-  function onImgAreaSelect(img, selection) {
-    updateImgAreaSelectFields(selection);
-  }
-
-  function prepareCropPoints(width, height) {
-    var x1, y1, x2, y2;
-
-    if (height/width > 0.75) {
-      x1 = 0;
-      x2 = width;
-      var cropHeight = width*0.75;
-      var offset = (height - cropHeight)/2;
-      y1 = offset;
-      y2 = offset + cropHeight; 
-    } else {
-      y1 = 0;
-      y2 = height;
-      var cropWidth = height*1.33333333;
-      var offset = (width - cropWidth)/2;
-      x1 = offset;
-      x2 = offset + cropWidth;
-    }
-
-    console.log(' x1: ' + Math.round(x1) + ' y1: ' + Math.round(y1) + ' x2: ' + Math.round(x2) + ' y2: ' + Math.round(y2));
-
-    return {
-      x1: Math.round(x1),
-      y1: Math.round(y1),
-      x2: Math.round(x2),
-      y2: Math.round(y2),
-    }
-
   }
 
 });
