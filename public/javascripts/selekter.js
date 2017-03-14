@@ -84,10 +84,10 @@
       if ((this.image.height()/this.image.width()) > this.OBLONG) {
         // it can move vertically.
         options.orientation = 'vertical';
-        options.maxVert = Math.round(this.image.offset().top + this.image.height() - cropBox.height());
+        options.maxVert = (Math.round(this.image.offset().top + this.image.height() - cropBox.height())) - 2;
       } else {
         options.orientation = 'horizontal';
-        options.maxHoriz = Math.round(this.image.offset().left + this.image.width() - cropBox.width());
+        options.maxHoriz = (Math.round(this.image.offset().left + this.image.width() - cropBox.width())) - 2;
       }
 
       cropBox.dragSelecter(options);

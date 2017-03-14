@@ -13,28 +13,28 @@
         <img src="/images/example-with-upload.png" class="bike-photo add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
         {{/if}}
 
-{{!--   <p class="text-warning" id="replace_image_hint" style="display:none;">Use another photo</p> --}}
-        <div class="progress"><div>Loading…</div></div>
+        <div class="progress" style="visibility: hidden;"><div>Loading…</div></div>
 
-        <div id="choose_photo_help" class="bike-photo add-bike-photo">Choose a photo{{!--  or drag it here --}}</div>
+        <div id="choose_photo_help" class="bike-photo add-bike-photo">Choose a photo</div>
 
       </div>
 
       <p class="help-block" id="primary_photo_help">(Primary photo must be from the side)</p>
 
-      <input type="hidden" name="original_filename" id="file_name" />
+      <input type="hidden" name="original_filename" id="file_name">
       </label>
     </div>
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <input type="hidden" name="user_id" value="{{user.id}}">
 
-{{!-- 
-    TO-DO: IMPLEMENT SCALE!!! --}}
-    <input type="hidden" name="scale" id="scale" value="1" />
-    <input type="hidden" name="xValue" id="xValue" value="">
-    <input type="hidden" name="yValue" id="yValue" value="">
-    <input type="hidden" name="cropWidth" id="cropWidth" value="">
-    <input type="hidden" name="cropHeight" id="cropHeight" value="">
+    <input type="hidden" name="scale" value="">
+    <input type="hidden" name="xValue" value="">
+    <input type="hidden" name="yValue" value="">
+    <input type="hidden" name="cropWidth" value="">
+    <input type="hidden" name="cropHeight" value="">
+
+    <input type="hidden" name="actualHeight" value="">
+    <input type="hidden" name="actualWidth" value="">
 
     <div class="modal fade" id="selectAreaModal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -42,21 +42,19 @@
           <div class="modal-header">
             <h5 class="modal-title">Please select crop</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="text-align: center">
             <p>Later you may include other photos of your bike, but the first photo must be from the side and a certain aspect ratio.</p> 
             <div class="form-group">
-                <label class="custom-file-upload">
-                <div class="upload-target-wrapper">
-     {{!--              <img src="" class="add-bike-photo" id="crop-target" style="display: inline;"> --}}
-                  <img src="/images/tall.jpg" width="436" height="561" id="crop-target" style="display: inline;">
-                </div>
-              </div> 
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary" id="selectCrop">Select Crop</button>
+              <div class="upload-target-wrapper">
+                <img src="" id="cropTarget" width="100%" alt="Selected photo to crop">
               </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary" id="selectCrop">Select Crop</button>
+            </div>
           </div>
         </div>
       </div>
