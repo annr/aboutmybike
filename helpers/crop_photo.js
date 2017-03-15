@@ -14,6 +14,7 @@ let run = function(localPath, fields, callback) {
     height: parseInt(fields.cropHeight * fields.scale),
     xValue: parseInt(fields.xValue * fields.scale),
     yValue: parseInt(fields.yValue * fields.scale),
+    gravity: 'NorthWest',
   };  
 
   // crop and change graphics format if nec.

@@ -107,7 +107,7 @@ $(document).ready(function() {
   // TO-DO: have all of this validation come from the backend.
   function simpleValidation(input) {
     $('.alert').remove();
-    let maxSize = 5000000; // from config/index
+    let maxSize = 18000000; // from config/index. 18MB?
     let minSize = 100000;
     // lame
     let acceptedFileTypes = ['image/jpeg', 'image/png'];

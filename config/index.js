@@ -3,7 +3,7 @@ const config = {}
 config.appConfig = {
   name : "About My Bike",
   s3Url: "https://s3-us-west-1.amazonaws.com/amb-storage",
-  maxPhotoSize: 5000000,
+  maxPhotoSize: 18000000,
   minPhotoSize: 100000,
   minPixelsWidth: 1024, // not yet used.
   acceptedFileTypes: ['image/jpeg', 'image/png'],

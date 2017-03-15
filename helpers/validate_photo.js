@@ -14,14 +14,21 @@ let s3 = new AWS.S3();
 let run = function(localPath, callback) {
   fs.readFile(localPath, (err, data) => {
     // upload file to amb-processing and use rekognition to determine if it is most likely a bike
+    // (new Date()).getTime();
+    // use localPath name as upload name -- it should be unique.
+    let filename = localPath.substr(localPath.lastIndexOf('/')+1);
+    // fo some reason I wasn't able to add a folder to the path:
+    //  InvalidS3ObjectException: Unable to get image metadata from S3.  Check object key, region and/or access permissions.
+    // OR ValidationException: 1 validation error detected: Value 'amb-processing/validations' at 
+    //   'image.s3Object.bucket' failed to satisfy constraint: Member must satisfy regular expression pattern: [0-9A-Za-z\.\-_]*
+    let validationsFolder = 'validations';
+    console.log('validating file with name: ' + filename);
     let fileData = data;
-    let filename = 'test-image.jpg';
     if (err) throw err;
 
     let params = { Bucket: config.rekognitionBucket, Key: filename, Body: fileData };
 
     s3.putObject(params, function (err, fileData) {
-      console.log('reguin: ' + AWS.config.region);
       if (err) {
         throw new Error(`Error uploading image to ${bucketName} to validate bike photo: ${err}`);
       } else {

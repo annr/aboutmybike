@@ -67,31 +67,6 @@ let storeOriginal = function(fields, photo) {
 
 }
 
-/*
-// bike_id is required to generate filename
-let optimizeAndStoreMedium = function(fields, photo) {
-  var tmpDirectory = photo.substr(0, photo.lastIndexOf('/')+1);
-  var tmpFilename = tmpDirectory + fields.bike_id + '-' + (new Date()).getTime();
-  var tmpPath = `${tmpFilename}-tmp.jpg`;
-  var dstPath = `${tmpFilename}.jpg`;
-
-  var filename = `${getFilename(fields.fbike_id, 'm')}.${getExtension()}`;
-
-  fs.readFile(photo, (err, fileData) => {
-
-    if (err) throw err;
-
-    let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: fileData };
-    s3.putObject(params, function (err, fileData) {
-      if (err) {
-        if (err) throw err;
-      }
-    });
-
-  });
-}
-*/
-
 let hasCompleteCropObject = function(fields) {
   if (fields) {
     if (fields.cropWidth !== '' && fields.cropHeight !== '' && fields.xValue !== '' && fields.yValue !== '') {
@@ -122,7 +97,8 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
       dstPath: tmpPath,
       width: width,
       format: 'jpg',
-      height: height
+      height: height,
+      gravity: 'NorthWest',
     };
 
     if (height/width > 0.75) {
@@ -154,7 +130,6 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
         progressive: true,
         width: newWidth,
         strip: true,
-        //filter: 'Lagrange',
         sharpening: 0.2
       }
 
