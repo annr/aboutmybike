@@ -174,7 +174,7 @@ app.use(function (err, req, res) {
     };
     sns.publish(params, function (err) {
       if (err) {
-        console.err(`Error sending SNS: ${err}`);
+        console.log(`Error sending SNS: ${err}`);
       }
     });
   }
