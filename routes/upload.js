@@ -36,11 +36,16 @@ router.post('/', function (req, res, next) {
       } else {
         // two ways to get here. after crop or by default as in this case.
         validateAndUploadPhoto(localPath, fields).then(function(data) {
-          if (!data.id) throw new Error('Promise requires bike id returned as id.');
-          if (!req.user.bike_id) {
-            req.user.bike_id = data.id;
+          if(data.message === 'not_bicycle') { // result of validation
+            res.json({ error: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.', status: 200 });
+          } else if (data.id) {
+            if (!req.user.bike_id) {
+              req.user.bike_id = data.id;
+            }
+            res.json({ success: 'Validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
+          } else {
+            throw new Error('Something went wrong with validation / upload. ');
           }
-          res.json({ success: 'Validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
         }).catch(function(err) {
           console.log(err);
         });
@@ -63,8 +68,8 @@ let cropPromise = function (photo_path, fields) {
 
 let validatePromise = function (photo_path) {
   return new Promise(function(resolve, reject){
-    validatePhoto.run(photo_path, function(data) {
-      resolve('message from validate: ' + data.message);
+    validatePhoto.run(photo_path, function(result) {
+      resolve(result);
     });
   });
 };
@@ -81,14 +86,17 @@ let validateAndUploadPhoto = function(photo_path, fields) {
 
   return new Promise(function(resolve, reject) {
 
-    validatePromise(photo_path).then(function(successMessage) {
-
-      uploadPromise(photo_path, fields).then(function(data) {
-        resolve(data);
-      }).catch(function(err) {
-        console.log(err);
-      });
-
+    // we either get a result from validation or data from upload.
+    validatePromise(photo_path).then(function(result) {
+      if(result.message === 'bicycle') {
+        uploadPromise(photo_path, fields).then(function(data) {
+          resolve(data);
+        }).catch(function(err) {
+          console.log(err);
+        });
+      } else {
+        resolve(result);
+      }
     }).catch(function(err) {
       console.log(err);
     });

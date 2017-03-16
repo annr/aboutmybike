@@ -41,12 +41,17 @@ $(document).ready(function() {
       },
       success: function(data) {
         $('.upload-target-wrapper .progress').css('visibility', 'hidden');
-        appendAlert('Successfully stored your bike photo.');
-        if($('input[name=bike_id]').val() === '') {
-          $('input[name=bike_id]').val(data.id);
+        // it's question if you should design this under "success"
+        if(data.error) {
+          appendAlert(data.error, null, 'warning');
+        } else {
+          appendAlert('Successfully stored your bike photo.', null, 'success');
+          if($('input[name=bike_id]').val() === '') {
+            $('input[name=bike_id]').val(data.id);
+          }
+          // make sure preview uses cache-busted new file
+          $('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
         }
-        // make sure preview uses cache-busted new file
-        $('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
       },
       error: function(err) {
         // be transparent and output error.
@@ -110,7 +115,7 @@ $(document).ready(function() {
   function simpleValidation(input) {
     $('.alert').remove();
     let maxSize = 18000000; // from config/index. 18MB?
-    let minSize = 100000;
+    let minSize = 50000;
     // lame
     let acceptedFileTypes = ['image/jpeg', 'image/png'];
 

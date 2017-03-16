@@ -54,8 +54,8 @@ let run = function(localPath, callback) {
               confidence: bikeLabel.Confidence 
             });
            } else {
-            callback({ 
-              message: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.'
+            callback({
+              message: 'not_bicycle'
             });
            }
          }

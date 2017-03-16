@@ -26,7 +26,8 @@ let run = function(localPath, fields, callback) {
             helper.createPhoto(fields, photoPath);
             callback({
               message: 'Added photo, and updated bike photo with the name.',
-              id: fields.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
+              id: fields.bike_id,
+              photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
             }); // or fields.bike_id
           });
         }
@@ -39,7 +40,8 @@ let run = function(localPath, fields, callback) {
         helper.createPhoto(fields, photoPath);
         callback({
           message: 'Created bike, added photo, and updated bike photo with the name.',
-          id: fields.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
+          id: fields.bike_id,
+          photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
         });
       });
     }
