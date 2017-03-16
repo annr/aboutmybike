@@ -4,6 +4,7 @@ const oauth = require('./oauth');
 const config = require('../config').appConfig;
 let db = require('../db');
 let AWS = require('aws-sdk');
+const userHelper = require('../helpers/user.js');
 
 const authenticationMiddleware = require('./middleware');
 
@@ -79,15 +80,8 @@ function initPassport () {
           db.one('insert into amb_user(facebook_id, first_name, last_name, gender, email) ' +
               'values($1, $2, $3, $4, $5) returning *', [profile.id, first_name, last_name, gender, profile.emails[0].value])
             .then(function (data) {
-              // add profile photo:
-              db.one('insert into user_photo(user_id, web_url) ' +
-                  'values($1, $2) returning *', [data.id, profile.photos[0].value])
-                .then(function (data) {
-                  callback(null, data);
-                })
-                .catch(function (err) {
-                  callback(new Error('Failed to create new user and user photo records. (' + err + ')'));
-                });
+              // also add FB profile photo to user_photo (not used yet):
+              userHelper.createPhoto(data.id, profile.photos[0].value);
               callback(null, data);
             })
             .catch(function (err) {

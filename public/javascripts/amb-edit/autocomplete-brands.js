@@ -31,7 +31,7 @@
         let list = JSON.parse(ajax.responseText);
         new Awesomplete(
           document.querySelector("#brand"),
-          { 
+          {
             list: list,
             filter: Awesomplete.FILTER_STARTSWITH,
             sort: function(item) { // need to override sort. false doesn't work
@@ -40,7 +40,7 @@
           });
       };
       ajax.send();
-    
+
       $("#brand").change(function () {
         searchAndUpdateBrand(this.value);
       });
