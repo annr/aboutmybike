@@ -22,7 +22,6 @@ let run = function(localPath, callback) {
     // OR ValidationException: 1 validation error detected: Value 'amb-processing/validations' at 
     //   'image.s3Object.bucket' failed to satisfy constraint: Member must satisfy regular expression pattern: [0-9A-Za-z\.\-_]*
     let validationsFolder = 'validations';
-    console.log('validating file with name: ' + filename);
     let fileData = data;
     if (err) throw err;
 

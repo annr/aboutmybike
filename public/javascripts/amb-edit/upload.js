@@ -13,6 +13,7 @@ $(document).ready(function() {
   }
   
   $("#uploadForm").submit(function( event ) {
+
     event.preventDefault();
     $('.alert').remove();
 
@@ -21,6 +22,7 @@ $(document).ready(function() {
     var formData = new FormData(form);
 
     $('.upload-target-wrapper .progress').css('visibility', 'visible');
+    appendAlert('Validating photo...', null, 'info');
 
     if($('#selectAreaModal').is(':visible')) {
       $('#selectAreaModal').modal('hide');

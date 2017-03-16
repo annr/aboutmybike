@@ -22,33 +22,25 @@ let run = function(localPath, fields, callback) {
           fields.bike_id = bike_id;
           photoHelper.storeOriginal(fields, localPath);
           photoHelper.optimizeAndStoreBig(fields, localPath, function(photoPath) {
-            helper.createPhoto(fields, photoPath, function (err, data) {
-              if (err) {
-                throw err;
-              } else {
-                // return bike_id to set on user session.
-                callback({ message: 'Added photo, and updated bike photo with the name.', id: data.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath) }); // or fields.bike_id
-              }
-            });
+            // error will be thrown if there is an issue creating photo, from createPhoto.
+            helper.createPhoto(fields, photoPath);
+            callback({
+              message: 'Added photo, and updated bike photo with the name.',
+              id: fields.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
+            }); // or fields.bike_id
           });
         }
       });
+
+
     } else {
       photoHelper.storeOriginal(fields, localPath);
-
       photoHelper.optimizeAndStoreBig(fields, localPath, function(photoPath) {
-        console.log('optimized photo and now creating photo record: ');
-        helper.createPhoto(fields, photoPath, function (err, data) {
-          if (err) {
-            throw err;
-          } else {
-            // set bike_id on session user
-            // REPRO:
-            //req.user.bike_id = fields.bike_id;
-            callback({ message: 'Created bike, added photo, and updated bike photo with the name.', id: fields.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath) });
-          }
+        helper.createPhoto(fields, photoPath);
+        callback({
+          message: 'Created bike, added photo, and updated bike photo with the name.',
+          id: fields.bike_id, photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
         });
-
       });
     }
   });

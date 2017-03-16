@@ -197,7 +197,7 @@
         var cont_x = $(opt.container).offset().top;
         var cont_y = $(opt.container).offset().left;
 
-        console.log('cont_h ' + cont_h + ' cont_w: ' + cont_w + ' cont_x: ' + cont_x + ' cont_y: ' + cont_y);
+        //console.log('cont_h ' + cont_h + ' cont_w: ' + cont_w + ' cont_x: ' + cont_x + ' cont_y: ' + cont_y);
 
         var z_idx = $drag.css('z-index'),
           drg_h = $drag.outerHeight(),

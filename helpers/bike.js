@@ -52,11 +52,11 @@ function createBike(fields, callback) {
   db.bike.add(parseInt(fields.user_id))
     .then(function (data) {
       db.bike_info.add(data.id)
-        .then(function (data) {
-          callback(null, data);
+        .then(function (bike_id) {
+          callback(null, bike_id);
         })
         .catch(function (err) {
-          callback(new Error(`Failed to create bike info record: (${err})`));
+          callback(new Error(`Failed to create bike_info record: (${err})`));
         });
     })
     .catch(function (err) {
@@ -86,13 +86,10 @@ function updateIntro(fields, callback) {
     });
 }
 
-function updateMainPhoto(main_photo_path, bike_id, callback) {
+function updateMainPhoto(main_photo_path, bike_id) {
   db.bike.update_main_photo([main_photo_path, bike_id])
-    .then(function () {
-      callback(null);
-    })
     .catch(function (err) {
-      callback(new Error(`Failed to update main bike photo: (${err})`));
+      throw new Error(`Failed to update main bike photo: (${err})`);
     });
 }
 
@@ -148,15 +145,15 @@ function updateBasicsInfo(fields, callback) {
 /* There's hardly any reason to have a photo table at this point.
    The values are never queried and not all of the versions are in the table.
  */
-function createPhoto(fields, photoPath, callback) {
+function createPhoto(fields, photoPath) {
   db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (bike_id) {
       // I don't love this:
       var wildcardPath = photoPath.replace('_b', '_{*}');
-      updateMainPhoto(wildcardPath, bike_id, callback);
+      updateMainPhoto(wildcardPath, bike_id);
     })
     .catch(function (err) {
-      callback(new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`));
+      throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
     });
 }
 
@@ -181,7 +178,6 @@ function transformForDisplay(data) {
   bike.details = detailString.join(', ');
 
   bike.photo_url = bike.main_photo_path.replace('{*}', 'b');
-  console.log('translated photo path: ' + bike.main_photo_path.replace('{*}', 'b'));
   return bike;
 }
 

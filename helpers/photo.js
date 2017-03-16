@@ -87,8 +87,9 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
 
   im.identify(photo, function(err, img){
     if (err) throw err;
-    var height = img.height;
-    var width = img.width;
+    let height = img.height;
+    let width = img.width;
+    let ratio = Math.round((height/width) * 100)/100;
 
     // default 4:3 ratio
     // all this will do is change the quality.
@@ -98,13 +99,14 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
       width: width,
       format: 'jpg',
       height: height,
-      gravity: 'NorthWest',
     };
 
-    if (height/width > 0.75) {
+    // here we automatically normalize to 4:3 if necesssary. modal select area cropping is doen before this step
+    // and so we can safely crop from the gravity "Center" (the default. vs NorthWest).
+    if (ratio > 0.75) {
       options.width = width;
       options.height = Math.floor(width*0.75);
-    } else {
+    } else if (ratio < 0.75) {
       options.width = Math.round(height*1.3333333333);
       options.height = height;
     }
