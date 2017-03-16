@@ -24,25 +24,28 @@
       searchBrandAjax.send();
     }
 
-    let ajax = new XMLHttpRequest();
-    ajax.open("GET", "/api/brands", true);
-    ajax.onload = function() {
-      let list = JSON.parse(ajax.responseText);
-      new Awesomplete(
-        document.querySelector("#brand"),
-        { 
-          list: list,
-          filter: Awesomplete.FILTER_STARTSWITH,
-          sort: function(item) { // need to override sort. false doesn't work
-            return item;
-          }
-        });
-    };
-    ajax.send();
+    if($('#brand').length !== 0) {
+      let ajax = new XMLHttpRequest();
+      ajax.open("GET", "/api/brands", true);
+      ajax.onload = function() {
+        let list = JSON.parse(ajax.responseText);
+        new Awesomplete(
+          document.querySelector("#brand"),
+          { 
+            list: list,
+            filter: Awesomplete.FILTER_STARTSWITH,
+            sort: function(item) { // need to override sort. false doesn't work
+              return item;
+            }
+          });
+      };
+      ajax.send();
+    
+      $("#brand").change(function () {
+        searchAndUpdateBrand(this.value);
+      });
 
-    $("#brand").change(function () {
-      searchAndUpdateBrand(this.value);
-    });
+    }
 
     addEventListener("awesomplete-select", function(e) {
       let hiddenFieldToUpdate = '#' + e.target.name + '_id';
