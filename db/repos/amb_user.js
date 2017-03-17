@@ -15,6 +15,9 @@ module.exports = (rep, pgp) => {
     select: id =>
       rep.one(sql.select, id, amb_user => amb_user),
 
+    username_select: username =>
+      rep.one(sql.username_select, username, amb_user => amb_user),
+
     fb_select: facebook_id =>
       rep.one(sql.fb_select, facebook_id, amb_user => amb_user),
 

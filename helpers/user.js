@@ -22,6 +22,17 @@ function getUser(userID, callback) {
     });
 }
 
+function getUserByUsername(username, callback) {
+//  db.one('select * from bike where id = $1', bikeID)
+  db.amb_user.username_select(username)
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error(`Failed get user record with username: (${err})`));
+    });
+}
+
 function getFacebookUser(facebookID, callback) {
 //  db.one('select * from bike where id = $1', bikeID)
   db.amb_user.select(facebookID)
@@ -47,6 +58,7 @@ function createPhoto(userID, photoPath, callback) {
 module.exports = {
   createUser,
   getUser,
+  getUserByUsername,
   getFacebookUser,
   createPhoto,
 }

@@ -1,1 +1,50 @@
-<h1>{{username}}</h1>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-2">
+      <p><img class="profile-photo float-right" src="{{user.picture}}" alt="{{user.username}}'s profile photo" width="50" height="50"></p>
+    </div>
+    <div class="col-10">
+      <dl>
+        <dt>Username</dt>
+        <dd>{{user.username}}</dd>
+
+        <dt>Joined</dt>
+        <dd>{{user.join_date}}</dd>
+
+        {{#if user.bio}}
+        <dt>Bio</dt>
+        <dd>{{user.bio}}</dd>
+        {{else}}
+          {{#if is_users_profile}}
+          <dt>Bio</dt>
+          <dd><a href="/u/{{user.username}}/edit">add bio</a></dd>
+          {{/if}}
+        {{/if}}
+
+        {{#if user.web_url}}
+        <dt>Web Url</dt>
+        <dd>{{user.web_url}}</dd>
+        {{else}}
+          {{#if is_users_profile}}
+          <dt>Web Url</dt>
+          <dd><a href="/u/{{user.username}}/edit">add web url</a></dd>
+          {{/if}}
+        {{/if}}
+
+        {{#if user.bike_id}}
+        <dt>Bike</dt>
+        <dd><a href="/bike/{{user.bike_id}}"><img class="user-profile-bike-photo" width="270" height="202" src="{{s3Url}}{{user.bike_main_photo}}" alt="{{user.username}}'s bike"></a></dd>
+        {{else}}
+          {{#if is_users_profile}}
+          <dt>Bike</dt>
+          <dd><a href="/edit/{{user.bike_id}}">add bike</a></dd>
+          {{/if}}
+        {{/if}}
+
+      </dl>
+    </div>
+  </div>
+</div>
+

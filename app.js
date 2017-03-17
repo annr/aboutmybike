@@ -137,7 +137,7 @@ app.use('/feedback', feedback);
 app.use('/edit', ensureAuthenticated, edit);
 app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
-app.use('/profile', ensureAuthenticated, profile);
+app.use('/u', ensureAuthenticated, profile);
 
 app.get('/logout', function (req, res) {
   req.logout();

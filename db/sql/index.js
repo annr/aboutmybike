@@ -31,6 +31,7 @@ module.exports = {
     add: sql('amb_user/add.sql'),
     update_last_login: sql('amb_user/update_last_login.sql'),
     select: sql('amb_user/select.sql'),
+    username_select: sql('amb_user/username_select.sql'),
     fb_select: sql('amb_user/fb_select.sql'),
   },
   bike_info: {
