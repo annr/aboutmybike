@@ -2,7 +2,8 @@
   Selects user from ID
 */
  
-   SELECT u.*, user_photo.web_url as picture, 
+   SELECT u.*,
+          user_photo.web_url as picture,
           bike.id as bike_id 
      FROM amb_user u 
 LEFT JOIN bike on bike.user_id = u.id

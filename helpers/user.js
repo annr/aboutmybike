@@ -4,8 +4,6 @@ let util = require('util');
 function createUser(values, callback) {
   db.amb_user.add(values)
     .then(function (data) {
-      console.log('createUser then');
-      console.log(util.inspect(data));
       callback(null, data);
     })
     .catch(function (err) {

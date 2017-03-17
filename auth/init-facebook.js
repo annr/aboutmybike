@@ -13,13 +13,13 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-  db.one('select u.*, user_photo.web_url as picture, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id left join user_photo on user_photo.user_id = u.id where u.id = $1 limit 1;', id)
-    .then(function (data) {
+  userHelper.getUser(id, function (err, data) {
+    if (err) {
+      callback(new Error('Failed to get user by id: (' + err + ')'));
+    } else {
       callback(null, data);
-    })
-    .catch(function (err) {
-      callback(new Error('Failed get user: (' + err + ')'));
-    });
+    }
+  });
 });
 
 function initPassport () {
@@ -38,30 +38,21 @@ function initPassport () {
       profileFields: ['id', 'first_name', 'last_name', 'gender', 'website', 'email', 'photos']
     },
     function(accessToken, refreshToken, profile, callback) {
-      db.one('select u.*, user_photo.web_url as picture, bike.id as bike_id from amb_user u left join bike on bike.user_id = u.id left join user_photo on user_photo.user_id = u.id where u.facebook_id = $1 limit 1;', profile.id)
-        .then(function (data) {
-          // let user = {
-          //   id: data.id,
-          //   facebook: profile,
-          //   amb: data
-          // }
-          // TO-DO: update last login.
-          callback(null, data);
-        })
-        .catch(function (err) {
+      userHelper.getFacebookUser(profile.id, function (err, data) {
+        if (err) {
           // send SNS alerting there is a new user.
-          let sns = new AWS.SNS();
-          let params;
-          params = {
-            Message: JSON.stringify(profile),
-            Subject: 'User Signup',
-            TopicArn: config.topicArn + config.snsUserSignupTopicName
-          };
-          sns.publish(params, function(err, data) {
-            if (err) {
-              console.err('Error sending User Signup SNS: ' + err);
-            }
-          });
+          // let sns = new AWS.SNS();
+          // let params;
+          // params = {
+          //   Message: JSON.stringify(profile),
+          //   Subject: 'User Signup',
+          //   TopicArn: config.topicArn + config.snsUserSignupTopicName
+          // };
+          // sns.publish(params, function(err, data) {
+          //   if (err) {
+          //     console.err('Error sending User Signup SNS: ' + err);
+          //   }
+          // });
 
           let first_name = null;
           let last_name = null;
@@ -92,8 +83,10 @@ function initPassport () {
               callback(null, data);
             }
           });
-
-        });
+        } else {
+          callback(null, data);
+        }
+      });
     }
   ));
 
