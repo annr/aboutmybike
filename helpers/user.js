@@ -4,8 +4,9 @@ let util = require('util');
 function createUser(values, callback) {
   db.amb_user.add(values)
     .then(function (data) {
-      console.log('inserted user maybe: ');
+      console.log('createUser then');
       console.log(util.inspect(data));
+      callback(null, data);
     })
     .catch(function (err) {
       callback(new Error(`Failed to create bike record: (${err})`));
@@ -34,9 +35,12 @@ function getFacebookUser(facebookID, callback) {
     });
 }
 
-function createPhoto(userID, photoPath) {
+function createPhoto(userID, photoPath, callback) {
   console.log('In crate ohoho');
   db.user_photo.add([userID, photoPath])
+    .then(function (data) {
+      callback(null, data);
+    })
     .catch(function (err) {
       throw new Error(`Failed insert user_photo record: (${err})`);
     });

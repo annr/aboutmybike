@@ -6,7 +6,7 @@ let promise = require('bluebird');
 // because event 'extend' is called multiple times:
 let repos = {
   bike: require('./repos/bike'),
-  //amb_user: require('./repos/amb_user'),
+  amb_user: require('./repos/amb_user'),
   bike_info: require('./repos/bike_info'),
   photo: require('./repos/photo'),
   user_photo: require('./repos/user_photo'),
@@ -24,7 +24,7 @@ let options = {
     // Do not use 'require()' here, because this event occurs for every task
     // and transaction being executed, which should be as fast as possible.
     obj.bike = repos.bike(obj, pgp);
-    //obj.amb_user = repos.amb_user(obj, pgp);
+    obj.amb_user = repos.amb_user(obj, pgp);
     obj.bike_info = repos.bike_info(obj, pgp);
     obj.photo = repos.photo(obj, pgp);
     obj.user_photo = repos.user_photo(obj, pgp);

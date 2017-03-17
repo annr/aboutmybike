@@ -77,16 +77,22 @@ function initPassport () {
               last_name = profile.name.familyName;
             }
           }
-          db.one('insert into amb_user(facebook_id, first_name, last_name, gender, email) ' +
-              'values($1, $2, $3, $4, $5) returning *', [profile.id, first_name, last_name, gender, profile.emails[0].value])
-            .then(function (data) {
-              // also add FB profile photo to user_photo (not used yet):
-              userHelper.createPhoto(data.id, profile.photos[0].value);
-              callback(null, data);
-            })
-            .catch(function (err) {
+
+          userHelper.createUser([profile.id, first_name, last_name, gender, profile.emails[0].value], function (err, data) {
+            if (err) {
               callback(new Error('Failed to create new user. (' + err + ')'));
-            });
+            } else {
+              userHelper.createPhoto(data.id, profile.photos[0].value, function(err, data) {
+                if (err) {
+                  callback(new Error('Failed to create user profile photo. (' + err + ')'));
+                } else {
+                  callback(null, data);
+                }
+              });
+              callback(null, data);
+            }
+          });
+
         });
     }
   ));

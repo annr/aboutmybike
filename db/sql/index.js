@@ -27,12 +27,12 @@ module.exports = {
     update_basics: sql('bike/update_basics.sql'),
     update_main_photo: sql('bike/update_main_photo.sql'),
   },
-  // amb_user: {
-  //   add: sql('amb_user/add.sql'),
-  //   update_last_login: sql('amb_user/update_last_login.sql'),
-  //   select: sql('amb_user/select.sql'),
-  //   fb_select: sql('amb_user/fb_select.sql'),
-  // },
+  amb_user: {
+    add: sql('amb_user/add.sql'),
+    update_last_login: sql('amb_user/update_last_login.sql'),
+    select: sql('amb_user/select.sql'),
+    fb_select: sql('amb_user/fb_select.sql'),
+  },
   bike_info: {
     add: sql('bike_info/add.sql'),
     update: sql('bike_info/update.sql'),
