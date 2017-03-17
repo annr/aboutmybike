@@ -21,7 +21,7 @@ let run = function(localPath, fields, callback) {
         } else {
           fields.bike_id = bike_id;
           photoHelper.storeOriginal(fields, localPath);
-          photoHelper.optimizeAndStoreBig(fields, localPath, function(photoPath) {
+          photoHelper.optimizeAndStoreCopies(fields, localPath, function(photoPath) {
             // error will be thrown if there is an issue creating photo, from createPhoto.
             helper.createPhoto(fields, photoPath);
             callback({
@@ -36,7 +36,9 @@ let run = function(localPath, fields, callback) {
 
     } else {
       photoHelper.storeOriginal(fields, localPath);
-      photoHelper.optimizeAndStoreBig(fields, localPath, function(photoPath) {
+      console.log('in upload photo, bike_id set?  ' + fields.bike_id);
+      photoHelper.optimizeAndStoreCopies(fields, localPath, function(photoPath) {
+        console.log('photo paht: ' + photoPath);
         helper.createPhoto(fields, photoPath);
         callback({
           message: 'Created bike, added photo, and updated bike photo with the name.',

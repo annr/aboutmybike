@@ -14,7 +14,14 @@ config.appConfig = {
   awsRegion: 'us-west-1',
   s3Bucket: 'amb-storage',
   rekognitionBucket: 'amb-processing',
-  rekognitionRegion: 'us-west-2'
+  rekognitionRegion: 'us-west-2',
+  mainImageSizes: [ // 1024x768, 500x375, 240x180, 100x75
+    {label: 'Large', size_key: 'b', width: 1024, height: 768},
+    {label: 'Medium', size_key: 'm', width: 500, height: 375},
+    {label: 'Small', size_key: 's', width: 240, height: 180},
+    {label: 'Thumbnail', size_key: 't', width: 100, height: 75}
+  ],
+  mainImageSizeKeyOriginal: 'o',
 }
 
 module.exports = config

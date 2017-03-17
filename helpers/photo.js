@@ -2,14 +2,15 @@ const im = require('imagemagick');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const s3 = new AWS.S3();
-const bucketName = 'amb-storage';
-const monthString = getTwoDigitMonth();
+const MM = getTwoDigitMonth();
+let config = require('../config').appConfig;
 
 let rootFolder = '/dev';
 if (process.env.RDS_HOSTNAME !== undefined) {
   rootFolder = '/photos';
 }
-let destinationFolder = `${rootFolder}/2017-${monthString}`;
+
+const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}`;
 
 /* PRIVATE FUNCTIONS */
 function getFilename(bike_id, size) {
@@ -56,7 +57,7 @@ let storeOriginal = function(fields, photo) {
 
     if (err) throw err;
 
-    let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: fileData };
+    let params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: filename, Body: fileData };
     s3.putObject(params, function (err, fileData) {
       if (err) {
         if (err) throw err;
@@ -76,7 +77,7 @@ let hasCompleteCropObject = function(fields) {
   return false;
 }
 
-let optimizeAndStoreBig = function(fields, photo, callback) {
+let optimizeAndStoreCopies = function(fields, photo, callback) {
   if(!fields.bike_id) {
     throw new Error('bike_id not set');
   }
@@ -123,7 +124,10 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
         quality = 1;
       }
 
+      // make a bunch of versions here, including tiny.
       var newWidth = (width < 1024) ? width : 1024;
+
+      // m
 
       var resizeOptions = {
         srcPath: tmpPath,
@@ -132,7 +136,7 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
         progressive: true,
         width: newWidth,
         strip: true,
-        sharpening: 0.2
+        //sharpening: 0.2
       }
 
       // cropped. now:
@@ -143,35 +147,38 @@ let optimizeAndStoreBig = function(fields, photo, callback) {
       im.resize(resizeOptions, function(err, stdout, stderr){
         if (err) throw err;
 
-        fs.readFile(dstPath, (err, data) => {
-          // now store that new image:
-          var filename = `${getFilename(fields.bike_id, 'b')}.${getExtension()}`;
-          let params = { Bucket: bucketName + destinationFolder, Key: filename, Body: data };
+        var filename = `${getFilename(fields.bike_id, 'b')}.${getExtension()}`;
+        let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: filename };
 
-          if (err) throw err;
-
-          s3.putObject(params, function (err) {
-            if (err) {
-              console.log(`Error uploading ${filename}: ${err}`);
-            } else {
-              // this should next create photo
-              callback(`${destinationFolder}/${filename}`);
-            }
-          });
-
-        });
-
+        readAndStoreFile(dstPath, s3Params, callback);
       });
     });
   });
-
-
 };
+
+// always passes file path to callback.
+function readAndStoreFile(pathToFile, s3Params, callback) {
+  let params = s3Params;
+  fs.readFile(pathToFile, (err, data) => {
+    if (err) throw err;
+    // s3Params are complete with the exception of `Body`, the readFile data.
+    params.Body = data;
+    s3.putObject(params, function (err) {
+      if (err) {
+        console.log(`Error uploading ${pathToFile}: ${err}`);
+      } else {
+        // this should next create photo
+        callback(`${DESTINATION_FOLDER}/${params.Key}`);
+      }
+    });
+  });
+}
 
 module.exports = {
   storeOriginal,
-  optimizeAndStoreBig,
+  optimizeAndStoreCopies,
   hasCompleteCropObject,
   replacePathWildcard,
+  readAndStoreFile,
 }
 
