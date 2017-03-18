@@ -1,54 +1,45 @@
 let fs = require('fs');
 let config = require('../config').appConfig;
-let helper = require('../helpers/bike');
+let bikeHelper = require('../helpers/bike');
 let photoHelper = require('../helpers/photo');
 
 /* 
- * validate photo
+ * upload photo
  *
- * takes a local path to a file to validate
+ * takes a local path and fields and creates the bike, uploads versions of photo and finally creates bike photo record.
 */
 
 let run = function(localPath, fields, callback) {
   fs.readFile(localPath, (err, data) => {
     if (err) throw err;
-
     if (!fields.bike_id) {
-
       helper.createBike(fields, function (err, bike_id) {
         if (err) {
-          next(err);
+          callback(err);
         } else {
-          fields.bike_id = bike_id;
-          photoHelper.storeOriginal(fields, localPath);
-          photoHelper.optimizeAndStoreCopies(fields, localPath, function(photoPath) {
-            // error will be thrown if there is an issue creating photo, from createPhoto.
-            helper.createPhoto(fields, photoPath);
-            callback({
-              message: 'Added photo, and updated bike photo with the name.',
-              id: fields.bike_id,
-              photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
-            }); // or fields.bike_id
-          });
+          storePhotos(bike_id, localPath, fields, callback);
         }
       });
-
-
     } else {
-      photoHelper.storeOriginal(fields, localPath);
-      console.log('in upload photo, bike_id set?  ' + fields.bike_id);
-      photoHelper.optimizeAndStoreCopies(fields, localPath, function(photoPath) {
-        console.log('photo paht: ' + photoPath);
-        helper.createPhoto(fields, photoPath);
-        callback({
-          message: 'Created bike, added photo, and updated bike photo with the name.',
-          id: fields.bike_id,
-          photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
-        });
-      });
+      storePhotos(fields.bike_id, localPath, fields, callback);
     }
   });
 }
+
+// using bike_id get filename template and then do the rest of the things.
+let storePhotos = function (bike_id, localPath, fields, callback) {
+    photoHelper.getPhotoPath(bike_id, localPath, function(photoPath) {
+      photoHelper.storeOriginal(bike_id, localPath, photoPath);
+      photoHelper.optimizeAndStoreCopies(bike_id, localPath, photoPath);
+      bikeHelper.createPhoto(fields, photoPath);
+      callback({
+        message: 'Created filename, uploaded versions of photo and created photo record',
+        id: fields.bike_id,
+        photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
+      });
+  });
+};
+
 
 module.exports = {
   run,

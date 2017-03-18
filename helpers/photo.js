@@ -4,6 +4,7 @@ const fs = require('fs');
 const s3 = new AWS.S3();
 const MM = getTwoDigitMonth();
 let config = require('../config').appConfig;
+let util = require('util');
 
 let rootFolder = '/dev';
 if (process.env.RDS_HOSTNAME !== undefined) {
@@ -13,11 +14,11 @@ if (process.env.RDS_HOSTNAME !== undefined) {
 const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}`;
 
 /* PRIVATE FUNCTIONS */
-function getFilename(bike_id, size) {
-  let version = size || 'o';
+function getTemplateFilename(bike_id, format) {
+  let extension = (format === 'PNG') ? '.png' : '.jpg';
   // limits main photo by bike id by day. We'll retain new photos if they are not added too often.
   let impreciseTs = ((new Date()).setHours(0, 0, 0, 0)/10000);
-  return `${bike_id}-${impreciseTs}_${version}`;
+  return '' + bike_id + '-' + impreciseTs + '_{*}' + extension;
 }
 
 function getTwoDigitMonth() {
@@ -28,15 +29,6 @@ function getTwoDigitMonth() {
   return paddedMonth;
 }
 
-function getExtension(photo) {
-  // let extension = photo.type.split('/')[1];
-  // if (extension.toLowerCase() === 'jpeg') {
-  //   extension = 'jpg';
-  // }
-  //return extension;
-  return 'jpg';
-}
-
 //function replacePathWildcard(path, size_key) {
 function replacePathWildcard(path) {
   return path.replace('{*}', 'b');
@@ -45,27 +37,17 @@ function replacePathWildcard(path) {
 /* EXPOSED FUNCTIONS */
 
 // bike_id is required to generate filename
-let storeOriginal = function(fields, photo) {
+// we store the "original" but we use a different filename. 
+// this requires us to know if it's a png or jpg
+// I don't think the temporary filename includes the extension.
 
-  if(!fields.bike_id) {
+let storeOriginal = function(bike_id, photo, photoPath, callback) {
+  if(!bike_id) {
     throw new Error('bike_id not set');
   }
-
-  var filename = `${getFilename(fields.bike_id, 'o')}.${getExtension()}`;
-
-  fs.readFile(photo, (err, fileData) => {
-
-    if (err) throw err;
-
-    let params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: filename, Body: fileData };
-    s3.putObject(params, function (err, fileData) {
-      if (err) {
-        if (err) throw err;
-      }
-    });
-
-  });
-
+  console.log('check photo path ' + replacePathWildcard(photoPath, 'o'));
+  let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(photoPath, 'o') };
+  readAndStoreFile(photo, s3Params);
 }
 
 let hasCompleteCropObject = function(fields) {
@@ -77,12 +59,32 @@ let hasCompleteCropObject = function(fields) {
   return false;
 }
 
-let optimizeAndStoreCopies = function(fields, photo, callback) {
-  if(!fields.bike_id) {
+let extractDirectoryOfPath = function(str) {
+  if(!str) {
+    throw new Error(`file path not passed`);
+  }
+  return str.substr(0, str.lastIndexOf('/')+1);;
+}
+
+let getPhotoProperties = function(photo, callback) {
+  im.identify(photo, function(err, img) {
+    if (err) throw err;
+    callback(img);
+  });
+};
+
+let getPhotoPath = function(bike_id, localPath, callback) {
+  getPhotoProperties(localPath, function(img) {
+    callback(DESTINATION_FOLDER + '/' + getTemplateFilename(bike_id, img.format));  
+  });
+}; 
+
+let optimizeAndStoreCopies = function(bike_id, photo, callback) {
+  if(!bike_id) {
     throw new Error('bike_id not set');
   }
-  var tmpDirectory = photo.substr(0, photo.lastIndexOf('/')+1);
-  var tmpFilename = tmpDirectory + fields.bike_id + '-' + (new Date()).getTime();
+  var tmpDirectory = extractDirectoryOfPath(photo);
+  var tmpFilename = tmpDirectory + bike_id + '-' + (new Date()).getTime();
   var tmpPath = `${tmpFilename}-tmp.jpg`;
   var dstPath = `${tmpFilename}.jpg`;
 
@@ -102,7 +104,7 @@ let optimizeAndStoreCopies = function(fields, photo, callback) {
       height: height,
     };
 
-    // here we automatically normalize to 4:3 if necesssary. modal select area cropping is doen before this step
+    // here we automatically normalize to 4:3 if necesssary. modal select area cropping is applied before this step
     // and so we can safely crop from the gravity "Center" (the default. vs NorthWest).
     if (ratio > 0.75) {
       options.width = width;
@@ -144,14 +146,16 @@ let optimizeAndStoreCopies = function(fields, photo, callback) {
       // 2) reduce quality
       // 3) make progressive
 
+      // Go through all sizes. Only in the case of the one size run callback. 
+      //config.mainImageSizes.forEach();
+
+      console.log('check photo path ' + replacePathWildcard(photoPath, 'b'));
       im.resize(resizeOptions, function(err, stdout, stderr){
         if (err) throw err;
-
-        var filename = `${getFilename(fields.bike_id, 'b')}.${getExtension()}`;
-        let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: filename };
-
+        let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(photoPath, 'b') };
         readAndStoreFile(dstPath, s3Params, callback);
       });
+
     });
   });
 };
@@ -168,7 +172,9 @@ function readAndStoreFile(pathToFile, s3Params, callback) {
         console.log(`Error uploading ${pathToFile}: ${err}`);
       } else {
         // this should next create photo
-        callback(`${DESTINATION_FOLDER}/${params.Key}`);
+        if(callback) { // storing original doens't have callback
+          callback(`${DESTINATION_FOLDER}/${params.Key}`);
+        }
       }
     });
   });
@@ -180,5 +186,6 @@ module.exports = {
   hasCompleteCropObject,
   replacePathWildcard,
   readAndStoreFile,
+  getPhotoPath
 }
 
