@@ -14,8 +14,8 @@ if (process.env.RDS_HOSTNAME !== undefined) {
 const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}`;
 
 /* PRIVATE FUNCTIONS */
-function getTemplateFilename(bike_id, format) {
-  let extension = (format === 'PNG') ? '.png' : '.jpg';
+function getTemplateFilename(bike_id) {
+  let extension = '.jpg';
   // limits main photo by bike id by day. We'll retain new photos if they are not added too often.
   let impreciseTs = ((new Date()).setHours(0, 0, 0, 0)/10000);
   return '' + bike_id + '-' + impreciseTs + '_{*}' + extension;
@@ -30,24 +30,9 @@ function getTwoDigitMonth() {
 }
 
 //function replacePathWildcard(path, size_key) {
-function replacePathWildcard(path) {
-  return path.replace('{*}', 'b');
-}
-
-/* EXPOSED FUNCTIONS */
-
-// bike_id is required to generate filename
-// we store the "original" but we use a different filename. 
-// this requires us to know if it's a png or jpg
-// I don't think the temporary filename includes the extension.
-
-let storeOriginal = function(bike_id, photo, photoPath, callback) {
-  if(!bike_id) {
-    throw new Error('bike_id not set');
-  }
-  console.log('check photo path ' + replacePathWildcard(photoPath, 'o'));
-  let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(photoPath, 'o') };
-  readAndStoreFile(photo, s3Params);
+function replacePathWildcard(path, size) {
+  let version = size || 'b';
+  return path.replace('{*}', version);
 }
 
 let hasCompleteCropObject = function(fields) {
@@ -65,7 +50,7 @@ let extractDirectoryOfPath = function(str) {
   }
   return str.substr(0, str.lastIndexOf('/')+1);;
 }
-
+// not currently used.
 let getPhotoProperties = function(photo, callback) {
   im.identify(photo, function(err, img) {
     if (err) throw err;
@@ -73,91 +58,60 @@ let getPhotoProperties = function(photo, callback) {
   });
 };
 
-let getPhotoPath = function(bike_id, localPath, callback) {
-  getPhotoProperties(localPath, function(img) {
-    callback(DESTINATION_FOLDER + '/' + getTemplateFilename(bike_id, img.format));  
+let convertToJpeg = function(srcPath, tmpPath, callback) {
+  im.convert([srcPath, tmpPath], function(err) {
+    if (err) throw err;
+    callback();
   });
-}; 
+};
 
-let optimizeAndStoreCopies = function(bike_id, photo, callback) {
+let getStoredPath = function(bike_id) {
+  return getTemplateFilename(bike_id);
+};
+
+let getFullStoredPath = function(bike_id) {
+  return DESTINATION_FOLDER + '/' + getStoredPath(bike_id);
+};
+
+let optimizeAndStoreCopies = function(bike_id, localPath, storedPath, callback) {
+  // prepped (/aboutmybike/helpers/prep_photo.js). now:
+  // 1) reduce pixel width if nec.
+  // 2) reduce quality
+  // 3) make progressive
+
   if(!bike_id) {
     throw new Error('bike_id not set');
   }
-  var tmpDirectory = extractDirectoryOfPath(photo);
-  var tmpFilename = tmpDirectory + bike_id + '-' + (new Date()).getTime();
-  var tmpPath = `${tmpFilename}-tmp.jpg`;
-  var dstPath = `${tmpFilename}.jpg`;
 
-  im.identify(photo, function(err, img){
+  // only create one version for now.
+  let size_key = 'b';
+  let dstPath = localPath + '-' + size_key;
+  let newWidth = 1024;
+
+  var resizeOptions = {
+    srcPath: localPath,
+    dstPath: dstPath,
+    //quality: quality, // will default to 0.8
+    progressive: true,
+    width: newWidth,
+    //strip: true,
+    //sharpening: 0.2
+  }
+
+  // prepped (/aboutmybike/helpers/prep_photo.js). now:
+  // 1) reduce pixel width if nec.
+  // 2) reduce quality
+  // 3) make progressive
+
+  im.resize(resizeOptions, function(err, stdout, stderr){
     if (err) throw err;
-    let height = img.height;
-    let width = img.width;
-    let ratio = Math.round((height/width) * 100)/100;
-
-    // default 4:3 ratio
-    // all this will do is change the quality.
-    var options = {
-      srcPath: photo,
-      dstPath: tmpPath,
-      width: width,
-      format: 'jpg',
-      height: height,
-    };
-
-    // here we automatically normalize to 4:3 if necesssary. modal select area cropping is applied before this step
-    // and so we can safely crop from the gravity "Center" (the default. vs NorthWest).
-    if (ratio > 0.75) {
-      options.width = width;
-      options.height = Math.floor(width*0.75);
-    } else if (ratio < 0.75) {
-      options.width = Math.round(height*1.3333333333);
-      options.height = height;
-    }
-
-    // crop and change graphics format if nec.
-    im.crop(options, function(err, stdout, stderr){
-
-      // default optimization:
-      var quality = 0.7;
-
-      // only reduce the quality if the file has not already been optimzed.
-      if(img.quality && img.quality <= 0.8) {
-        //unsetting the quality value:
-        quality = 1;
-      }
-
-      // make a bunch of versions here, including tiny.
-      var newWidth = (width < 1024) ? width : 1024;
-
-      // m
-
-      var resizeOptions = {
-        srcPath: tmpPath,
-        dstPath: dstPath,
-        quality: quality,
-        progressive: true,
-        width: newWidth,
-        strip: true,
-        //sharpening: 0.2
-      }
-
-      // cropped. now:
-      // 1) reduce pixel width if nec.
-      // 2) reduce quality
-      // 3) make progressive
-
-      // Go through all sizes. Only in the case of the one size run callback. 
-      //config.mainImageSizes.forEach();
-
-      console.log('check photo path ' + replacePathWildcard(photoPath, 'b'));
-      im.resize(resizeOptions, function(err, stdout, stderr){
-        if (err) throw err;
-        let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(photoPath, 'b') };
-        readAndStoreFile(dstPath, s3Params, callback);
-      });
-
+    let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, 'b') };
+    readAndStoreFile(dstPath, s3Params, function() {
+      fs.unlink(dstPath);
+      callback();
     });
   });
+
 };
 
 // always passes file path to callback.
@@ -170,22 +124,17 @@ function readAndStoreFile(pathToFile, s3Params, callback) {
     s3.putObject(params, function (err) {
       if (err) {
         console.log(`Error uploading ${pathToFile}: ${err}`);
-      } else {
-        // this should next create photo
-        if(callback) { // storing original doens't have callback
-          callback(`${DESTINATION_FOLDER}/${params.Key}`);
-        }
       }
+      callback();
     });
   });
 }
 
 module.exports = {
-  storeOriginal,
   optimizeAndStoreCopies,
-  hasCompleteCropObject,
   replacePathWildcard,
   readAndStoreFile,
-  getPhotoPath
+  getStoredPath,
+  getFullStoredPath
 }
 

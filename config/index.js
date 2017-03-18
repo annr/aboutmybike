@@ -16,6 +16,7 @@ config.appConfig = {
   rekognitionBucket: 'amb-processing',
   rekognitionRegion: 'us-west-2',
   mainImageSizes: [ // 1024x768, 500x375, 240x180, 100x75
+    {label: 'Full', size_key: 'f'}, // full resolution but quality currently at 0.8
     {label: 'Large', size_key: 'b', width: 1024, height: 768},
     {label: 'Medium', size_key: 'm', width: 500, height: 375},
     {label: 'Small', size_key: 's', width: 240, height: 180},

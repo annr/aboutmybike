@@ -71,6 +71,8 @@ $(document).ready(function() {
         // load the image to get height and width. 
         // if oblong, open modal.
         image.onload = function() {
+          $('input[name=actualHeight]').val(this.height);
+          $('input[name=actualWidth]').val(this.width);
           // if ratio is close to 4:3, just crop.
           // technically is ratio between 3:2 (0.666667) and 4:5 (0.8)
           if(this.height/this.width > 0.66 && this.height/this.width < 0.801) {
@@ -80,8 +82,6 @@ $(document).ready(function() {
           } else {
             // we'll open up the modal dialog for cropping.
             // first unset the values:
-            $('input[name=actualHeight]').val(this.height);
-            $('input[name=actualWidth]').val(this.width);
             $('#cropTarget').attr('src', e.target.result);
             $('#selectAreaModal').modal('show');
           }

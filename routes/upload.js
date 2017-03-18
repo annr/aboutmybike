@@ -4,7 +4,7 @@ const formidable = require('formidable');
 const helper = require('../helpers/bike');
 const photoHelper = require('../helpers/photo');
 const validatePhoto = require('../helpers/validate_photo');
-const cropPhoto = require('../helpers/crop_photo');
+const prepPhoto = require('../helpers/prep_photo');
 const uploadPhoto = require('../helpers/upload_photo');
 
 /* Create bike record */
@@ -17,39 +17,21 @@ router.post('/', function (req, res, next) {
     let localPath = photo.path;
 
     if (localPath) {
-      // upload does a few things:
-      // 1) crops image if necessary
-      if (photoHelper.hasCompleteCropObject(fields)) {
-        cropPromise(localPath, fields).then(function() {
-          validateAndUploadPhoto(localPath, fields).then(function(data) {
-            if (!data.id) throw new Error('Promise requires bike id returned as id.');
-            if (!req.user.bike_id) {
-              req.user.bike_id = data.id;
-            }
-            res.json({ success: 'Cropped photo, validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
-          }).catch(function(err) {
-            console.log(err);
-          });;
-        }).catch(function(err) {
-          console.log(err);
-        });
-      } else {
-        // two ways to get here. after crop or by default as in this case.
+      prepPromise(localPath, fields).then(function() {
+        // prepPromise overwrites local file. Hope nothing goes wrong!!!!
         validateAndUploadPhoto(localPath, fields).then(function(data) {
-          if(data.message === 'not_bicycle') { // result of validation
-            res.json({ error: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.', status: 200 });
-          } else if (data.id) {
-            if (!req.user.bike_id) {
-              req.user.bike_id = data.id;
-            }
-            res.json({ success: 'Validated photo, added bike record if nec., uploaded, and updated or added photo record', status: 200, id: data.id, photoPath: data.photoPath });
-          } else {
-            throw new Error('Something went wrong with validation / upload. ');
+          if (!data.id) throw new Error('Promise requires bike id returned as id.');
+          if (!req.user.bike_id) {
+            req.user.bike_id = data.id;
           }
+          res.json({ success: 'Cropped and validated photo, added bike record if nec., uploaded and added photo record', status: 200, id: data.id, photoPath: data.photoPath });
         }).catch(function(err) {
           console.log(err);
-        });
-      }
+        });;
+
+      }).catch(function(err) {
+        console.log(err);
+      });
     } else {
       throw err;
     }
@@ -58,10 +40,10 @@ router.post('/', function (req, res, next) {
 
 });
 
-let cropPromise = function (photo_path, fields) {
+let prepPromise = function (photo_path, fields) {
   return new Promise(function(resolve, reject){
-    cropPhoto.run(photo_path, fields, function(data) {
-      resolve('message from inside crop: ' + data.message);
+    prepPhoto.run(photo_path, fields, function(data) {
+      resolve('message from inside prep: ' + data.message);
     });
   });
 };

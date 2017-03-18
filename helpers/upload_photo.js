@@ -28,18 +28,21 @@ let run = function(localPath, fields, callback) {
 
 // using bike_id get filename template and then do the rest of the things.
 let storePhotos = function (bike_id, localPath, fields, callback) {
-    photoHelper.getPhotoPath(bike_id, localPath, function(photoPath) {
-      photoHelper.storeOriginal(bike_id, localPath, photoPath);
-      photoHelper.optimizeAndStoreCopies(bike_id, localPath, photoPath);
-      bikeHelper.createPhoto(fields, photoPath);
-      callback({
-        message: 'Created filename, uploaded versions of photo and created photo record',
-        id: fields.bike_id,
-        photoPath: config.s3Url + photoHelper.replacePathWildcard(photoPath),
-      });
-  });
-};
 
+  let storedPath = photoHelper.getStoredPath(bike_id);
+  let fullStoredPath = photoHelper.getFullStoredPath(bike_id);
+
+  photoHelper.optimizeAndStoreCopies(bike_id, localPath, storedPath, function() {
+    bikeHelper.createPhoto(fields, fullStoredPath);
+    // we can only send this callback with the new photo when storing all the photos succeeds
+    callback({
+      message: 'Created filename, uploaded versions of photo and created photo record',
+      id: bike_id,
+      photoPath: config.s3Url + photoHelper.replacePathWildcard(fullStoredPath, 'b'),
+    });
+  });
+
+};
 
 module.exports = {
   run,
