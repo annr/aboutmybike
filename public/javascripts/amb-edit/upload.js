@@ -63,6 +63,7 @@ $(document).ready(function() {
 
   function filePreview(file, callback) {
     if (file) {
+      $('input[name=original_filename]').val(file.name)
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function (e) {

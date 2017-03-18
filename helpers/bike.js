@@ -149,8 +149,7 @@ function createPhoto(fields, photoPath) {
   db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
     .then(function (bike_id) {
       // I don't love this:
-      var wildcardPath = photoPath.replace('_b', '_{*}');
-      updateMainPhoto(wildcardPath, bike_id);
+      updateMainPhoto(photoPath, bike_id);
     })
     .catch(function (err) {
       throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);

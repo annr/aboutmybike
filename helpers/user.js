@@ -45,7 +45,6 @@ function getFacebookUser(facebookID, callback) {
 }
 
 function createPhoto(userID, photoPath, callback) {
-  console.log('In crate ohoho');
   db.user_photo.add([userID, photoPath])
     .then(function (data) {
       callback(null, data);

@@ -14,17 +14,17 @@ router.get(['/', '/:id'], function (req, res, next) {
   let calculatedRows;
   let id = req.params.id;
 
+  console.log('param id '  + req.params.id);
   helper.getBike(id, function (err, data) {
-
-    // must be user's bike for them to edit
-    if (data.user_id != req.user.id) {
-      console.log('redirecting...');
-      res.redirect(`/bike/${data.id}`);
-    }
-
     if (err) {
       next(err);
     } else {
+      // must be user's bike for them to edit
+      if (data.user_id != req.user.id) {
+        console.log('redirecting...');
+        res.redirect(`/bike/${data.id}`);
+      }
+
       // Try to guess how many textarea rows will be necessary to edit the text.
       // This is hard, because responsive, but if the text is really long, you can give more editor.
       if (data.description && data.description.length) {
@@ -33,7 +33,12 @@ router.get(['/', '/:id'], function (req, res, next) {
           rows = calculatedRows;
         }
       }
-      data.photo_url = data.main_photo_path.replace('{*}', 'b');
+
+      // data.main_photo_path should always exist.
+      // This test should be removed but I'm leaving it in for now.
+      //if(data.main_photo_path) {
+        data.photo_url = data.main_photo_path.replace('{*}', 'b');
+      //}
 
       res.render(view, {
         page_title,

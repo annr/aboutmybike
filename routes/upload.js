@@ -17,8 +17,8 @@ router.post('/', function (req, res, next) {
     let localPath = photo.path;
 
     if (localPath) {
+      // prepPromise overwrites local file. Hope nothing goes wrong!!!!
       prepPromise(localPath, fields).then(function() {
-        // prepPromise overwrites local file. Hope nothing goes wrong!!!!
         validateAndUploadPhoto(localPath, fields).then(function(data) {
           if (!data.id) throw new Error('Promise requires bike id returned as id.');
           if (!req.user.bike_id) {

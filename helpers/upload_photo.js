@@ -13,7 +13,7 @@ let run = function(localPath, fields, callback) {
   fs.readFile(localPath, (err, data) => {
     if (err) throw err;
     if (!fields.bike_id) {
-      helper.createBike(fields, function (err, bike_id) {
+      bikeHelper.createBike(fields, function (err, bike_id) {
         if (err) {
           callback(err);
         } else {
