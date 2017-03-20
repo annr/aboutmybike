@@ -4,6 +4,7 @@ let AWS = require('aws-sdk');
 AWS.config.region = config.rekognitionRegion; // Region
 var rekognition = new AWS.Rekognition();
 let s3 = new AWS.S3();
+//let util = require('util');
 
 /* 
  * validate photo
@@ -45,10 +46,11 @@ let run = function(localPath, callback) {
          if (err) {
            throw new Error(err)
          } else {
+           //console.log(util.inspect(data.Labels));
            var bikeLabel = data.Labels.find(function(label) {
              return (label.Name.toLowerCase() === 'bicycle' || label.Name.toLowerCase() === 'bike' )
            });
-           if (bikeLabel && bikeLabel.Confidence > 80) {
+           if (bikeLabel && bikeLabel.Confidence > 70) {
             callback({ 
               message: 'bicycle', 
               confidence: bikeLabel.Confidence 

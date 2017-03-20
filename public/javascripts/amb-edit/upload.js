@@ -50,7 +50,7 @@ $(document).ready(function() {
             $('input[name=bike_id]').val(data.id);
           }
           // make sure preview uses cache-busted new file
-          $('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
+          //$('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
         }
       },
       error: function(err) {

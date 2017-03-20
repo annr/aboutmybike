@@ -31,7 +31,7 @@ function getTwoDigitMonth() {
 
 //function replacePathWildcard(path, size_key) {
 function replacePathWildcard(path, size) {
-  let version = size || 'b';
+  let version = size || 'm';
   return path.replace('{*}', version);
 }
 
@@ -73,44 +73,46 @@ let getFullStoredPath = function(bike_id) {
   return DESTINATION_FOLDER + '/' + getStoredPath(bike_id);
 };
 
-let optimizeAndStoreCopies = function(bike_id, localPath, storedPath, callback) {
+let optimizeAndStoreCopies = function(localPath, storedPath, callback) {
+  config.mainImageSizes.forEach(function(copy) {
+    console.log('in ' + copy.size_key);
+    optimizeAndStoreCopy(localPath, storedPath, copy.size_key, copy.width, copy.height);
+  });
+  // will this work? -- the function that is called in the loop is asncy.
+  console.log('outside of loop -- were all called???');
+  callback();
+};
+
+let optimizeAndStoreCopy = function(localPath, storedPath, sizeKey, width, height) {
   // prepped (/aboutmybike/helpers/prep_photo.js). now:
   // 1) reduce pixel width if nec.
   // 2) reduce quality
   // 3) make progressive
+  let dstPath = localPath + '-' + sizeKey;
 
-  if(!bike_id) {
-    throw new Error('bike_id not set');
-  }
-
-  // only create one version for now.
-  let size_key = 'b';
-  let dstPath = localPath + '-' + size_key;
-  let newWidth = 1024;
+  // we need to set width and height
 
   var resizeOptions = {
     srcPath: localPath,
     dstPath: dstPath,
-    //quality: quality, // will default to 0.8
     progressive: true,
-    width: newWidth,
-    //strip: true,
-    //sharpening: 0.2
+    width: width,
+    height: height,
   }
 
-  // prepped (/aboutmybike/helpers/prep_photo.js). now:
-  // 1) reduce pixel width if nec.
-  // 2) reduce quality
-  // 3) make progressive
-
-  im.resize(resizeOptions, function(err, stdout, stderr){
-    if (err) throw err;
-    let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, 'b') };
-    readAndStoreFile(dstPath, s3Params, function() {
-      fs.unlink(dstPath);
-      callback();
+  if(width && height) { // if these aren't set, just upload loca file.
+    im.resize(resizeOptions, function(err, stdout, stderr){
+      if (err) throw err;
+      let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, sizeKey) };
+      readAndStoreFile(dstPath, s3Params, function() {
+        fs.unlinkSync(dstPath);
+      });
     });
-  });
+  } else {
+    let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, sizeKey) };
+    // in this case don't unlink uploaded file -- it's not a copy.
+    readAndStoreFile(localPath, s3Params, function() {});
+  }
 
 };
 
@@ -135,6 +137,7 @@ module.exports = {
   replacePathWildcard,
   readAndStoreFile,
   getStoredPath,
-  getFullStoredPath
+  getFullStoredPath,
+  getPhotoProperties,
 }
 

@@ -6,7 +6,7 @@ const photoHelper = require('../helpers/photo');
 const validatePhoto = require('../helpers/validate_photo');
 const prepPhoto = require('../helpers/prep_photo');
 const uploadPhoto = require('../helpers/upload_photo');
-
+const util = require('util');
 /* Create bike record */
 router.post('/', function (req, res, next) {
   const config = req.app.locals;
@@ -19,7 +19,12 @@ router.post('/', function (req, res, next) {
     if (localPath) {
       // prepPromise overwrites local file. Hope nothing goes wrong!!!!
       prepPromise(localPath, fields).then(function() {
+
         validateAndUploadPhoto(localPath, fields).then(function(data) {
+          if (data.message === 'not_bicycle') {
+            res.json({ error: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.', status: 200 });
+            return;
+          }
           if (!data.id) throw new Error('Promise requires bike id returned as id.');
           if (!req.user.bike_id) {
             req.user.bike_id = data.id;

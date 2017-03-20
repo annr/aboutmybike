@@ -145,8 +145,8 @@ function updateBasicsInfo(fields, callback) {
 /* There's hardly any reason to have a photo table at this point.
    The values are never queried and not all of the versions are in the table.
  */
-function createPhoto(fields, photoPath) {
-  db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath])
+function createPhoto(fields, photoPath, metadata) {
+  db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath, metadata])
     .then(function (bike_id) {
       // I don't love this:
       updateMainPhoto(photoPath, bike_id);

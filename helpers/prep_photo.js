@@ -17,6 +17,7 @@ let run = function(localPath, fields, callback) {
   // - crop with select area values
 
   let options = {
+    progressive: true,
     srcPath: localPath,
     dstPath: localPath, // !!!!
     //quality: 1, // TO-DO: you need to get quality of the uploaded file and make it the same. this blows up file size for now reason.

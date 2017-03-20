@@ -14,7 +14,6 @@ router.get(['/', '/:id'], function (req, res, next) {
   let calculatedRows;
   let id = req.params.id;
 
-  console.log('param id '  + req.params.id);
   helper.getBike(id, function (err, data) {
     if (err) {
       next(err);
@@ -37,7 +36,7 @@ router.get(['/', '/:id'], function (req, res, next) {
       // data.main_photo_path should always exist.
       // This test should be removed but I'm leaving it in for now.
       //if(data.main_photo_path) {
-        data.photo_url = data.main_photo_path.replace('{*}', 'b');
+        data.photo_url = data.main_photo_path.replace('{*}', 'm');
       //}
 
       res.render(view, {

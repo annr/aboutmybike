@@ -32,14 +32,24 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
   let storedPath = photoHelper.getStoredPath(bike_id);
   let fullStoredPath = photoHelper.getFullStoredPath(bike_id);
 
-  photoHelper.optimizeAndStoreCopies(bike_id, localPath, storedPath, function() {
-    bikeHelper.createPhoto(fields, fullStoredPath);
-    // we can only send this callback with the new photo when storing all the photos succeeds
-    callback({
-      message: 'Created filename, uploaded versions of photo and created photo record',
-      id: bike_id,
-      photoPath: config.s3Url + photoHelper.replacePathWildcard(fullStoredPath, 'b'),
+  photoHelper.optimizeAndStoreCopies(localPath, storedPath, function() {
+    photoHelper.getPhotoProperties(localPath, function(img) {
+      let propertiesToStore = {
+        width: img.width,
+        height: img.height,
+        filesize: img.filesize,
+        number_pixels: img['number pixels'],
+      };
+      console.log(propertiesToStore.toJSON);
+      bikeHelper.createPhoto(fields, fullStoredPath, JSON.stringify(propertiesToStore));
+      // we can only send this callback with the new photo when storing all the photos succeeds
+      callback({
+        message: 'Created filename, uploaded versions of photo and created photo record',
+        id: bike_id,
+        photoPath: config.s3Url + photoHelper.replacePathWildcard(fullStoredPath, 'm'),
+      });
     });
+
   });
 
 };

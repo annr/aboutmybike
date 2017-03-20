@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
         if (data[i].description && data[i].description.length > (descriptionCropLength - 3)) {
           data[i].description = `${data[i].description.substring(0, 100)}...`;
         }
-        data[i].photo_url = data[i].main_photo_path.replace('{*}', 'b');
+        data[i].photo_url = data[i].main_photo_path.replace('{*}', 'm');
       }
       res.render('bikes', {
         page_title: 'Bikes',
