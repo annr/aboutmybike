@@ -14,6 +14,88 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+SET search_path = public, pg_catalog;
+
+ALTER TABLE ONLY public.user_photo DROP CONSTRAINT user_photo_user_id_fkey;
+ALTER TABLE ONLY public.bike DROP CONSTRAINT user_id;
+ALTER TABLE ONLY public.theft DROP CONSTRAINT theft_owner_id_fkey;
+ALTER TABLE ONLY public.theft DROP CONSTRAINT theft_bike_id_fkey;
+ALTER TABLE ONLY public.story DROP CONSTRAINT story_user_id_fkey;
+ALTER TABLE ONLY public.photo DROP CONSTRAINT photo_user_id_fkey;
+ALTER TABLE ONLY public.photo DROP CONSTRAINT photo_bike_id_fkey;
+ALTER TABLE ONLY public.model DROP CONSTRAINT model_manufacturer_id_fkey;
+ALTER TABLE ONLY public.bike DROP CONSTRAINT model_id;
+ALTER TABLE ONLY public.bike DROP CONSTRAINT manufacturer_id;
+ALTER TABLE ONLY public.manufacturer DROP CONSTRAINT country_code;
+ALTER TABLE ONLY public.bike_info DROP CONSTRAINT bike_info_bike_id_fkey;
+ALTER TABLE ONLY public.amb_user DROP CONSTRAINT user_pkey;
+ALTER TABLE ONLY public.user_photo DROP CONSTRAINT user_photo_pkey;
+ALTER TABLE ONLY public.theft DROP CONSTRAINT theft_pkey;
+ALTER TABLE ONLY public.story DROP CONSTRAINT story_pkey;
+ALTER TABLE ONLY public.session DROP CONSTRAINT session_pkey;
+ALTER TABLE ONLY public.reason DROP CONSTRAINT reason_pkey;
+ALTER TABLE ONLY public.photo DROP CONSTRAINT photo_pkey;
+ALTER TABLE ONLY public.model DROP CONSTRAINT model_pkey;
+ALTER TABLE ONLY public.manufacturer DROP CONSTRAINT manufacturer_pkey;
+ALTER TABLE ONLY public.manufacturer DROP CONSTRAINT manufacturer_name_key;
+ALTER TABLE ONLY public.country DROP CONSTRAINT country_pkey;
+ALTER TABLE ONLY public.city DROP CONSTRAINT city_pkey;
+ALTER TABLE ONLY public.bike DROP CONSTRAINT bike_pkey;
+ALTER TABLE ONLY public.bike_info DROP CONSTRAINT bike_info_pkey;
+ALTER TABLE public.user_photo ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.theft ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.story ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.reason ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.photo ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.model ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.manufacturer ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.city ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.bike ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.amb_user ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.user_photo_id_seq;
+DROP TABLE public.user_photo;
+DROP SEQUENCE public.user_id_seq;
+DROP TABLE public.type;
+DROP SEQUENCE public.theft_id_seq;
+DROP TABLE public.theft;
+DROP SEQUENCE public.story_id_seq;
+DROP TABLE public.story;
+DROP TABLE public.session;
+DROP SEQUENCE public.reason_id_seq;
+DROP TABLE public.reason;
+DROP SEQUENCE public.photo_id_seq;
+DROP TABLE public.photo;
+DROP SEQUENCE public.model_id_seq;
+DROP TABLE public.model;
+DROP SEQUENCE public.manufacturer_id_seq;
+DROP TABLE public.manufacturer;
+DROP TABLE public.country;
+DROP SEQUENCE public.city_id_seq;
+DROP TABLE public.city;
+DROP TABLE public.bike_info;
+DROP SEQUENCE public.bike_id_seq;
+DROP TABLE public.bike;
+DROP TABLE public.amb_user;
+DROP TYPE public.market_size_type;
+DROP TYPE public.era;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --

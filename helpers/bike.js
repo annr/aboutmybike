@@ -300,7 +300,6 @@ function getTitleWithBrandAndModel(bike) {
   return title.trim();
 }
 
-
 module.exports = {
   getAllBikes,
   getBike,

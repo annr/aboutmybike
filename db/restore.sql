@@ -585,17 +585,9 @@ ALTER TABLE ONLY user_photo ALTER COLUMN id SET DEFAULT nextval('user_photo_id_s
 --
 
 COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_name, last_name, facebook_link, gender, locale, email, website) FROM stdin;
-15	2017-03-15 11:15:27.36213-07	2017-03-15 11:38:42.357034-07	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-16	2017-03-15 11:57:31.499197-07	\N	\N	\N	\N	Ann	Robson	\N	female	\N	ann@bhnc.com	\N
-1	2016-09-25 20:27:23.210233-07	\N	arobson	\N	Ann Robson	Ann	Robson	https://www.facebook.com/aerobson	female	en-us	\N	\N
-2	2017-02-26 11:34:44.399102-08	\N	binky	\N	\N	\N	\N	\N	\N	\N	\N	\N
-11	2017-03-01 16:09:16.837795-08	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-12	2017-03-07 08:47:49.203765-08	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-13	2017-03-07 09:26:02.255999-08	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-14	2017-03-15 08:00:17.743535-07	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-17	2017-03-15 12:18:56.433817-07	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-18	2017-03-15 12:23:25.447534-07	\N	\N	\N	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-19	2017-03-15 12:26:11.547005-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
+1	2017-03-18 10:55:48.161761-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
+3	2017-03-20 10:21:18.795074-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
+2	2017-03-20 07:49:33.308469-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
 \.
 
 
@@ -604,20 +596,7 @@ COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_na
 --
 
 COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, description, notes, nickname, manufacturer_id, model_id, serial_number, main_photo_path, type_ids, reason_ids, status) FROM stdin;
-26	Peugeot	Custom	2017-03-07 12:42:09.981801-08	2017-03-07 12:42:09.981801-08	13	I WILL NOT LET ANYONE WALK.	\N	Bangladeshi	\N	\N	123	/dev/2017-03/26-148947480_{*}.jpg	{1}	{8}	1
-10	\N	\N	2017-03-02 11:39:15.004324-08	2017-03-02 11:39:15.004324-08	11	Testing for adding <script>alert('fuck you')</script>.	\N	Banana Boat	\N	\N	\N	/dev/2017-001/aboutmybike-10-1488441600000.png	{16}	{8,9}	1
-11	\N	\N	2017-03-06 19:37:35.395439-08	2017-03-06 19:37:35.395439-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-12	\N	\N	2017-03-06 19:42:17.941725-08	2017-03-06 19:42:17.941725-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-13	\N	\N	2017-03-06 19:47:48.238888-08	2017-03-06 19:47:48.238888-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-14	\N	\N	2017-03-06 19:55:14.91326-08	2017-03-06 19:55:14.91326-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-15	\N	\N	2017-03-06 19:55:42.71873-08	2017-03-06 19:55:42.71873-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-16	\N	\N	2017-03-06 20:07:08.403385-08	2017-03-06 20:07:08.403385-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-17	\N	\N	2017-03-06 20:16:05.940747-08	2017-03-06 20:16:05.940747-08	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-18	\N	\N	2017-03-07 08:57:33.090481-08	2017-03-07 08:57:33.090481-08	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	1
-19	\N	\N	2017-03-07 09:04:57.6563-08	2017-03-07 09:04:57.6563-08	12	I WILL NOT LET ANYONE WALK THROUGH MY MIND WITH THEIR DIRTY FEET.	\N	Stickers	\N	\N	\N	/dev/2017-001/aboutmybike-19-1488873600000.png	{2}	{1,9}	1
-7	\N	\N	2017-03-01 19:11:22.644761-08	2017-03-01 19:11:22.644761-08	2	This is not a bike it's a rocket.\r\n\r\nNo bike.	\N	Rocket Fast	6168	\N	1234	/dev/2017-001/aboutmybike-1488424304867.png	{16}	{1,5,6,9}	1
-28	\N	\N	2017-03-15 08:51:00.65581-07	2017-03-15 08:51:00.65581-07	14	NOW I COULD LET THESE DREAMKILLERS KILL MY SELF ESTEEM, OR USE MY ARROGANCE AS THE STEAM TO POWER MY DREAMS.	\N	Kanye	\N	\N	\N	/dev/2017-03/28-148956120_{*}.jpg	{16}	{1,4,5,6,9}	1
-27	\N	Custom	2017-03-15 08:49:04.344998-07	2017-03-15 08:49:04.344998-07	14	ALL BULLSHIT ASIDE, NOW IT IS TIME TO BE HONEST. I FEAR NO MAN, FOR DEATH IS ALL THAT IS PROMISED.	\N	50 Cent	6055	\N	1234	/dev/2017-03/27-148956120_{*}.jpg	{13}	{8,9}	1
+1	\N	\N	2017-03-18 10:57:19.372048-07	2017-03-18 10:57:19.372048-07	1	SOME PEOPLE SAY YOU ARE GOING THE WRONG WAY, WHEN IT IS SIMPLY A WAY OF YOUR OWN.	\N	Angelina	\N	\N	123 and 234	/dev/2017-03/1-148982040_{*}.jpg	\N	{1,4,5,8,9}	1
 \.
 
 
@@ -625,7 +604,7 @@ COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, 
 -- Name: bike_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('bike_id_seq', 28, true);
+SELECT pg_catalog.setval('bike_id_seq', 1, true);
 
 
 --
@@ -633,13 +612,7 @@ SELECT pg_catalog.setval('bike_id_seq', 28, true);
 --
 
 COPY bike_info (bike_id, year, era, speeds, handlebars, brakes, color, details) FROM stdin;
-7	\N	Mid-Century	\N	\N	\N	\N	\N
-10	\N	\N	\N	\N	\N	\N	\N
-18	\N	\N	\N	\N	\N	\N	\N
-19	\N	\N	\N	\N	\N	\N	\N
-26	\N	1970s	\N	\N	\N	#f8b82b	\N
-28	\N	\N	\N	\N	\N	\N	\N
-27	\N	2000s	\N	\N	\N	#000000	\N
+1	\N	1990s	\N	\N	\N	#000000	\N
 \.
 
 
@@ -2418,126 +2391,16 @@ SELECT pg_catalog.setval('model_id_seq', 1, false);
 --
 
 COPY photo (id, original_file, file_path, bike_id, user_id, metadata, created_at) FROM stdin;
-77	Screen Shot 2017-02-16 at 11.51.34 AM.png	/dev/2017-001/aboutmybike-1488424281727.png	7	11	\N	2017-03-01 19:11:22.651758-08
-88	Screen Shot 2017-02-16 at 11.44.41 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:49:13.960622-08
-90	Screen Shot 2017-02-16 at 11.51.17 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:52:36.431369-08
-92	Screen Shot 2017-02-16 at 11.51.34 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:54:28.181924-08
-94	Screen Shot 2017-02-16 at 11.47.23 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:56:24.054391-08
-96	Screen Shot 2017-02-16 at 11.53.00 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 12:00:35.827547-08
-98	Screen Shot 2017-02-16 at 11.53.13 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 13:12:26.269677-08
-100	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-19-1488873600000.png	19	12	\N	2017-03-07 09:04:58.586519-08
-112	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 12:56:03.872039-08
-114	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 12:57:43.650038-08
-115	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 12:57:43.665162-08
-117	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 14:35:45.876523-08
-120	Screen Shot 2017-02-16 at 11.44.30 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:43:55.09947-08
-121	Screen Shot 2017-02-16 at 11.44.30 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:43:55.104768-08
-124	Screen Shot 2017-02-16 at 11.47.23 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:52:00.14303-08
-125	Screen Shot 2017-02-16 at 11.47.23 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:52:00.148207-08
-128	Screen Shot 2017-03-03 at 6.56.07 PM.png	/dev/2017-001/aboutmybike-26-148896000.png	26	13	\N	2017-03-08 09:11:20.631884-08
-130	Screen Shot 2017-02-16 at 11.40.48 AM.png	/dev/2017-001/aboutmybike-26-148896000.png	26	13	\N	2017-03-08 09:22:00.794448-08
-131	Screen Shot 2017-02-16 at 11.40.48 AM.png	/dev/2017-001/aboutmybike-26-148896000.png	26	13	\N	2017-03-08 09:22:00.799442-08
-134	Screen Shot 2017-03-08 at 9.08.47 AM.png	/dev/2017-03/26-148896000_b.png	26	13	\N	2017-03-08 18:18:15.440176-08
-136	Screen Shot 2017-03-08 at 9.08.23 AM.png	/dev/2017-03/26-148896000_b.png	26	13	\N	2017-03-08 18:33:31.12816-08
-138	Screen Shot 2017-03-03 at 6.56.07 PM.png	/dev/2017-03/26-148904640_b.png	26	13	\N	2017-03-09 12:19:39.478412-08
-140	Screen Shot 2017-03-08 at 9.08.35 AM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 13:02:34.858201-08
-142	Screen Shot 2017-03-03 at 6.56.07 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 16:14:23.50021-08
-144	Screen Shot 2017-03-09 at 6.01.14 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:10:21.45202-08
-146	Screen Shot 2017-03-09 at 6.02.56 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:12:08.067401-08
-148	Screen Shot 2017-03-09 at 6.03.37 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:29:44.188343-08
-150	Screen Shot 2017-03-08 at 9.08.35 AM.png	/dev/2017-03/26-148913280_b.jpg	26	13	\N	2017-03-10 10:13:34.52707-08
-153	Screen Shot 2017-03-09 at 6.05.23 PM.png	/dev/2017-03/26-148913280_b.jpg	26	13	\N	2017-03-10 10:35:40.103889-08
-155		/dev/2017-03/26-148921920_b.jpg	26	13	\N	2017-03-11 23:48:45.984011-08
-157		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:15:52.687233-07
-159		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:49:22.996411-07
-160		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:49:30.525193-07
-161		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:49:40.864592-07
-163		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 11:36:42.32733-07
-165		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 11:45:30.662975-07
-167		/dev/2017-03/undefined-148930560_b.jpg	26	13	\N	2017-03-12 23:05:59.328303-07
-169		/dev/2017-03/undefined-148938840_b.jpg	26	13	\N	2017-03-13 08:29:42.328975-07
-171		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 08:48:52.008056-07
-173		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 08:52:50.299617-07
-175		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:16:30.784841-07
-177		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:28:43.699169-07
-179		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:41:48.988949-07
-181		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:43:17.272546-07
-183		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 11:21:04.755361-07
-185		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 12:34:03.452297-07
-187		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 13:00:19.203512-07
-190		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 23:16:48.985878-07
-192		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:06:13.904047-07
-194		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:08:35.035644-07
-197		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:15:04.447303-07
-199		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:45:53.014612-07
-201		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:56:17.58597-07
-203		/dev/2017-03/27-148956120_b.jpg	27	14	\N	2017-03-15 08:49:06.280147-07
-205		/dev/2017-03/27-148956120_b.jpg	27	14	\N	2017-03-15 09:18:29.22983-07
-207		/dev/2017-03/28-148956120_b.jpg	28	14	\N	2017-03-15 09:31:08.061674-07
-209		/dev/2017-03/27-148956120_b.jpg	27	14	\N	2017-03-15 09:40:25.857933-07
-210		/dev/2017-03/27-148956120_b.jpg	27	14	\N	2017-03-15 09:40:58.407738-07
-212		/dev/2017-03/28-148956120_b.jpg	28	14	\N	2017-03-15 10:05:29.383072-07
-78	Screen Shot 2017-02-16 at 11.52.46 AM.png	/dev/2017-001/aboutmybike-1488424304867.png	7	11	\N	2017-03-01 19:11:46.419787-08
-87	Screen Shot 2017-02-16 at 11.45.28 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:39:15.821435-08
-89	Screen Shot 2017-02-16 at 11.44.41 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:49:13.96527-08
-91	Screen Shot 2017-02-16 at 11.51.17 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:52:36.437043-08
-93	Screen Shot 2017-02-16 at 11.51.34 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:54:28.186441-08
-95	Screen Shot 2017-02-16 at 11.47.23 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 11:56:24.059153-08
-97	Screen Shot 2017-02-16 at 11.53.00 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 12:00:35.831741-08
-99	Screen Shot 2017-02-16 at 11.53.13 AM.png	/dev/2017-001/aboutmybike-10-1488441600000.png	10	11	\N	2017-03-02 13:12:26.275175-08
-101	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-19-1488873600000.png	19	12	\N	2017-03-07 09:23:51.081981-08
-102	Screen Shot 2017-02-09 at 1.32.10 PM.png	/dev/2017-001/aboutmybike-19-1488873600000.png	19	12	\N	2017-03-07 09:23:51.088939-08
-111	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-001/aboutmybike-undefined-1488873600000.png	26	13	\N	2017-03-07 12:42:11.292457-08
-113	Screen Shot 2017-02-09 at 1.35.17 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 12:56:03.877678-08
-116	Screen Shot 2017-02-09 at 1.35.00 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 14:34:27.071749-08
-118	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 14:36:48.944291-08
-119	Screen Shot 2017-02-09 at 1.35.29 PM.png	/dev/2017-001/aboutmybike-26-1488873600000.png	26	13	\N	2017-03-07 14:36:48.950065-08
-122	Screen Shot 2017-02-16 at 11.44.41 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:45:30.303327-08
-123	Screen Shot 2017-02-16 at 11.44.41 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:45:30.31056-08
-126	Screen Shot 2017-02-16 at 11.43.44 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:53:53.038938-08
-127	Screen Shot 2017-02-16 at 11.43.44 AM.png	/dev/2017-001/aboutmybike-26-148887360.png	26	13	\N	2017-03-07 14:53:53.044414-08
-129	Screen Shot 2017-03-03 at 6.56.07 PM.png	/dev/2017-001/aboutmybike-26-148896000.png	26	13	\N	2017-03-08 09:11:20.63972-08
-132	Screen Shot 2017-02-16 at 11.52.30 AM.png	/dev/2017-03/undefined-148896000_b.png	26	13	\N	2017-03-08 18:08:03.416949-08
-133	Screen Shot 2017-02-16 at 11.52.30 AM.png	/dev/2017-03/undefined-148896000_b.png	26	13	\N	2017-03-08 18:08:03.423297-08
-135	Screen Shot 2017-03-08 at 9.08.47 AM.png	/dev/2017-03/26-148896000_b.png	26	13	\N	2017-03-08 18:20:57.448539-08
-137	Screen Shot 2017-03-08 at 9.08.35 AM.png	/dev/2017-03/26-148904640_b.png	26	13	\N	2017-03-09 12:11:08.597765-08
-139	Screen Shot 2017-03-08 at 9.08.47 AM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 12:51:37.142861-08
-141	Screen Shot 2017-03-08 at 9.08.47 AM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 16:07:36.509406-08
-143	Screen Shot 2017-03-08 at 9.08.23 AM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 16:18:33.238854-08
-145	Screen Shot 2017-03-09 at 6.01.14 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:11:29.43981-08
-147	Screen Shot 2017-03-09 at 6.03.10 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:17:33.129141-08
-149	Screen Shot 2017-03-09 at 6.04.44 PM.png	/dev/2017-03/26-148904640_b.jpg	26	13	\N	2017-03-09 18:49:44.867922-08
-151	Screen Shot 2017-03-08 at 9.08.23 AM.png	/dev/2017-03/26-148913280_b.jpg	26	13	\N	2017-03-10 10:28:58.836075-08
-152	Screen Shot 2017-03-08 at 9.08.23 AM.png	/dev/2017-03/26-148913280_b.jpg	26	13	\N	2017-03-10 10:29:24.56718-08
-154	Screen Shot 2017-03-09 at 6.06.02 PM.png	/dev/2017-03/26-148913280_b.jpg	26	13	\N	2017-03-10 10:46:57.421769-08
-156		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:10:30.88426-07
-158		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 10:42:41.328729-07
-162		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 11:28:20.199969-07
-164		/dev/2017-03/26-148930560_b.jpg	26	13	\N	2017-03-12 11:39:14.061993-07
-166		/dev/2017-03/undefined-148930560_b.jpg	26	13	\N	2017-03-12 23:01:58.564979-07
-168		/dev/2017-03/undefined-148930560_b.jpg	26	13	\N	2017-03-12 23:20:39.872879-07
-170		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 08:45:50.851329-07
-172		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 08:49:08.384752-07
-174		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:15:56.223695-07
-176		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:25:15.077666-07
-178		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:31:47.014521-07
-180		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:42:37.263627-07
-182		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 09:46:19.899573-07
-184		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 12:22:15.701797-07
-186		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 12:46:54.547468-07
-188		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 13:02:39.711102-07
-189		/dev/2017-03/26-148938840_b.jpg	26	13	\N	2017-03-13 13:02:59.554281-07
-191		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 12:27:14.251376-07
-193		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:07:03.370274-07
-195		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:12:22.395114-07
-196		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:12:43.846349-07
-198		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:37:53.194547-07
-200		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 14:49:19.261343-07
-202		/dev/2017-03/26-148947480_b.jpg	26	13	\N	2017-03-14 15:01:24.566999-07
-204		/dev/2017-03/28-148956120_b.jpg	28	14	\N	2017-03-15 08:51:02.420239-07
-206		/dev/2017-03/28-148956120_b.jpg	28	14	\N	2017-03-15 09:26:01.492896-07
-208		/dev/2017-03/27-148956120_b.jpg	27	14	\N	2017-03-15 09:39:11.105807-07
-211		/dev/2017-03/28-148956120_b.jpg	28	14	\N	2017-03-15 09:58:11.35113-07
+246		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 12:57:19.724755-07
+247		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:03:13.924765-07
+248		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:22.755495-07
+249	ellen-rutt-detroit-art-bike.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:31.919351-07
+250	fuji_cambridge_iii.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:31:47.779407-07
+251	287769357_d9bf7ba0da.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:37:49.295141-07
+252	287769684_d8ae73e674.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:53:15.467752-07
+253	00I0I_dklyr2uOCiH_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:54:14.813719-07
+254	00l0l_3qMEYlr9NAr_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 15:35:16.020839-07
+255	Screen Shot 2017-03-08 at 6.51.24 PM.png	/dev/2017-03/1-148982040_{*}.jpg	1	1	{"width": 1251, "height": 939, "filesize": "2.674MB", "number_pixels": "1.175M"}	2017-03-18 15:51:29.259189-07
 \.
 
 
@@ -2545,7 +2408,7 @@ COPY photo (id, original_file, file_path, bike_id, user_id, metadata, created_at
 -- Name: photo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('photo_id_seq', 212, true);
+SELECT pg_catalog.setval('photo_id_seq', 255, true);
 
 
 --
@@ -2581,7 +2444,7 @@ wmaLtyqnZt5hNbEy-TJG_PnJNiiGObgs	{"cookie":{"originalMaxAge":2592000000,"expires
 u79eVtlGh7mONkCtfjJZ2hzb3ALG0RjQ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.759Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
 0XEuurkq985EnMgu2fOuvbFw_WApiN5N	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T02:59:09.650Z","httpOnly":true,"path":"/"}}	2017-03-29 19:59:10
 _0IWn5h0SVBuVz4EDrKiqGjLmOJR79Yc	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T22:16:21.577Z","httpOnly":true,"path":"/"},"passport":{"user":5}}	2017-03-30 15:17:10
-j-J8Rp_Xs9SFkBiExaoGX9oIrZbfAzON	{"cookie":{"originalMaxAge":2591999999,"expires":"2017-04-14T19:18:39.772Z","httpOnly":true,"path":"/"},"passport":{}}	2017-04-14 13:24:08
+j-J8Rp_Xs9SFkBiExaoGX9oIrZbfAzON	{"cookie":{"originalMaxAge":2591999999,"expires":"2017-04-19T17:27:17.941Z","httpOnly":true,"path":"/"},"passport":{}}	2017-04-19 10:27:19
 V1_myJsHMrGRunIliKv8A94ntbz67RrJ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.757Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
 gskHgbu2wpw2qbBKgr776Czunt53V-_5	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T02:59:09.621Z","httpOnly":true,"path":"/"}}	2017-03-29 19:59:10
 2cywolBc5FvvCd_cBu5-6ZCoIbEbMijK	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.756Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
@@ -2659,7 +2522,7 @@ COPY type (id, label, notes, related_type_ids) FROM stdin;
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('user_id_seq', 19, true);
+SELECT pg_catalog.setval('user_id_seq', 3, true);
 
 
 --
@@ -2667,11 +2530,10 @@ SELECT pg_catalog.setval('user_id_seq', 19, true);
 --
 
 COPY user_photo (id, user_id, web_url, source, created_at) FROM stdin;
-5	11	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-01 16:09:16.846432-08
-6	12	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-07 08:47:49.219036-08
-7	13	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-07 09:26:02.270749-08
-8	14	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-15 08:00:17.754384-07
-9	15	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-15 11:15:27.368981-07
+22	\N	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-16 22:12:43.68154-07
+25	1	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-18 10:55:48.168753-07
+26	2	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-20 07:49:33.321156-07
+27	3	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-20 10:21:18.799699-07
 \.
 
 
@@ -2679,7 +2541,7 @@ COPY user_photo (id, user_id, web_url, source, created_at) FROM stdin;
 -- Name: user_photo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('user_photo_id_seq', 9, true);
+SELECT pg_catalog.setval('user_photo_id_seq', 27, true);
 
 
 --
