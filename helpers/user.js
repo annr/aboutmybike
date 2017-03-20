@@ -35,7 +35,7 @@ function getUserByUsername(username, callback) {
 
 function getFacebookUser(facebookID, callback) {
 //  db.one('select * from bike where id = $1', bikeID)
-  db.amb_user.select(facebookID)
+  db.amb_user.fb_select(facebookID)
     .then(function (data) {
       callback(null, data);
     })
