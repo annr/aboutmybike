@@ -86,8 +86,8 @@ function updateIntro(fields, callback) {
     });
 }
 
-function updateMainPhoto(main_photo_path, bike_id) {
-  db.bike.update_main_photo([main_photo_path, bike_id])
+function updateMainPhoto(main_photo_id, bike_id) {
+  db.bike.update_main_photo([main_photo_id, bike_id])
     .catch(function (err) {
       throw new Error(`Failed to update main bike photo: (${err})`);
     });
@@ -145,15 +145,30 @@ function updateBasicsInfo(fields, callback) {
 /* There's hardly any reason to have a photo table at this point.
    The values are never queried and not all of the versions are in the table.
  */
-function createPhoto(fields, photoPath, metadata) {
-  db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath, metadata])
-    .then(function (bike_id) {
-      // I don't love this:
-      updateMainPhoto(photoPath, bike_id);
+function createOrUpdatePhoto(fields, photoPath, metadata) {
+  db.photo.bike_id_select(parseInt(fields.bike_id))
+    .then(function (photo) {
+      db.photo.update(photo.id, photoPath, metadata])
+        .then(function (photo_id) {
+          // sets the id of the main photo added above on the bike record.
+          updateMainPhoto(photo_id, parseInt(fields.bike_id));
+        })
+        .catch(function (err) {
+          throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
+        });
     })
     .catch(function (err) {
-      throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
+      // there isn't a photo record for this bike. add one.
+      db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath, metadata])
+        .then(function (photo_id) {
+          // sets the id of the main photo added above on the bike record.
+          updateMainPhoto(photo_id, parseInt(fields.bike_id));
+        })
+        .catch(function (err) {
+          throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
+        });
     });
+
 }
 
 function transformForDisplay(data) {
@@ -307,7 +322,7 @@ module.exports = {
   updateIntro,
   updateBasics,
   updateBasicsInfo,
-  createPhoto,
+  createOrUpdatePhoto,
   getTitle,
   transformForDisplay,
   getFormReasons,

@@ -75,11 +75,9 @@ let getFullStoredPath = function(bike_id) {
 
 let optimizeAndStoreCopies = function(localPath, storedPath, callback) {
   config.mainImageSizes.forEach(function(copy) {
-    console.log('in ' + copy.size_key);
     optimizeAndStoreCopy(localPath, storedPath, copy.size_key, copy.width, copy.height);
   });
   // will this work? -- the function that is called in the loop is asncy.
-  console.log('outside of loop -- were all called???');
   callback();
 };
 

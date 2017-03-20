@@ -4,10 +4,11 @@
 */
    SELECT b.id, 
           b.description, 
-          b.main_photo_path, 
+          photo.file_path as main_photo_path, 
           type.label AS type, 
           bike_info.era AS era
      FROM bike b 
 LEFT JOIN bike_info ON b.id = bike_info.bike_id
+LEFT JOIN photo ON b.main_photo_id = photo.id
 LEFT JOIN type on b.type_ids[1]=type.id
     WHERE b.description IS NOT null AND b.status != -1

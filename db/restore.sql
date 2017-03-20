@@ -105,10 +105,10 @@ CREATE TABLE bike (
     manufacturer_id integer,
     model_id integer,
     serial_number text,
-    main_photo_path text,
     type_ids integer[],
     reason_ids integer[],
-    status integer
+    status integer,
+    main_photo_id integer
 );
 
 
@@ -294,7 +294,8 @@ CREATE TABLE photo (
     bike_id integer,
     user_id integer,
     metadata jsonb,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone
 );
 
 
@@ -585,9 +586,11 @@ ALTER TABLE ONLY user_photo ALTER COLUMN id SET DEFAULT nextval('user_photo_id_s
 --
 
 COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_name, last_name, facebook_link, gender, locale, email, website) FROM stdin;
-1	2017-03-18 10:55:48.161761-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-3	2017-03-20 10:21:18.795074-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-2	2017-03-20 07:49:33.308469-07	\N	\N	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
+1	2017-03-18 10:55:48.161761-07	\N	ann	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
+4	2017-03-20 10:54:23.043457-07	\N	aero	\N	\N	Ann	Robson	\N	female	\N	anno.robson@gmail.com	\N
+5	2017-03-20 10:55:09.03946-07	\N	lpc	\N	\N	Leslie	Chong	\N	female	\N	leslie.chong@gmail.com	\N
+2	2017-03-20 10:51:32.493725-07	\N	jerome	\N	\N	Jerome	Tavé	\N	male	\N	jerometave@gmail.com	\N
+3	2017-03-20 10:52:33.010915-07	\N	wildechild	\N	\N	Josie	Robson	\N	female	\N	jwrobson@gmail.com	\N
 \.
 
 
@@ -595,8 +598,8 @@ COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_na
 -- Data for Name: bike; Type: TABLE DATA; Schema: public; Owner: arobson
 --
 
-COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, description, notes, nickname, manufacturer_id, model_id, serial_number, main_photo_path, type_ids, reason_ids, status) FROM stdin;
-1	\N	\N	2017-03-18 10:57:19.372048-07	2017-03-18 10:57:19.372048-07	1	SOME PEOPLE SAY YOU ARE GOING THE WRONG WAY, WHEN IT IS SIMPLY A WAY OF YOUR OWN.	\N	Angelina	\N	\N	123 and 234	/dev/2017-03/1-148982040_{*}.jpg	\N	{1,4,5,8,9}	1
+COPY bike (id, brand_unlinked, model_unlinked, created_at, updated_at, user_id, description, notes, nickname, manufacturer_id, model_id, serial_number, type_ids, reason_ids, status, main_photo_id) FROM stdin;
+1	\N	\N	2017-03-18 10:57:19.372048-07	2017-03-18 10:57:19.372048-07	1	SOME PEOPLE SAY YOU ARE GOING THE WRONG WAY, WHEN IT IS SIMPLY A WAY OF YOUR OWN.	\N	Angelina	\N	\N	123 and 234	\N	{1,4,5,8,9}	1	256
 \.
 
 
@@ -2390,17 +2393,18 @@ SELECT pg_catalog.setval('model_id_seq', 1, false);
 -- Data for Name: photo; Type: TABLE DATA; Schema: public; Owner: arobson
 --
 
-COPY photo (id, original_file, file_path, bike_id, user_id, metadata, created_at) FROM stdin;
-246		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 12:57:19.724755-07
-247		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:03:13.924765-07
-248		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:22.755495-07
-249	ellen-rutt-detroit-art-bike.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:31.919351-07
-250	fuji_cambridge_iii.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:31:47.779407-07
-251	287769357_d9bf7ba0da.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:37:49.295141-07
-252	287769684_d8ae73e674.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:53:15.467752-07
-253	00I0I_dklyr2uOCiH_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:54:14.813719-07
-254	00l0l_3qMEYlr9NAr_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 15:35:16.020839-07
-255	Screen Shot 2017-03-08 at 6.51.24 PM.png	/dev/2017-03/1-148982040_{*}.jpg	1	1	{"width": 1251, "height": 939, "filesize": "2.674MB", "number_pixels": "1.175M"}	2017-03-18 15:51:29.259189-07
+COPY photo (id, original_file, file_path, bike_id, user_id, metadata, created_at, updated_at) FROM stdin;
+246		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 12:57:19.724755-07	\N
+247		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:03:13.924765-07	\N
+248		/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:22.755495-07	\N
+249	ellen-rutt-detroit-art-bike.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 13:14:31.919351-07	\N
+250	fuji_cambridge_iii.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:31:47.779407-07	\N
+251	287769357_d9bf7ba0da.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:37:49.295141-07	\N
+252	287769684_d8ae73e674.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:53:15.467752-07	\N
+253	00I0I_dklyr2uOCiH_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 14:54:14.813719-07	\N
+254	00l0l_3qMEYlr9NAr_1200x900.jpg	/dev/2017-03/1-148982040_{*}.jpg	1	1	\N	2017-03-18 15:35:16.020839-07	\N
+255	Screen Shot 2017-03-08 at 6.51.24 PM.png	/dev/2017-03/1-148982040_{*}.jpg	1	1	{"width": 1251, "height": 939, "filesize": "2.674MB", "number_pixels": "1.175M"}	2017-03-18 15:51:29.259189-07	\N
+256	Screen Shot 2017-02-09 at 1.35.40 PM.png	/dev/2017-03/1-148999320_{*}.jpg	1	1	{"width": 864, "height": 648, "filesize": "1.123MB", "number_pixels": "560K"}	2017-03-20 11:56:38.947078-07	\N
 \.
 
 
@@ -2408,7 +2412,7 @@ COPY photo (id, original_file, file_path, bike_id, user_id, metadata, created_at
 -- Name: photo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('photo_id_seq', 255, true);
+SELECT pg_catalog.setval('photo_id_seq', 256, true);
 
 
 --
@@ -2444,8 +2448,8 @@ wmaLtyqnZt5hNbEy-TJG_PnJNiiGObgs	{"cookie":{"originalMaxAge":2592000000,"expires
 u79eVtlGh7mONkCtfjJZ2hzb3ALG0RjQ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.759Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
 0XEuurkq985EnMgu2fOuvbFw_WApiN5N	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T02:59:09.650Z","httpOnly":true,"path":"/"}}	2017-03-29 19:59:10
 _0IWn5h0SVBuVz4EDrKiqGjLmOJR79Yc	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T22:16:21.577Z","httpOnly":true,"path":"/"},"passport":{"user":5}}	2017-03-30 15:17:10
-j-J8Rp_Xs9SFkBiExaoGX9oIrZbfAzON	{"cookie":{"originalMaxAge":2591999999,"expires":"2017-04-19T17:27:17.941Z","httpOnly":true,"path":"/"},"passport":{}}	2017-04-19 10:27:19
 V1_myJsHMrGRunIliKv8A94ntbz67RrJ	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.757Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
+j-J8Rp_Xs9SFkBiExaoGX9oIrZbfAzON	{"cookie":{"originalMaxAge":2591999999,"expires":"2017-04-19T18:53:34.266Z","httpOnly":true,"path":"/"},"passport":{"user":1}}	2017-04-19 11:56:44
 gskHgbu2wpw2qbBKgr776Czunt53V-_5	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T02:59:09.621Z","httpOnly":true,"path":"/"}}	2017-03-29 19:59:10
 2cywolBc5FvvCd_cBu5-6ZCoIbEbMijK	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-27T23:27:17.756Z","httpOnly":true,"path":"/"}}	2017-03-27 16:27:18
 LtPxp5MxYqpHijUvkuqMN5xW9bTmBqI-	{"cookie":{"originalMaxAge":2592000000,"expires":"2017-03-30T03:16:01.930Z","httpOnly":true,"path":"/"}}	2017-03-30 15:11:14
@@ -2532,8 +2536,6 @@ SELECT pg_catalog.setval('user_id_seq', 3, true);
 COPY user_photo (id, user_id, web_url, source, created_at) FROM stdin;
 22	\N	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-16 22:12:43.68154-07
 25	1	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-18 10:55:48.168753-07
-26	2	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-20 07:49:33.321156-07
-27	3	https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12295504_10207924651948031_1540028450570342820_n.jpg?oh=141a54fe9311be8d1068fd3df0fa80ff&oe=596EE342	'facebook'	2017-03-20 10:21:18.799699-07
 \.
 
 
@@ -2662,6 +2664,14 @@ ALTER TABLE ONLY amb_user
 
 ALTER TABLE ONLY bike_info
     ADD CONSTRAINT bike_info_bike_id_fkey FOREIGN KEY (bike_id) REFERENCES bike(id) ON DELETE CASCADE;
+
+
+--
+-- Name: bike bike_main_photo_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: arobson
+--
+
+ALTER TABLE ONLY bike
+    ADD CONSTRAINT bike_main_photo_id_fkey FOREIGN KEY (main_photo_id) REFERENCES photo(id) ON DELETE CASCADE;
 
 
 --

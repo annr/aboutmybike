@@ -27,6 +27,7 @@ ALTER TABLE ONLY public.model DROP CONSTRAINT model_manufacturer_id_fkey;
 ALTER TABLE ONLY public.bike DROP CONSTRAINT model_id;
 ALTER TABLE ONLY public.bike DROP CONSTRAINT manufacturer_id;
 ALTER TABLE ONLY public.manufacturer DROP CONSTRAINT country_code;
+ALTER TABLE ONLY public.bike DROP CONSTRAINT bike_main_photo_id_fkey;
 ALTER TABLE ONLY public.bike_info DROP CONSTRAINT bike_info_bike_id_fkey;
 ALTER TABLE ONLY public.amb_user DROP CONSTRAINT user_pkey;
 ALTER TABLE ONLY public.user_photo DROP CONSTRAINT user_photo_pkey;
@@ -187,10 +188,10 @@ CREATE TABLE bike (
     manufacturer_id integer,
     model_id integer,
     serial_number text,
-    main_photo_path text,
     type_ids integer[],
     reason_ids integer[],
-    status integer
+    status integer,
+    main_photo_id integer
 );
 
 
@@ -376,7 +377,8 @@ CREATE TABLE photo (
     bike_id integer,
     user_id integer,
     metadata jsonb,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone
 );
 
 
@@ -780,6 +782,14 @@ ALTER TABLE ONLY amb_user
 
 ALTER TABLE ONLY bike_info
     ADD CONSTRAINT bike_info_bike_id_fkey FOREIGN KEY (bike_id) REFERENCES bike(id) ON DELETE CASCADE;
+
+
+--
+-- Name: bike bike_main_photo_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: arobson
+--
+
+ALTER TABLE ONLY bike
+    ADD CONSTRAINT bike_main_photo_id_fkey FOREIGN KEY (main_photo_id) REFERENCES photo(id) ON DELETE CASCADE;
 
 
 --

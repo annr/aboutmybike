@@ -40,8 +40,7 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
         filesize: img.filesize,
         number_pixels: img['number pixels'],
       };
-      console.log(propertiesToStore.toJSON);
-      bikeHelper.createPhoto(fields, fullStoredPath, JSON.stringify(propertiesToStore));
+      bikeHelper.createOrUpdatePhoto(fields, fullStoredPath, JSON.stringify(propertiesToStore));
       // we can only send this callback with the new photo when storing all the photos succeeds
       callback({
         message: 'Created filename, uploaded versions of photo and created photo record',
