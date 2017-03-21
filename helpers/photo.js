@@ -2,16 +2,20 @@ const im = require('imagemagick');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const s3 = new AWS.S3();
-const MM = getTwoDigitMonth();
 let config = require('../config').appConfig;
 let util = require('util');
+
+let getTwoDigitMonth = getTwoDigitDate(new Date().getMonth() + 1);
+let getTwoDigitDay = getTwoDigitDate(new Date().getDate());
 
 let rootFolder = '/dev';
 if (process.env.RDS_HOSTNAME !== undefined) {
   rootFolder = '/photos';
 }
 
-const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}`;
+const MM = getTwoDigitMonth();
+const DD = getTwoDigitDay();
+const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}-${DD}`;
 
 /* PRIVATE FUNCTIONS */
 function getTemplateFilename(bike_id) {
@@ -21,12 +25,14 @@ function getTemplateFilename(bike_id) {
   return '' + bike_id + '-' + impreciseTs + '_{*}' + extension;
 }
 
-function getTwoDigitMonth() {
-  var paddedMonth = (new Date().getMonth() + 1)+"";
-  if(paddedMonth.length === 1) {
-    paddedMonth = "0" + paddedMonth;
+function getTwoDigitDate(toPad) {
+  return function() {
+    var padded = toPad +"";
+    if(padded.length === 1) {
+      padded = "0" + padded;
+    }
+    return padded;
   }
-  return paddedMonth;
 }
 
 //function replacePathWildcard(path, size_key) {
