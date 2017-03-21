@@ -257,8 +257,15 @@ function getFormEras(era) {
   return formEras;
 }
 
+/* TITLE
+ *
+ * We want to get as much as possible that is available for the title.
+ *
+ *
+/*
 
-/* if available add era, bike type and ' Bike'.
+
+/* If available add era, bike type and ' Bike'.
    otherwise just return ' Bike'.
 
    Ex. return '1980s Road Bike'

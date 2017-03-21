@@ -37,7 +37,7 @@ require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
-console.log('confirming set values... ' process.env.RDS_HOSTNAME || 'NO HOST');
+console.log('confirming set values... ' + (process.env.RDS_HOSTNAME || 'NO HOST'));
 
 const HOST = process.env.RDS_HOSTNAME || 'localhost';
 const PORT = process.env.RDS_PORT || '5432';
