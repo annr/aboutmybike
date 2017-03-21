@@ -7,7 +7,7 @@
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
+--SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -76,11 +76,10 @@ ALTER TABLE ONLY amb_user ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::reg
 --
 
 COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_name, last_name, facebook_link, gender, locale, email, website) FROM stdin;
-1	2017-03-18 10:55:48.161761-07	\N	ann	10210812525663069	\N	Ann	Robson	\N	female	\N	nosbora@gmail.com	\N
-4	2017-03-20 10:54:23.043457-07	\N	aero	\N	\N	Ann	Robson	\N	female	\N	anno.robson@gmail.com	\N
-5	2017-03-20 10:55:09.03946-07	\N	lpc	\N	\N	Leslie	Chong	\N	female	\N	leslie.chong@gmail.com	\N
 2	2017-03-20 10:51:32.493725-07	\N	jerome	\N	\N	Jerome	Tavé	\N	male	\N	jerometave@gmail.com	\N
 3	2017-03-20 10:52:33.010915-07	\N	wildechild	\N	\N	Josie	Robson	\N	female	\N	jwrobson@gmail.com	\N
+4	2017-03-21 09:30:41.478669-07	\N	lpc	\N	\N	Leslie	Chong	\N	female	\N	leslie.chong@gmail.com	\N
+1	2017-03-18 10:55:48.161761-07	2017-03-21 09:12:08.802779-07	ann	\N	\N	Ann	Robson	\N	female	\N	anno.robson@gmail.com	\N
 \.
 
 
@@ -88,7 +87,7 @@ COPY amb_user (id, created_at, last_login, username, facebook_id, name, first_na
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: arobson
 --
 
-SELECT pg_catalog.setval('user_id_seq', 3, true);
+SELECT pg_catalog.setval('user_id_seq', 4, true);
 
 
 --

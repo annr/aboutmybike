@@ -145,13 +145,13 @@ function updateBasicsInfo(fields, callback) {
 /* There's hardly any reason to have a photo table at this point.
    The values are never queried and not all of the versions are in the table.
  */
-function createOrUpdatePhoto(fields, photoPath, metadata) {
-  db.photo.bike_id_select(parseInt(fields.bike_id))
+function createOrUpdatePhoto(user_id, bike_id, original_filename, photoPath, metadata) {
+  db.photo.bike_id_select(bike_id)
     .then(function (photo) {
-      db.photo.update(photo.id, photoPath, metadata])
+      db.photo.update([photo.id, photoPath, metadata])
         .then(function (photo_id) {
           // sets the id of the main photo added above on the bike record.
-          updateMainPhoto(photo_id, parseInt(fields.bike_id));
+          updateMainPhoto(photo_id, bike_id);
         })
         .catch(function (err) {
           throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
@@ -159,10 +159,11 @@ function createOrUpdatePhoto(fields, photoPath, metadata) {
     })
     .catch(function (err) {
       // there isn't a photo record for this bike. add one.
-      db.photo.add([parseInt(fields.user_id), parseInt(fields.bike_id), fields.original_filename, photoPath, metadata])
+      console.log('in add new photo');
+      db.photo.add([user_id, bike_id, original_filename, photoPath, metadata])
         .then(function (photo_id) {
           // sets the id of the main photo added above on the bike record.
-          updateMainPhoto(photo_id, parseInt(fields.bike_id));
+          updateMainPhoto(photo_id, bike_id);
         })
         .catch(function (err) {
           throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);

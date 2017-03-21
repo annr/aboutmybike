@@ -84,6 +84,8 @@ function initPassport () {
             }
           });
         } else {
+          // existing user logged in again.
+          userHelper.setLastLogin(profile.id);
           callback(null, data);
         }
       });

@@ -25,7 +25,11 @@ router.post('/', function (req, res, next) {
             res.json({ error: 'Bicycle not recognized or it is not the primary image in the photo. Please attach a clearer photo of your bike.', status: 200 });
             return;
           }
-          if (!data.id) throw new Error('Promise requires bike id returned as id.');
+          if (!data.id) {
+            throw new Error('Promise requires bike id returned as id.');
+            res.json({ error: 'Could not upload bicycle photo', status: 200 });
+            return;
+          }
           if (!req.user.bike_id) {
             req.user.bike_id = data.id;
           }

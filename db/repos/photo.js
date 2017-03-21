@@ -15,8 +15,8 @@ module.exports = (rep, pgp) => {
     select: id =>
       rep.one(sql.select, id, photo => photo),
 
-    bike_id_select: bike_id => // LATER A BIKE CAN MORE THAN ONE PHOTO!!!! CHANGE THE RETURN
-      rep.one(sql.bike_id_select, photo => photo),
+    bike_id_select: bike_id => // LATER A BIKE CAN HAVE MORE THAN ONE PHOTO!!!! CHANGE THE RETURN
+      rep.one(sql.bike_id_select, bike_id, photo => photo),
 
   };
 };

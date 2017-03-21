@@ -30,6 +30,7 @@ module.exports = {
   amb_user: {
     add: sql('amb_user/add.sql'),
     update_last_login: sql('amb_user/update_last_login.sql'),
+    update_last_fb_login: sql('amb_user/update_last_fb_login.sql'),
     select: sql('amb_user/select.sql'),
     username_select: sql('amb_user/username_select.sql'),
     fb_select: sql('amb_user/fb_select.sql'),
@@ -40,6 +41,9 @@ module.exports = {
   },
   photo: {
     add: sql('photo/add.sql'),
+    update: sql('photo/update.sql'),
+    select: sql('photo/select.sql'),
+    bike_id_select: sql('photo/bike_id_select.sql'),
   },
   user_photo: {
     add: sql('user_photo/add.sql'),

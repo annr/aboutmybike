@@ -28,7 +28,7 @@ let run = function(localPath, fields, callback) {
 
 // using bike_id get filename template and then do the rest of the things.
 let storePhotos = function (bike_id, localPath, fields, callback) {
-
+  
   let storedPath = photoHelper.getStoredPath(bike_id);
   let fullStoredPath = photoHelper.getFullStoredPath(bike_id);
 
@@ -40,7 +40,7 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
         filesize: img.filesize,
         number_pixels: img['number pixels'],
       };
-      bikeHelper.createOrUpdatePhoto(fields, fullStoredPath, JSON.stringify(propertiesToStore));
+      bikeHelper.createOrUpdatePhoto(parseInt(fields.user_id), bike_id, fields.original_filename, fullStoredPath, JSON.stringify(propertiesToStore));
       // we can only send this callback with the new photo when storing all the photos succeeds
       callback({
         message: 'Created filename, uploaded versions of photo and created photo record',

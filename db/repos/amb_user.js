@@ -12,6 +12,9 @@ module.exports = (rep, pgp) => {
     update_last_login: id => // -- last_login
       rep.result(sql.update_last_login, id),
 
+    update_last_fb_login: facebook_id => // -- last_login
+      rep.result(sql.update_last_fb_login, facebook_id),
+
     select: id =>
       rep.one(sql.select, id, amb_user => amb_user),
 

@@ -3,7 +3,9 @@
 <div class="container">
   <div class="row">
     <div class="col-2">
+    {{#if user.picture}}
       <p><img class="profile-photo float-right" src="{{user.picture}}" alt="{{user.username}}'s profile photo" width="50" height="50"></p>
+    {{/if}}
     </div>
     <div class="col-10">
       <dl>

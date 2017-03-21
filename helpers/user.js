@@ -7,7 +7,7 @@ function createUser(values, callback) {
       callback(null, data);
     })
     .catch(function (err) {
-      callback(new Error(`Failed to create bike record: (${err})`));
+      callback(new Error(`Failed to create new user: (${err})`));
     });
 }
 
@@ -54,10 +54,19 @@ function createPhoto(userID, photoPath, callback) {
     });
 }
 
+// we only log in with facebook for now.
+function setLastLogin(id) {
+  db.amb_user.update_last_fb_login(id)
+    .catch(function (err) {
+      throw new Error(`Failed update last_login for user ${id}: (${err})`);
+    });
+}
+
 module.exports = {
   createUser,
   getUser,
   getUserByUsername,
   getFacebookUser,
   createPhoto,
+  setLastLogin,
 }
