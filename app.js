@@ -24,30 +24,6 @@ const profile = require('./routes/profile');
 
 const app = express();
 
-/* TO TEST !!!!! */
-var promise = require('bluebird');
-var options = {
-  // Initialization Options
-  promiseLib: promise
-};
-var testConn;
-
-var pgp = require('pg-promise')(options);
-testConn = 'postgres://arobson:h34rt4nn71@amb-prod-instance.crufdsximznc.us-west-1.rds.amazonaws.com:5432/amb';
-
-//amb-prod-instance.crufdsximznc.us-west-1.rds.amazonaws.com:5432
-//ambdbinstance.crufdsximznc.us-west-1.rds.amazonaws.com:5432 
-
-var db = pgp(testConn);
-
-db.any('select * from amb_user')
-  .then(function (data) {
-    console.log(data);
-  });
-
-/* END TEST */
-
-
 // these are globally added values. can be used in templages like {{app_name}}
 app.locals.app_name = config.name;
 app.locals.s3Url = config.s3Url;
