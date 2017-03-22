@@ -8,6 +8,9 @@ const userHelper = require('../helpers/user.js');
 
 const authenticationMiddleware = require('./middleware');
 
+// this should / could be taken from the environment:
+AWS.config.region = config.awsRegion;
+
 passport.serializeUser(function (user, callback) {
   callback(null, user.id);
 });
@@ -40,19 +43,22 @@ function initPassport () {
     function(accessToken, refreshToken, profile, callback) {
       userHelper.getFacebookUser(profile.id, function (err, data) {
         if (err) {
-          // send SNS alerting there is a new user.
-          // let sns = new AWS.SNS();
-          // let params;
-          // params = {
-          //   Message: JSON.stringify(profile),
-          //   Subject: 'User Signup',
-          //   TopicArn: config.topicArn + config.snsUserSignupTopicName
-          // };
-          // sns.publish(params, function(err, data) {
-          //   if (err) {
-          //     console.err('Error sending User Signup SNS: ' + err);
-          //   }
-          // });
+          //send SNS alerting there is a new user.
+          let sns = new AWS.SNS();
+          let params;
+          params = {
+            Message: JSON.stringify(profile),
+            Subject: 'User Signup',
+            TopicArn: config.topicArn + config.snsUserSignupTopicName
+          };
+          console.log('config server is trying alert about new user with: ');
+          console.log(AWS.config);
+          console.log('topic arn ' + config.topicArn + config.snsUserSignupTopicName);
+          sns.publish(params, function(err, data) {
+            if (err) {
+              console.log('AMB ERROR: Could not publish User Signup SNS: ' + err);
+            }
+          });
 
           let first_name = null;
           let last_name = null;

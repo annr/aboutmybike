@@ -24,6 +24,8 @@ const profile = require('./routes/profile');
 
 const app = express();
 
+AWS.config.region = config.awsRegion;
+
 // these are globally added values. can be used in templages like {{app_name}}
 app.locals.app_name = config.name;
 app.locals.year = new Date().getFullYear();
@@ -173,6 +175,10 @@ app.use(function (err, req, res) {
       Subject: `Express Error: ${err.message.substring(0, 20)}`,
       TopicArn: config.topicArn + config.snsExpressErrorTopicName,
     };
+
+    console.log('config server is trying use to send express error alert:');
+    console.log(AWS.config);
+
     sns.publish(params, function (err) {
       if (err) {
         console.log(`Error sending SNS: ${err}`);
