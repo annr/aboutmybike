@@ -37,8 +37,6 @@ require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
-console.log('confirming set values... ' + (process.env.RDS_HOSTNAME || 'NO HOST'));
-
 const HOST = process.env.RDS_HOSTNAME || 'localhost';
 const PORT = process.env.RDS_PORT || '5432';
 const DB_NAME = process.env.RDS_DB_NAME || 'amb';
@@ -151,7 +149,7 @@ app.use(function (req, res, next) {
   let err = new Error('404 Not Found');
   err.status = 404;
   if (process.env.RDS_HOSTNAME !== undefined) {
-    res.render('404', { layout: 'error-layout' });
+    //res.render('404', { layout: 'error-layout' });
   } else {
     next(err);
   }
