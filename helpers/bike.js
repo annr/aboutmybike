@@ -1,4 +1,5 @@
 let db = require('../db');
+let _ = require('../public/javascripts/lodash');
 
 let types = require('./bike-types').types;
 let reasons = [
@@ -23,8 +24,6 @@ let eras = [
   { label: 'Early 1900s' },
   { label: 'Late 1800s' },
 ];
-
-let _ = require('../public/javascripts/lodash');
 
 function getAllBikes(callback) {
   // for grid only, for now.

@@ -5,16 +5,13 @@ const s3 = new AWS.S3();
 let config = require('../config').appConfig;
 let util = require('util');
 
-let getTwoDigitMonth = getTwoDigitDate(new Date().getMonth() + 1);
-let getTwoDigitDay = getTwoDigitDate(new Date().getDate());
-
 let rootFolder = '/dev';
 if (process.env.RDS_HOSTNAME !== undefined) {
   rootFolder = '/photos';
 }
 
-const MM = getTwoDigitMonth();
-const DD = getTwoDigitDay();
+const MM = getTwoDigitDate(new Date().getMonth() + 1);
+const DD = getTwoDigitDate(new Date().getDate());
 const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}-${DD}`;
 
 /* PRIVATE FUNCTIONS */
@@ -26,13 +23,11 @@ function getTemplateFilename(bike_id) {
 }
 
 function getTwoDigitDate(toPad) {
-  return function() {
-    var padded = toPad +"";
-    if(padded.length === 1) {
-      padded = "0" + padded;
-    }
-    return padded;
+  var padded = toPad +"";
+  if(padded.length === 1) {
+    padded = "0" + padded;
   }
+  return padded;
 }
 
 //function replacePathWildcard(path, size_key) {
