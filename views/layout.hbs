@@ -7,6 +7,8 @@
     <link rel="stylesheet" media="all" href="/css/spectrum.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- ah! get this shit out of the head -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
   </head>
 
   <body>
@@ -60,7 +62,7 @@
     {{{body}}}
 
 <br><br>
-  <footer>{{#unless is_feedback_page}}<a href="/feedback">Feedback / Questions</a>{{/unless}}<p><small>©2017 AboutMyBike.com</p></small></p></footer>
+  <footer>{{#unless is_feedback_page}}<a href="/feedback">Feedback / Questions</a>{{/unless}}<p><small>©{{year}} AboutMyBike.com</p></small></p></footer>
   </div>
  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -85,10 +87,6 @@
       </div>
     </div>
   </div>
-
-
-    <!-- ah! get this shit out of the head -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
 
     <script src="/javascripts/util.js"></script>
     <script src="/javascripts/modal.js"></script>

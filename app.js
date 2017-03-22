@@ -26,6 +26,7 @@ const app = express();
 
 // these are globally added values. can be used in templages like {{app_name}}
 app.locals.app_name = config.name;
+app.locals.year = new Date().getFullYear();
 app.locals.s3Url = config.s3Url;
 
 app.locals.maxPhotoSize = config.maxPhotoSize;

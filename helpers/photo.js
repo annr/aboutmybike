@@ -12,7 +12,8 @@ if (process.env.RDS_HOSTNAME !== undefined) {
 
 const MM = getTwoDigitDate(new Date().getMonth() + 1);
 const DD = getTwoDigitDate(new Date().getDate());
-const DESTINATION_FOLDER = `${rootFolder}/2017-${MM}-${DD}`;
+const YYYY = new Date().getFullYear();
+const DESTINATION_FOLDER = `${rootFolder}/${YYYY}-${MM}-${DD}`;
 
 /* PRIVATE FUNCTIONS */
 function getTemplateFilename(bike_id) {
