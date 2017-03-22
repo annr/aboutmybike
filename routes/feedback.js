@@ -13,8 +13,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-   console.log('config server is trying to publish contact form with: ');
-   console.log(AWS.config);
   let email = req.body.email;
   let comments = req.body.comments;
   let sns = new AWS.SNS();

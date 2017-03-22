@@ -20,7 +20,6 @@ router.get(['/', '/:id'], function (req, res, next) {
     } else {
       // must be user's bike for them to edit
       if (data.user_id != req.user.id) {
-        console.log('redirecting...');
         res.redirect(`/bike/${data.id}`);
       }
 

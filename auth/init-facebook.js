@@ -51,11 +51,10 @@ function initPassport () {
             Subject: 'User Signup',
             TopicArn: config.topicArn + config.snsUserSignupTopicName
           };
-          console.log('config server is trying alert about new user with: ');
-          console.log(AWS.config);
-          console.log('topic arn ' + config.topicArn + config.snsUserSignupTopicName);
           sns.publish(params, function(err, data) {
             if (err) {
+              console.log(AWS.config);
+              console.log('topic arn ' + config.topicArn + config.snsUserSignupTopicName);
               console.log('AMB ERROR: Could not publish User Signup SNS: ' + err);
             }
           });
