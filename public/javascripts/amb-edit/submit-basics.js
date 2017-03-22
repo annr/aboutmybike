@@ -3,6 +3,15 @@
 */
 $(document).ready(function() {
 
+  function appendAlert(msg, elem, type) {
+    // remove any existing alert warnings
+    $('.alert').remove();
+    if(!elem) {
+      elem = $('.alert-area')[0];
+    }
+    $(elem).append('<div class="alert alert-' + (type || 'warning') + '" role="alert">' + msg + '</div>');
+  }
+
   $("#editIntro").submit(function(event) {
     event.preventDefault();
     let desc = $('#description');
