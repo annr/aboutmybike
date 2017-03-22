@@ -6,7 +6,6 @@
     "start": "node ./bin/www",
     "build-css": "node-sass -o public/css src/scss",
     "lint": "./node_modules/.bin/eslint routes/** helpers/** db/*",
-    //"test": "mocha",
     "test": "./node_modules/jasmine-node/bin/jasmine-node spec/"
   },
   "devDependencies": {
