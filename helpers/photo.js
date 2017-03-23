@@ -6,8 +6,8 @@ let config = require('../config').appConfig;
 let util = require('util');
 
 let rootFolder = '/dev';
-if (process.env.RDS_HOSTNAME !== undefined) {
-  rootFolder = '/photos';
+if (process.env.ENVIRONMENT !== undefined) {
+  rootFolder = '/' + process.env.ENVIRONMENT;
 }
 
 const MM = getTwoDigitDate(new Date().getMonth() + 1);
