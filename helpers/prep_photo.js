@@ -10,8 +10,8 @@ const util= require('util');
 */
 
 let run = function(localPath, fields, callback) {
+  let newPath = localPath + '-tmp';
   // Three things:
-
   // - convert to JPEG (in any case)
   // - crop slightly
   // - crop with select area values
@@ -19,7 +19,7 @@ let run = function(localPath, fields, callback) {
   let options = {
     progressive: true,
     srcPath: localPath,
-    dstPath: localPath, // !!!!
+    dstPath: newPath, // !!!!
     //quality: 1, // TO-DO: you need to get quality of the uploaded file and make it the same. this blows up file size for now reason.
     // I am choosing not to set quality right now. That means that the "full" size value is going to be reduced to .8 quality
     // also, if a user uploads a jpeg that has a lower quality the file size is going to blow up for no reason.
@@ -55,7 +55,7 @@ let run = function(localPath, fields, callback) {
   // crop and change graphics format if nec.
   im.crop(options, function(err){
     if (err) throw new Error(err);
-    callback({ message: 'prepped file overwrites ' + localPath});
+    callback(newPath);
   });
 };
 

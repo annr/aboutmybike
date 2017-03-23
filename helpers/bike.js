@@ -148,9 +148,9 @@ function createOrUpdatePhoto(user_id, bike_id, original_filename, photoPath, met
   db.photo.bike_id_select(bike_id)
     .then(function (photo) {
       db.photo.update([photo.id, photoPath, metadata])
-        .then(function (photo_id) {
+        .then(function () {
           // sets the id of the main photo added above on the bike record.
-          updateMainPhoto(photo_id, bike_id);
+          updateMainPhoto(photo.id, bike_id);
         })
         .catch(function (err) {
           throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
@@ -158,7 +158,6 @@ function createOrUpdatePhoto(user_id, bike_id, original_filename, photoPath, met
     })
     .catch(function (err) {
       // there isn't a photo record for this bike. add one.
-      console.log('in add new photo');
       db.photo.add([user_id, bike_id, original_filename, photoPath, metadata])
         .then(function (photo_id) {
           // sets the id of the main photo added above on the bike record.

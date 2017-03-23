@@ -22,7 +22,7 @@ let run = function(localPath, callback) {
     //  InvalidS3ObjectException: Unable to get image metadata from S3.  Check object key, region and/or access permissions.
     // OR ValidationException: 1 validation error detected: Value 'amb-processing/validations' at 
     //   'image.s3Object.bucket' failed to satisfy constraint: Member must satisfy regular expression pattern: [0-9A-Za-z\.\-_]*
-    let validationsFolder = 'validations';
+    //let validationsFolder = 'validations';
     let fileData = data;
     if (err) throw err;
 

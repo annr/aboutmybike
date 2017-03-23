@@ -75,6 +75,18 @@ let getFullStoredPath = function(bike_id) {
   return DESTINATION_FOLDER + '/' + getStoredPath(bike_id);
 };
 
+let storeOriginal = function(localPath, userId, originalFilename, callback) {
+  let filePath = DESTINATION_FOLDER + '/originals/' + userId;
+  let s3Params = { Bucket: config.s3Bucket + filePath, Key: originalFilename};
+  // in this case don't unlink uploaded file -- it's not a copy.
+  readAndStoreFile(localPath, s3Params, function(err) {
+    if (err) {
+      console.log(`Error uploading to ${filePath}/${original_filename}: ${err}`);
+    }
+    callback(err);
+  });
+};
+
 let optimizeAndStoreCopies = function(localPath, storedPath, callback) {
   config.mainImageSizes.forEach(function(copy) {
     optimizeAndStoreCopy(localPath, storedPath, copy.size_key, copy.width, copy.height);
@@ -127,7 +139,7 @@ function readAndStoreFile(pathToFile, s3Params, callback) {
       if (err) {
         console.log(`Error uploading ${pathToFile}: ${err}`);
       }
-      callback();
+      callback(err);
     });
   });
 }
@@ -139,5 +151,6 @@ module.exports = {
   getStoredPath,
   getFullStoredPath,
   getPhotoProperties,
+  storeOriginal,
 }
 
