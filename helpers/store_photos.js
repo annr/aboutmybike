@@ -45,7 +45,7 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
       callback({
         message: 'Created filename, uploaded versions of photo and created photo record',
         id: bike_id,
-        photoPath: config.s3Url + photoHelper.replacePathWildcard(fullStoredPath, 'm'),
+        photoPath: config.s3Url + photoHelper.replacePathWildcard(fullStoredPath, 'b'),
       });
     });
 

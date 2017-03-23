@@ -33,7 +33,7 @@ function getTwoDigitDate(toPad) {
 
 //function replacePathWildcard(path, size_key) {
 function replacePathWildcard(path, size) {
-  let version = size || 'm';
+  let version = size || 'b';
   return path.replace('{*}', version);
 }
 
@@ -108,8 +108,10 @@ let optimizeAndStoreCopy = function(localPath, storedPath, sizeKey, width, heigh
     srcPath: localPath,
     dstPath: dstPath,
     progressive: true,
+    quality: 0.85, // 0.8 is a little too grungy.
     width: width,
     height: height,
+    strip: true, // strip metadata hopefully.
   }
 
   if(width && height) { // if these aren't set, just upload loca file.

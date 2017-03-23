@@ -20,9 +20,7 @@ let run = function(localPath, fields, callback) {
     progressive: true,
     srcPath: localPath,
     dstPath: newPath, // !!!!
-    //quality: 1, // TO-DO: you need to get quality of the uploaded file and make it the same. this blows up file size for now reason.
-    // I am choosing not to set quality right now. That means that the "full" size value is going to be reduced to .8 quality
-    // also, if a user uploads a jpeg that has a lower quality the file size is going to blow up for no reason.
+    quality: 1, // because we are going to use this cropped photo to make the other versions, we cannot reduce quality!
   };
 
   //if (fields.cropWidth === '' || fields.cropHeight === '' || fields.xValue !== '' || fields.yValue !== '') {
