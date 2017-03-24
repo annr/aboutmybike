@@ -1,4 +1,4 @@
-const im = require('imagemagick');
+const im = require('./imagemagick');
 const util= require('util');
 
 /* 

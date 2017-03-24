@@ -1,4 +1,4 @@
-const im = require('imagemagick');
+const im = require('./imagemagick');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const s3 = new AWS.S3();
@@ -111,7 +111,6 @@ let optimizeAndStoreCopy = function(localPath, storedPath, sizeKey, width, heigh
     quality: 0.85, // 0.8 is a little too grungy.
     width: width,
     height: height,
-    strip: true, // strip metadata hopefully.
   }
 
   if(width && height) { // if these aren't set, just upload loca file.

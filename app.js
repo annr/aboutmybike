@@ -54,6 +54,11 @@ if (process.env.RDS_HOSTNAME !== undefined) {
   iconFile = 'favicon.ico';
 }
 
+// OMG really? Do this better.
+if (process.env.ENVIRONMENT === 'staging') {
+  iconFile = 'favicon-staging.ico';
+}
+
 app.use(session({
   store: new PGSession({
     pg,
