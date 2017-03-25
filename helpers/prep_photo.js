@@ -19,8 +19,8 @@ let run = function(localPath, fields, callback) {
   let options = {
     progressive: true,
     srcPath: localPath,
-    dstPath: newPath, // !!!!
-    quality: 1, // because we are going to use this cropped photo to make the other versions, we cannot reduce quality!
+    dstPath: newPath,
+    //quality: 1, // because we are going to use this cropped photo to make the other versions, we cannot reduce quality!
   };
 
   //if (fields.cropWidth === '' || fields.cropHeight === '' || fields.xValue !== '' || fields.yValue !== '') {

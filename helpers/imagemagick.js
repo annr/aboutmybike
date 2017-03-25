@@ -352,7 +352,7 @@ exports.resizeArgs = function(options) {
     srcData: null,
     srcFormat: null,
     dstPath: null,
-    quality: 0.8,
+    //quality: 0.8,
     format: 'jpg',
     progressive: true,
     colorspace: null,
@@ -407,11 +407,12 @@ exports.resizeArgs = function(options) {
     args.push('-interlace');
     args.push('plane');
   }
-  if (isJPEG || opt.format === 'png') {
-    args.push('-quality');
+  // we don't want to add quality if it's not set.
+  if (opt.quality && (isJPEG || opt.format === 'png')) {
+    //args.push('-quality');
     args.push(Math.round(opt.quality * 100.0).toString());
   }
-  else if (opt.format === 'miff' || opt.format === 'mif') {
+  else if (opt.quality && (opt.format === 'miff' || opt.format === 'mif')) {
     args.push('-quality');
     args.push(Math.round(opt.quality * 9.0).toString());
   }
