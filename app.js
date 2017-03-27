@@ -30,7 +30,18 @@ const testFolder = '/etc/httpd/conf.d/';
 const fs = require('fs');
 fs.readdir(testFolder, (err, files) => {
   files.forEach(file => {
+
     console.log(file);
+    if(file.indexOf('.conf') !== -1) {
+      fs.readFile(testFolder + file, 'utf8', function (err,data) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(data);
+        console.log('- - - - -');
+      });
+    }
+
   });
 })
 
