@@ -21,8 +21,18 @@ const edit = require('./routes/edit');
 const add = require('./routes/add');
 const upload = require('./routes/upload');
 const profile = require('./routes/profile');
+const privacy = require('./routes/privacy');
 
 const app = express();
+
+const testFolder = '/etc/httpd/conf.d/';
+//const testFolder = './routes/';
+const fs = require('fs');
+fs.readdir(testFolder, (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+  });
+})
 
 AWS.config.region = config.awsRegion;
 
@@ -140,6 +150,7 @@ app.use('/', index);
 app.use('/bikes', bikes);
 app.use('/bike', bike);
 app.use('/feedback', feedback);
+app.use('/privacy', privacy);
 
 // these routes need to be authenticated:
 app.use('/edit', ensureAuthenticated, edit);
