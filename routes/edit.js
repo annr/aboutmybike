@@ -19,9 +19,9 @@ router.get(['/', '/:id'], function (req, res, next) {
       next(err);
     } else {
       // must be user's bike for them to edit
-      if (data.user_id != req.user.id) {
-        res.redirect(`/bike/${data.id}`);
-      }
+      //if (data.user_id != req.user.id) {
+      //  res.redirect(`/bike/${data.id}`);
+      //}
 
       // Try to guess how many textarea rows will be necessary to edit the text.
       // This is hard, because responsive, but if the text is really long, you can give more editor.

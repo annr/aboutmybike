@@ -75,8 +75,8 @@ let getFullStoredPath = function(bike_id) {
   return DESTINATION_FOLDER + '/' + getStoredPath(bike_id);
 };
 
-let storeOriginal = function(localPath, userId, originalFilename, callback) {
-  let filePath = DESTINATION_FOLDER + '/originals/' + userId;
+let storeOriginal = function(localPath, bikeId, originalFilename, callback) {
+  let filePath = DESTINATION_FOLDER + '/originals/' + bikeId;
   let s3Params = { Bucket: config.s3Bucket + filePath, Key: originalFilename};
   // in this case don't unlink uploaded file -- it's not a copy.
   readAndStoreFile(localPath, s3Params, function(err) {

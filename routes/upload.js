@@ -37,7 +37,7 @@ router.post('/', function (req, res, next) {
           // We should capture original until we know how to process jpegs better. (jpegs are lossy)
           // But we are not going to save the path in the db. The file, if it needs to be found, can be easily.
           // It will be located in DESTINATION_FOLDER/originals/user_id/original_filename.(jpg|png)
-          photoHelper.storeOriginal(localPath, parseInt(fields.user_id), fields.original_filename, function(err){
+          photoHelper.storeOriginal(localPath, data.id, fields.original_filename, function(err){
             if(err) {
               console.log('- - - - -');
               console.log('WARNING: could not store original....');

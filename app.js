@@ -25,26 +25,6 @@ const privacy = require('./routes/privacy');
 
 const app = express();
 
-const testFolder = '/etc/httpd/conf.d/';
-//const testFolder = './routes/';
-const fs = require('fs');
-fs.readdir(testFolder, (err, files) => {
-  files.forEach(file => {
-    if(file.indexOf('.conf') !== -1 || file.indexOf('.conf') !== -1) {
-      fs.readFile(testFolder + file, 'utf8', function (err,data) {
-        if (err) {
-          return console.log(err);
-        }
-        console.log('- - - - -');
-        console.log('Filename: ' + file);
-        console.log(data);
-        console.log('- - - - -');
-      });
-    }
-
-  });
-})
-
 AWS.config.region = config.awsRegion;
 
 // these are globally added values. can be used in templages like {{app_name}}
