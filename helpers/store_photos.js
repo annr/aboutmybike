@@ -34,6 +34,8 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
 
   // get properties so that we have image format for optimizing and storing
   // as well as storing in the database after success.
+
+  // note these properties are of the prepared file. it may have been cropped to 4:3.
   photoHelper.getPhotoProperties(localPath, function(img) {
     let propertiesToStore = {
       width: img.width,

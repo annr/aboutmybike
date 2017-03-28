@@ -101,8 +101,8 @@ let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, 
   // 2) reduce quality
   // 3) make progressive
 
-   // adding the extension will actually have im change format
-   // node-imagemagick seems to convert to jpeg by default but doesn't, or doesn't always.
+  // adding the extension will actually have im change format
+  // node-imagemagick seems to convert to jpeg by default but doesn't, or doesn't always.
   let dstPath = localPath + '-' + sizeKey + '.jpg';
 
   // we need to set width and height
@@ -112,7 +112,7 @@ let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, 
     progressive: true,
     width: width,
     height: height,
-    format: 'jpg',    
+    format: 'jpg',
   }
 
   // we check for the existence of height and width to see if it's not full size.
@@ -125,6 +125,7 @@ let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, 
     if (!width && !height) {
       resizeOptions.width = img.width;
       resizeOptions.height = img.height;
+      //console.log(`sizes used for f: ${img.width} x ${img.height}`);
     } else {
       resizeOptions.quality = 0.85; // only reduce quality if it's not the full size.
     }
