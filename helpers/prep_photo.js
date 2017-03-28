@@ -50,11 +50,16 @@ let run = function(localPath, fields, callback) {
     }
   }
 
-  // crop and change graphics format if nec.
-  im.crop(options, function(err){
-    if (err) throw new Error(err);
-    callback(newPath);
-  });
+  if(ratio !== 0.75) {
+    // crop and change graphics format if nec.
+    im.crop(options, function(err){
+      if (err) throw new Error(err);
+      callback(newPath);
+    });
+  } else {
+    callback(localPath);
+  }
+
 };
 
 module.exports = {

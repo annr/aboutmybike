@@ -46,7 +46,6 @@ let run = function(localPath, callback) {
          if (err) {
            throw new Error(err)
          } else {
-           //console.log(util.inspect(data.Labels));
            var bikeLabel = data.Labels.find(function(label) {
              return (label.Name.toLowerCase() === 'bicycle' || label.Name.toLowerCase() === 'bike' )
            });

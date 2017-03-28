@@ -258,8 +258,6 @@ exports.convert.path = 'convert';
 
 var resizeCall = function(t, callback) {
 
-  console.log(util.inspect(t));
-
   var proc = exports.convert(t.args, t.opt.timeout, callback);
   if (t.opt.srcPath.match(/-$/)) {
     if ('string' === typeof t.opt.srcData) {
@@ -302,7 +300,6 @@ exports.crop = function (options, callback) {
         args      = [];
     t.args.forEach(function (arg) {
       if (printNext === true){
-        console.log("arg", arg);
         printNext = false;
       }
       // ignoreArg is set when resize flag was found
@@ -310,12 +307,10 @@ exports.crop = function (options, callback) {
         args.push(arg);
       // found resize flag! ignore the next argument
       if (arg == '-resize'){
-        console.log("resize arg");
         ignoreArg = true;
         printNext = true;
       }
       if (arg === "-crop"){
-        console.log("crop arg");
         printNext = true;
       }
 
@@ -327,9 +322,6 @@ exports.crop = function (options, callback) {
             dGravity  = options.gravity ? options.gravity : "Center",
             xValue    = options.xValue ? options.xValue: 0,
             yValue    = options.yValue ? options.yValue : 0;
-
-      console.log('xValue ' + xValue);
-      console.log('yValue ' + yValue);
 
         args = args.concat([
           '-resize', resizeTo,
@@ -359,8 +351,8 @@ exports.resizeArgs = function(options) {
     width: 0,
     height: 0,
     strip: false,
-    filter: 'Lagrange',
-    sharpening: 0.2,
+    //filter: 'Lagrange',
+    //sharpening: 0.2,
     customArgs: [],
     timeout: 0
   }
