@@ -257,7 +257,6 @@ exports.convert = function(args, timeout, callback) {
 exports.convert.path = 'convert';
 
 var resizeCall = function(t, callback) {
-
   var proc = exports.convert(t.args, t.opt.timeout, callback);
   if (t.opt.srcPath.match(/-$/)) {
     if ('string' === typeof t.opt.srcData) {
@@ -360,7 +359,16 @@ exports.resizeArgs = function(options) {
   // check options
   if (typeof options !== 'object')
     throw new Error('first argument must be an object');
+
+  // holy fuckshit!
+  // this code forces defaults or drops them.
+  // TO-DO: just extend this object.
   for (var k in opt) if (k in options) opt[k] = options[k];
+  if (options.quality) {
+    opt.quality = options.quality;
+  }
+  // NOTE: sharpening and fiter commented out above will never be passed thru.
+
   if (!opt.srcPath && !opt.srcData)
     throw new Error('both srcPath and srcData are empty');
 
@@ -401,7 +409,7 @@ exports.resizeArgs = function(options) {
   }
   // we don't want to add quality if it's not set.
   if (opt.quality && (isJPEG || opt.format === 'png')) {
-    //args.push('-quality');
+    args.push('-quality');
     args.push(Math.round(opt.quality * 100.0).toString());
   }
   else if (opt.quality && (opt.format === 'miff' || opt.format === 'mif')) {

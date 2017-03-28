@@ -32,14 +32,16 @@ let storePhotos = function (bike_id, localPath, fields, callback) {
   let storedPath = photoHelper.getStoredPath(bike_id);
   let fullStoredPath = photoHelper.getFullStoredPath(bike_id);
 
-  photoHelper.optimizeAndStoreCopies(localPath, storedPath, function() {
-    photoHelper.getPhotoProperties(localPath, function(img) {
-      let propertiesToStore = {
-        width: img.width,
-        height: img.height,
-        filesize: img.filesize,
-        number_pixels: img['number pixels'],
-      };
+  // get properties so that we have image format for optimizing and storing
+  // as well as storing in the database after success.
+  photoHelper.getPhotoProperties(localPath, function(img) {
+    let propertiesToStore = {
+      width: img.width,
+      height: img.height,
+      filesize: img.filesize,
+      number_pixels: img['number pixels'],
+    };
+    photoHelper.optimizeAndStoreCopies(localPath, storedPath, img, function() {
       bikeHelper.createOrUpdatePhoto(parseInt(fields.user_id), bike_id, fields.original_filename, fullStoredPath, JSON.stringify(propertiesToStore));
       // we can only send this callback with the new photo when storing all the photos succeeds
       callback({

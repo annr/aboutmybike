@@ -87,33 +87,47 @@ let storeOriginal = function(localPath, bikeId, originalFilename, callback) {
   });
 };
 
-let optimizeAndStoreCopies = function(localPath, storedPath, callback) {
+let optimizeAndStoreCopies = function(localPath, storedPath, img, callback) {
   config.mainImageSizes.forEach(function(copy) {
-    optimizeAndStoreCopy(localPath, storedPath, copy.size_key, copy.width, copy.height);
+    optimizeAndStoreCopy(localPath, storedPath, img, copy.size_key, copy.width, copy.height);
   });
   // will this work? -- the function that is called in the loop is asncy.
   callback();
 };
 
-let optimizeAndStoreCopy = function(localPath, storedPath, sizeKey, width, height) {
+let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, height) {
   // prepped (/aboutmybike/helpers/prep_photo.js). now:
   // 1) reduce pixel width if nec.
   // 2) reduce quality
   // 3) make progressive
-  let dstPath = localPath + '-' + sizeKey;
+
+   // adding the extension will actually have im change format
+   // node-imagemagick seems to convert to jpeg by default but doesn't, or doesn't always.
+  let dstPath = localPath + '-' + sizeKey + '.jpg';
 
   // we need to set width and height
-
   var resizeOptions = {
     srcPath: localPath,
     dstPath: dstPath,
     progressive: true,
-    quality: 0.85, // 0.8 is a little too grungy.
     width: width,
     height: height,
+    format: 'jpg',    
   }
 
-  if(width && height) { // if these aren't set, just upload loca file.
+  // we check for the existence of height and width to see if it's not full size.
+  if ((width && height) || img.format === 'PNG') {
+    // If height and width aren't in the object it means it's "full size" or 'f'.
+    // Upload local file unless it's a PNG and needs to be converted
+
+    // That is, if height and width didn't come with the object, it's 'f,' but we also have to set those values for resize
+    // although in this case we are just using resize to chnage the file format.
+    if (!width && !height) {
+      resizeOptions.width = img.width;
+      resizeOptions.height = img.height;
+    } else {
+      resizeOptions.quality = 0.85; // only reduce quality if it's not the full size.
+    }
     im.resize(resizeOptions, function(err, stdout, stderr){
       if (err) throw err;
       let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, sizeKey) };
