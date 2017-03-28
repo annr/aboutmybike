@@ -22,6 +22,7 @@ const add = require('./routes/add');
 const upload = require('./routes/upload');
 const profile = require('./routes/profile');
 const privacy = require('./routes/privacy');
+const terms = require('./routes/terms');
 
 const app = express();
 
@@ -142,6 +143,7 @@ app.use('/bikes', bikes);
 app.use('/bike', bike);
 app.use('/feedback', feedback);
 app.use('/privacy', privacy);
+app.use('/terms', terms);
 
 // these routes need to be authenticated:
 app.use('/edit', ensureAuthenticated, edit);
