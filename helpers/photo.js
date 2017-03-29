@@ -6,8 +6,8 @@ let config = require('../config').appConfig;
 let util = require('util');
 
 let rootFolder = '/dev';
-if (process.env.ENVIRONMENT !== undefined) {
-  rootFolder = '/' + process.env.ENVIRONMENT;
+if (process.env.NODE_ENV !== undefined) {
+  rootFolder = '/' + process.env.NODE_ENV;
 }
 
 const MM = getTwoDigitDate(new Date().getMonth() + 1);
