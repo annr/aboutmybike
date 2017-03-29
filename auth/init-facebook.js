@@ -27,10 +27,11 @@ passport.deserializeUser(function (id, callback) {
 
 function initPassport () {
   let keys;
-  // we should have a better way to determine if env is prod.
-  // at least extract this into a helper funtion
-  if(process.env.RDS_HOSTNAME !== undefined) {
-    keys = oauth.production;
+
+  // this first test is for staging AND production.
+  // process.env.NODE_ENV !== undefined is our test for 'development'
+  if(process.env.NODE_ENV !== undefined) {
+    keys = oauth.production; // staging and prod.
   } else {
     keys = oauth.localhost;
   }

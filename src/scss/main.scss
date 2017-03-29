@@ -450,20 +450,31 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 
 /* END CARD STYLE */
 
-.bike-photo {
+.photo-space {
+  display: inline-block;
+  background-color: #eee;
+}
+
+@media (min-width: 992px) {
+  .example-photo-height {
+    height: 467px;
+  }
+}
+
+.bike-photo, .photo-space {
   max-width: 700px;
   max-height: 500px;
   width: 100%;
 }
 
-.add-bike-photo {
+.add-bike-photo, .photo-space {
   cursor: pointer;
-}.add-bike-photo {
+}.add-bike-photo, .photo-space {
   cursor: pointer;
 }
 
 @media (max-width: 767px) {
-  .bike-photo  {
+  .bike-photo, .photo-space  {
     max-width: none;
     max-height: none;
     width: 100%;
@@ -478,26 +489,30 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 
 /*
 @media (min-width: 543px) and (max-width: 767px) {
-  .bike-photo {
+  .bike-photo, .photo-space {
     width: 460px;
   }
 }
 
 @media (min-width: 500px) and (max-width: 543px) {
-  .bike-photo {
+  .bike-photo, .photo-space {
     width: 400px;
   }
 }
 
 @media (min-width: 390px) and (max-width: 499px) {
-  .bike-photo {
+  .bike-photo, .photo-space {
     width: 350px;
   }
 }
 
 @media (max-width: 389px) {
-  .bike-photo {
+  .bike-photo, .photo-space {
     width: 270px;
+  }
+
+  .login-form {
+    width: 230px;
   }
 }
 */

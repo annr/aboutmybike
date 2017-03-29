@@ -38,9 +38,12 @@ app.locals.minPhotoSize = config.minPhotoSize;
 app.locals.acceptedFileTypes = config.acceptedFileTypes;
 
 // session stuff:
-require('./auth').init(app);
+require('./auth').initFacebook(app);
+//require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
+
+const env = process.env.NODE_ENV || 'development';
 
 const HOST = process.env.RDS_HOSTNAME || 'localhost';
 const PORT = process.env.RDS_PORT || '5432';
@@ -49,16 +52,14 @@ const DB_USER = process.env.RDS_USERNAME || 'arobson';
 const DB_PASSWORD = process.env.RDS_PASSWORD;
 
 let connectionString = `postgres://${HOST}:${PORT}/${DB_NAME}`;
-let iconFile = 'favicon-dev.ico';
+let iconFile = 'favicon.ico';
 
-if (process.env.RDS_HOSTNAME !== undefined) {
+if (env !== 'development') {
   connectionString = `postgres://${DB_USER}:${DB_PASSWORD}@${HOST}:${PORT}/${DB_NAME}`;
-  iconFile = 'favicon.ico';
 }
 
-// OMG really? Do this better.
-if (process.env.ENVIRONMENT === 'staging') {
-  iconFile = 'favicon-staging.ico';
+if (env !== 'production') {
+ iconFile = `favicon-${env}.ico`;
 }
 
 app.use(session({
@@ -160,7 +161,7 @@ app.get('/logout', function (req, res) {
 app.use(function (req, res, next) {
   let err = new Error('404 Not Found');
   err.status = 404;
-  if (process.env.RDS_HOSTNAME !== undefined) {
+  if (env !== 'development') {
     //res.render('404', { layout: 'error-layout' });
   } else {
     next(err);
@@ -177,8 +178,8 @@ app.use(function (err, req, res) {
   res.locals.message = err.message; // eslint-disable-line no-param-reassign
   res.locals.error = req.app.get('env') === 'development' ? err : {}; // eslint-disable-line no-param-reassign
 
-  // if prod, publish SNS error:
-  if (process.env.RDS_HOSTNAME !== undefined) {
+  // publish prod and staging SNS errors:
+  if (env !== 'development') {
     params = {
       Message: `${err.message}\n\n${err.message.stack}`,
       Subject: `Express Error: ${err.message.substring(0, 20)}`,

@@ -46,8 +46,10 @@ let connectionObject = {
   user: 'arobson',
 };
 
+console.log('expect undefined here: ' + process.env.NODE_ENV);
+
 // if any AWS-configured values are set, it's prod
-if (process.env.RDS_HOSTNAME !== undefined) {
+if (process.env.NODE_ENV !== undefined) {
   connectionObject = {
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,

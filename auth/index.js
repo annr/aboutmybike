@@ -1,4 +1,5 @@
 module.exports = {
-  init: require('./init-facebook'),
+  initFacebook: require('./init-facebook'),
+  init: require('./init'),
   middleware: require('./middleware')
 }
