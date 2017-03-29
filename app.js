@@ -6,6 +6,8 @@ const pg = require('pg');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 const hbs = require('hbs');
 const config = require('./config').appConfig;
 const api = require('./api');
@@ -62,17 +64,23 @@ if (env !== 'production') {
  iconFile = `favicon-${env}.ico`;
 }
 
+app.use(cookieParser());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(session({
   store: new PGSession({
     pg,
     conString: connectionString,
     tableName: 'session',
   }),
-  secret: 's3Cur3', // TO-DO make secret secret!!!
+  secret: 'ilovebikesbikesbikes',
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
   saveUninitialized: false, // TO-DO: Understand this setting better.
 }));
+app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -128,10 +136,6 @@ hbs.registerHelper('cache-bust', function () {
 });
 
 app.use(favicon(path.join(__dirname, 'public', iconFile)));
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

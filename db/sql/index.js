@@ -68,7 +68,7 @@ function sql(file) {
         // Showing how to use static pre-formatting parameters -
         // we have variable 'schema' in each SQL (as an example);
         params: {
-            schema: 'public' // replace ${schema~} with "public"
+          schema: 'public' // replace ${schema~} with "public"
         }
     };
 

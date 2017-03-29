@@ -487,6 +487,47 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   }
 }
 
+.divider:after, .divider:before {
+  background: linear-gradient(90deg,#fff,#ddd);
+  content: " ";
+  display: inline-block;
+  height: 1px;
+  margin: 0 2.5%;
+  vertical-align: middle;
+  width: 35%;
+}
+.divider:after {
+  background: linear-gradient(90deg,#ddd,#fff);
+}
+
+.disclaimer {
+  color: rgba(0,0,0,.55);
+    float: left;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 10px 0;
+}
+
+.login-form, .page-form {
+  width: 306px;
+}
+
+.login-form {
+  width: 306px;
+  margin: 0 auto;
+}
+
+@media (max-width: 389px) {
+  .login-form, .continue-with-facebook-btn {
+    width: 225px;
+  }
+.continue-with-facebook-btn {
+    height: 55px;
+  }
+}
+
+
+
 /*
 @media (min-width: 543px) and (max-width: 767px) {
   .bike-photo, .photo-space {

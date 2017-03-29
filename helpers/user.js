@@ -54,7 +54,6 @@ function createPhoto(userID, photoPath, callback) {
     });
 }
 
-// we only log in with facebook for now.
 function setLastLogin(id) {
   db.amb_user.update_last_fb_login(id)
     .catch(function (err) {

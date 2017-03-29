@@ -4,7 +4,6 @@ const config = require('../config').appConfig;
 let AWS = require('aws-sdk');
 AWS.config.region = config.awsRegion;
 
-/* GET bike listing. */
 router.get('/', function (req, res, next) {
   res.render('feedback', {
     page_title: 'Feedback / Questions',

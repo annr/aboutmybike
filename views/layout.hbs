@@ -69,44 +69,6 @@
   </footer>
   </div>
 
-<style>
-.divider:after, .divider:before {
-  background: linear-gradient(90deg,#fff,#ddd);
-  content: " ";
-  display: inline-block;
-  height: 1px;
-  margin: 0 2.5%;
-  vertical-align: middle;
-  width: 35%;
-}
-.divider:after {
-  background: linear-gradient(90deg,#ddd,#fff);
-}
-
-.disclaimer {
-  color: rgba(0,0,0,.55);
-    float: left;
-    font-size: 12px;
-    line-height: 15px;
-    margin: 10px 0;
-}
-
-.login-form {
-  width: 306px;
-  margin: 0 auto;
-}
-
-@media (max-width: 389px) {
-  .login-form, .continue-with-facebook-btn {
-    width: 225px;
-  }
-.continue-with-facebook-btn {
-    height: 55px;
-  }
-}
-
-</style>
-
  <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
@@ -125,19 +87,16 @@
 
         <form action="/signup" method="post" id="signupForm" class="login-form">
           <div class="form-group">
-           {{!--  <label for="signup_email">Email address</label> --}}
-            <input type="email" class="form-control" id="signup_email" aria-describedby="emailHelp" placeholder="Enter email address">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required="true">
             <small id="emailHelp" class="form-text text-muted">We'll won't share your email.</small>
           </div>
 
           <div class="form-group">
-            {{!-- <label for="signup_username">Username</label> --}}
-            <input type="password" class="form-control" id="signup_password" placeholder="Username">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="true">
           </div>
 
           <div class="form-group">
-            {{!-- <label for="signup_password">Password</label> --}}
-            <input type="password" class="form-control" id="signup_password" placeholder="Password">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required="true">
           </div>
           <div style="text-align: center;">
             <input type="submit" class="btn btn-warning" value="Sign up">
@@ -147,7 +106,7 @@
           </p>
 
           <div class="form-group" style="margin-top: 20px;">
-            <p>Have an About My Bike account? <a class="auth-req-link" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" href="/">Log in</a></p>
+            <p>Already have an account? <a class="auth-req-link" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" href="/">Log in</a></p>
           </div>
         </form>
 
@@ -171,25 +130,27 @@
 
         <div style="text-align: center;">
           <a href="/auth/facebook" class="button"><img src="/images/continue-with-facebook.png" class="continue-with-facebook-btn" width="306" height="73" alt="Continue with Facebook"></a>
-{{!--           <p class="divider">or</p> --}}
+          <p class="divider">or</p>
         </div>
-{{!-- 
+
         <form action="/login" method="post" id="loginForm" class="login-form">
 
           <div class="form-group">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter email or username">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="true">
           </div>
 
           <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required="true">
           </div>
           <div style="text-align: center;">
             <input type="submit" class="btn btn-warning" value="Log in">
           </div>
 
-        </form> --}}
+          <div class="form-group" style="margin-top: 20px;">
+            <p>Don't have an account yet? <a class="auth-req-link" data-dismiss="modal" data-toggle="modal" data-target="#signupModal" href="/">Sign up</a></p>
+          </div>
 
-
+        </form>
        </div>
       </div>
     </div>
