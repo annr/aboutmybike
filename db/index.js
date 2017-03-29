@@ -46,8 +46,6 @@ let connectionObject = {
   user: 'arobson',
 };
 
-console.log('expect undefined here: ' + process.env.NODE_ENV);
-
 // if any AWS-configured values are set, it's prod
 if (process.env.NODE_ENV !== undefined) {
   connectionObject = {

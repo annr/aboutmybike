@@ -28,7 +28,7 @@
             </li>
             {{else}}
             <li class="nav-item">
-              <a class="nav-link auth-req-link" href="/add" {{#unless user}}data-toggle="modal" data-target="#loginModal"{{/unless}}>+ Add Your Bike</a>
+              <a class="nav-link auth-req-link" href="/add" {{#unless user}}data-toggle="modal" data-target="#signupModal"{{/unless}}>+ Add Your Bike</a>
             </li>
             {{/if}}
 
@@ -52,6 +52,9 @@
             <li class="nav-item">
               <a class="nav-link auth-req-link" data-toggle="modal" data-target="#loginModal" href="/">Log in</a>
             </li>
+{{!--             <li class="nav-item">
+              <a class="nav-link auth-req-link" data-toggle="modal" data-target="#signupModal" href="/">Sign up</a>
+            </li> --}}
             {{/if}}
 
           </ul>
@@ -65,24 +68,127 @@
   <footer>{{#unless is_feedback_page}}<p><a href="/feedback">Feedback / Questions</a></p>{{/unless}}<p style="font-size: smaller;">©{{year}} AboutMyBike.com · <a href="/privacy">Privacy</a> · <a href="/terms">Terms of Service</a></p></p>
   </footer>
   </div>
- <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+<style>
+.divider:after, .divider:before {
+  background: linear-gradient(90deg,#fff,#ddd);
+  content: " ";
+  display: inline-block;
+  height: 1px;
+  margin: 0 2.5%;
+  vertical-align: middle;
+  width: 35%;
+}
+.divider:after {
+  background: linear-gradient(90deg,#ddd,#fff);
+}
+
+.disclaimer {
+  color: rgba(0,0,0,.55);
+    float: left;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 10px 0;
+}
+
+.login-form {
+  width: 306px;
+  margin: 0 auto;
+}
+
+@media (max-width: 389px) {
+  .login-form, .continue-with-facebook-btn {
+    width: 225px;
+  }
+.continue-with-facebook-btn {
+    height: 55px;
+  }
+}
+
+</style>
+
+ <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{app_name}} Login</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Create an {{app_name}} account</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" style="text-align: center;">
+        <div class="modal-body">
+
+        <div style="text-align: center;">
+          <a href="/auth/facebook" class="button"><img src="/images/continue-with-facebook.png" class="continue-with-facebook-btn" width="306" height="73" alt="Continue with Facebook"></a>
+{{!--           <p class="divider">or</p> --}}
+        </div>
+
+        <form action="/signup" method="post" id="signupForm" class="login-form">
+          <div class="form-group">
+           {{!--  <label for="signup_email">Email address</label> --}}
+            <input type="email" class="form-control" id="signup_email" aria-describedby="emailHelp" placeholder="Enter email address">
+            <small id="emailHelp" class="form-text text-muted">We'll won't share your email.</small>
+          </div>
+
+          <div class="form-group">
+            {{!-- <label for="signup_username">Username</label> --}}
+            <input type="password" class="form-control" id="signup_password" placeholder="Username">
+          </div>
+
+          <div class="form-group">
+            {{!-- <label for="signup_password">Password</label> --}}
+            <input type="password" class="form-control" id="signup_password" placeholder="Password">
+          </div>
+          <div style="text-align: center;">
+            <input type="submit" class="btn btn-warning" value="Sign up">
+          </div>
+          <p class="disclaimer">
+            By clicking one of the buttons above, you agree to our <a target="_blank" href="https://aboutmybike.com/terms">Terms of Service</a> and <a target="_blank" href="https://aboutmybike.com/privacy" class="ga">Privacy Policy</a>.
+          </p>
+
+          <div class="form-group" style="margin-top: 20px;">
+            <p>Have an About My Bike account? <a class="auth-req-link" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" href="/">Log in</a></p>
+          </div>
+        </form>
+
+
+       </div>
+      </div>
+    </div>
+  </div>
+
+
+ <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create an {{app_name}} account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+        <div style="text-align: center;">
+          <a href="/auth/facebook" class="button"><img src="/images/continue-with-facebook.png" class="continue-with-facebook-btn" width="306" height="73" alt="Continue with Facebook"></a>
+{{!--           <p class="divider">or</p> --}}
+        </div>
 {{!-- 
-        <form action="/login" method="post" id="loginForm">
-          <input name="username" id="username" type="text" placeholder="Your username" />
-          <input name="password" id="password" type="password" placeholder="Your password"/>
-          <input type="hidden" id="target" name="target" value="/" />
-          <input type="submit" />
+        <form action="/login" method="post" id="loginForm" class="login-form">
+
+          <div class="form-group">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter email or username">
+          </div>
+
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          </div>
+          <div style="text-align: center;">
+            <input type="submit" class="btn btn-warning" value="Log in">
+          </div>
+
         </form> --}}
-        <a href="/auth/facebook"><img src="/images/login-with-facebook.png" width="200" height="42" alt="Log in with Facebook"></a>
+
 
        </div>
       </div>
