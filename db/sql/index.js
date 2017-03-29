@@ -29,11 +29,15 @@ module.exports = {
   },
   amb_user: {
     add: sql('amb_user/add.sql'),
+    add_facebook: sql('amb_user/add_facebook.sql'),
     update_last_login: sql('amb_user/update_last_login.sql'),
     update_last_fb_login: sql('amb_user/update_last_fb_login.sql'),
     select: sql('amb_user/select.sql'),
     username_select: sql('amb_user/username_select.sql'),
     fb_select: sql('amb_user/fb_select.sql'),
+    verified: sql('amb_user/verified.sql'),
+    update_password: sql('amb_user/update_password.sql'),
+    update_username: sql('amb_user/update_username.sql'),
   },
   bike_info: {
     add: sql('bike_info/add.sql'),

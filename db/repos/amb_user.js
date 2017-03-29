@@ -5,14 +5,18 @@ var sql = require('../sql').amb_user;
 module.exports = (rep, pgp) => {
   return {
 
-    // Adds a new bike, and returns the new id;
+    // Adds a new bike, and returns user
     add: values =>
       rep.one(sql.add, values, amb_user => amb_user),
 
-    update_last_login: id => // -- last_login
+    // Adds a new bike, and returns user
+    add_facebook: values =>
+      rep.one(sql.add_facebook, values, amb_user => amb_user),
+
+    update_last_login: id =>
       rep.result(sql.update_last_login, id),
 
-    update_last_fb_login: facebook_id => // -- last_login
+    update_last_fb_login: facebook_id =>
       rep.result(sql.update_last_fb_login, facebook_id),
 
     select: id =>
@@ -23,6 +27,15 @@ module.exports = (rep, pgp) => {
 
     fb_select: facebook_id =>
       rep.one(sql.fb_select, facebook_id, amb_user => amb_user),
+
+    verified: id =>
+      rep.result(sql.verified, id),
+
+    update_password: values =>
+      rep.result(sql.update_password, values),
+
+    update_username: values =>
+      rep.result(sql.update_username, values),
 
   };
 };

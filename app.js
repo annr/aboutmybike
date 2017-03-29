@@ -26,6 +26,12 @@ const profile = require('./routes/profile');
 const privacy = require('./routes/privacy');
 const terms = require('./routes/terms');
 
+const signup = require('./routes/signup');
+const login = require('./routes/login');
+
+const admin = require('./routes/admin');
+const username = require('./routes/username');
+
 const app = express();
 
 AWS.config.region = config.awsRegion;
@@ -41,7 +47,7 @@ app.locals.acceptedFileTypes = config.acceptedFileTypes;
 
 // session stuff:
 require('./auth').initFacebook(app);
-//require('./auth').init(app);
+require('./auth').init(app);
 
 app.set('trust proxy', 1); // trust first proxy
 
@@ -92,12 +98,24 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/' }),
   function (req, res) {
-    if (req.user.bike_id) {
+    // if they haven't added their username yet, take them to the form.
+    if (!req.user.username) {
+      res.redirect('/username');
+    } else if (req.user.bike_id) {
       res.redirect(`/bike/${req.user.bike_id}`);
     } else {
       res.redirect('/add');
     }
   });
+
+// TO-DO: send user to their bike page or the add page if they have not yet added their bike.
+app.post('/login',
+  passport.authenticate('local', {
+    successRedirect: '/', // the home page will have bikes on it soon.
+    failureRedirect: '/login',
+    failureFlash: true
+  })
+);
 
 /* MIDDLEWARE */
 const ensureAuthenticated = function (req, res, next) {
@@ -149,6 +167,12 @@ app.use('/bike', bike);
 app.use('/feedback', feedback);
 app.use('/privacy', privacy);
 app.use('/terms', terms);
+
+app.use('/login', login);
+app.use('/signup', signup);
+
+app.use('/admin', ensureAuthenticated, admin);
+app.use('/username', ensureAuthenticated, username);
 
 // these routes need to be authenticated:
 app.use('/edit', ensureAuthenticated, edit);
