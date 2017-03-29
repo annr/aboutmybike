@@ -508,17 +508,17 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
     margin: 10px 0;
 }
 
-.login-form, .page-form {
+.modal-form, .page-form {
   width: 306px;
+  font-size: smaller;
 }
 
-.login-form {
-  width: 306px;
+.modal-form {
   margin: 0 auto;
 }
 
 @media (max-width: 389px) {
-  .login-form, .continue-with-facebook-btn {
+  .modal-form, .continue-with-facebook-btn {
     width: 225px;
   }
 .continue-with-facebook-btn {
@@ -552,7 +552,7 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
     width: 270px;
   }
 
-  .login-form {
+  .modal-form {
     width: 230px;
   }
 }
