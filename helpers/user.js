@@ -11,6 +11,16 @@ function createUser(values, callback) {
     });
 }
 
+function createFacebookUser(values, callback) {
+  db.amb_user.add(values)
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error(`Failed to create new facebook user: (${err})`));
+    });
+}
+
 function getUser(userID, callback) {
 //  db.one('select * from bike where id = $1', bikeID)
   db.amb_user.select(userID)
@@ -61,11 +71,43 @@ function setLastLogin(id) {
     });
 }
 
+function setVerified(id) {
+  db.amb_user.verify(id)
+    .catch(function (err) {
+      throw new Error(`Failed to set verified switch for user ${id}: (${err})`);
+    });
+}
+
+function updatePasswordOfUsername(username, password, callback) {
+  db.amb_user.update_password([username, password])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      throw new Error(`Failed to update password for ${username}: (${err})`);
+    });
+}
+
+
+function addUsernameAndVerify(username, id, callback) {
+  db.amb_user.update_username([parseInt(id), username])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      throw new Error(`Failed to update username for ${id}: (${err})`);
+    });
+}
+
 module.exports = {
   createUser,
+  createFacebookUser,
   getUser,
   getUserByUsername,
   getFacebookUser,
   createPhoto,
   setLastLogin,
+  setVerified,
+  updatePasswordOfUsername,
+  addUsernameAndVerify,
 }

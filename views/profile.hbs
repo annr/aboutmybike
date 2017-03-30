@@ -1,47 +1,54 @@
-
-
 <div class="container">
   <div class="row">
     <div class="col-2">
-    {{#if user.picture}}
-      <p><img class="profile-photo float-right" src="{{user.picture}}" alt="{{user.username}}'s profile photo" width="50" height="50"></p>
+    {{#if profile_user.picture}}
+      <p><img class="profile-photo float-right" src="{{profile_user.picture}}" alt="{{profile_user.username}}'s profile photo" width="50" height="50"></p>
+    {{else}}
+       <img class="profile-photo float-right" src="/images/user-sm.png" width="50" height="50" alt="User Profile Icon">
     {{/if}}
     </div>
     <div class="col-10">
       <dl>
         <dt>Username</dt>
-        <dd>{{user.username}}</dd>
+        <dd>{{profile_user.username}}</dd>
 
         <dt>Joined</dt>
-        <dd>{{user.join_date}}</dd>
+        <dd>{{profile_user.join_date}}</dd>
 
-        {{#if user.bio}}
+        {{#if profile_user.bio}}
         <dt>Bio</dt>
-        <dd>{{user.bio}}</dd>
+        <dd>{{profile_user.bio}}</dd>
         {{else}}
           {{#if is_users_profile}}
           <dt>Bio</dt>
-          <dd><a href="/u/{{user.username}}/edit">add bio</a></dd>
+          <dd><a href="/u/{{profile_user.username}}/edit">add bio</a></dd>
           {{/if}}
         {{/if}}
 
-        {{#if user.web_url}}
+        {{#if profile_user.web_url}}
         <dt>Web Url</dt>
-        <dd>{{user.web_url}}</dd>
+        <dd>{{profile_user.web_url}}</dd>
         {{else}}
           {{#if is_users_profile}}
           <dt>Web Url</dt>
-          <dd><a href="/u/{{user.username}}/edit">add web url</a></dd>
+          <dd><a href="/u/{{profile_user.username}}/edit">add web url</a></dd>
           {{/if}}
         {{/if}}
 
-        {{#if user.bike_id}}
+        {{#if profile_user.bike_id}}
         <dt>Bike</dt>
-        <dd><a href="/bike/{{user.bike_id}}"><img class="user-profile-bike-photo" width="120" height="90" src="{{s3Url}}{{user.bike_main_photo}}" alt="{{user.username}}'s bike"></a></dd>
+        <dd>
+          <a href="/bike/{{profile_user.bike_id}}">
+            <img class="user-profile-bike-photo" width="120" height="90" src="{{s3Url}}{{profile_user.bike_main_photo}}" alt="{{profile_user.username}}'s bike">
+          </a>
+          {{#if is_users_profile}}
+          <br><a href="/edit/{{profile_user.bike_id}}">edit bike</a></dd>
+          {{/if}}
+        </dd>
         {{else}}
           {{#if is_users_profile}}
           <dt>Bike</dt>
-          <dd><a href="/edit/{{user.bike_id}}">add bike</a></dd>
+          <dd><a href="/edit/{{profile_user.bike_id}}">add bike</a></dd>
           {{/if}}
         {{/if}}
 

@@ -6,7 +6,7 @@ AWS.config.region = config.awsRegion;
 
 router.get('/', function (req, res, next) {
   res.render('feedback', {
-    page_title: 'Feedback / Questions',
+    page_title: 'Technical Support / Feedback',
     is_feedback_page: true,
   });
 });
@@ -25,7 +25,7 @@ router.post('/', function (req, res, next) {
       throw new Error(`Contact form submission error: ${err}`);
       res.json({ error: err, status: 500 });
     } else {
-      res.json({ success: 'Feedback sent.', status: 200 });
+      res.json({ success: 'Message sent.', status: 200 });
     }
   });
 });
