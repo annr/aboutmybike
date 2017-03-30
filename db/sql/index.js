@@ -30,6 +30,7 @@ module.exports = {
   amb_user: {
     add: sql('amb_user/add.sql'),
     add_facebook: sql('amb_user/add_facebook.sql'),
+    select_with_login_values: sql('amb_user/select_with_login_values.sql'),
     update_profile: sql('amb_user/update_profile.sql'),
     update_last_login: sql('amb_user/update_last_login.sql'),
     update_last_fb_login: sql('amb_user/update_last_fb_login.sql'),

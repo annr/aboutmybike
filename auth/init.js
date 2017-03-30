@@ -1,9 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 let db = require('../db');
-const bcrypt = require('bcrypt');
 const authenticationMiddleware = require('./middleware');
 let util = require('util');
+
+const userHelper = require('../helpers/user.js');
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 passport.serializeUser(function (user, callback) {
   console.log('in serizalize user');
@@ -22,7 +25,10 @@ passport.deserializeUser(function (id, callback) {
 });
 
 function initPassport () {
-  passport.use(new LocalStrategy({
+
+
+  passport.use('local-login',
+    new LocalStrategy({
       usernameField: 'username',
       passwordField: 'password',
       passReqToCallback : true
@@ -56,6 +62,69 @@ function initPassport () {
         .catch(function (err) {
           return callback(err);
         });
+    }
+  ));
+
+
+  passport.use('local-signup',
+    new LocalStrategy({
+      usernameField: 'username',
+      passwordField: 'password',
+      passReqToCallback : true
+    },
+    function(req, username, password, done) {
+      // if the user is already logged in, don't do anything.
+      if (req.user) {
+        return done(null, req.user); // you're logged in alrady!!!
+      } else {
+
+        if (req.body.email && username && password) {
+          let email = req.body.email.toLowerCase();
+          username = username.toLowerCase();
+
+          /// TO-DO: test if username or email already exists!!!!
+          ////
+          ///
+
+          userHelper.getUserWithLoginValues(email, username, function(err, data) {
+            if (err) {
+
+              // insert user record
+              bcrypt.hash(password, saltRounds, function(err, hash) {
+                if(err) {
+                  return done(err);
+                }
+                // Store hash in your password DB.
+                userHelper.createUser([email, username, hash], function(err, data) {
+                  if(err) {
+                    return done(err);
+                  }
+                  return done(null, data);
+                });
+
+              });
+
+            } else {
+              // you can try to log them in with password they provided.
+              // either username or email was found.
+              if (email === data.email) {
+                return done(null, false, req.flash('flashMessage', 'The email you entered belongs to an existing user. Please log in or contact support if this is your email.'));
+              }
+              if (username === data.username) {
+                return done(null, false, req.flash('flashMessage', 'Username is associated with an existing account. Please log in or choose another username.'));
+              }
+              return done(null, false, req.flash('flashMessage', 'Email or username are used by an existing account.'));
+            }
+
+          });
+
+        } else {
+          console.log('missing signup fields.');
+
+          //return done(null, req.user); // you're logged in alrady!!!
+        }
+
+      }
     }
   ));
 

@@ -18,7 +18,7 @@ passport.serializeUser(function (user, callback) {
 passport.deserializeUser(function (id, callback) {
   userHelper.getUser(id, function (err, data) {
     if (err) {
-      callback(new Error('Failed to get user by id: (' + err + ')'));
+      callback(err);
     } else {
       callback(null, data);
     }
@@ -75,7 +75,7 @@ function initPassport () {
             }
           }
 
-          userHelper.createUser([profile.id, first_name, last_name, gender, profile.emails[0].value], function (err, data) {
+          userHelper.createFacebookUser([profile.id, first_name, last_name, gender, profile.emails[0].value], function (err, data) {
             if (err) {
               callback(new Error('Failed to create new user. (' + err + ')'));
             } else {

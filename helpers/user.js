@@ -11,8 +11,8 @@ function createUser(values, callback) {
     });
 }
 
-function createFacebookUser(values, callback) {
-  db.amb_user.add(values)
+function createFacebookUser(values, callback) { // profile.id, first_name, last_name, gender, profile.emails[0].value
+  db.amb_user.add_facebook(values)
     .then(function (data) {
       callback(null, data);
     })
@@ -40,6 +40,16 @@ function getUserByUsername(username, callback) {
     })
     .catch(function (err) {
       callback(new Error(`Failed get user record with username: (${err})`));
+    });
+}
+
+function getUserWithLoginValues(email, username, callback) {
+  db.amb_user.select_with_login_values([email, username])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(new Error(`Failed get user record with username or email: (${err})`));
     });
 }
 
@@ -120,4 +130,5 @@ module.exports = {
   updatePasswordOfUsername,
   addUsernameAndVerify,
   updateProfile,
+  getUserWithLoginValues,
 }

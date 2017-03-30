@@ -12,8 +12,12 @@ router.post('/', function (req, res, next) {
   if(req.body.password) {
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
       // Store hash in your password DB.
-      userHelper.updatePasswordOfUsername(req.body.username, hash, function(data) {
-        req.flash('flashMessage', 'User password successfully updated.');
+      userHelper.updatePasswordOfUsername(req.body.username, hash, function(err, data) {
+        if (err) {
+          req.flash('flashMessage', `Failed to update password for ${req.body.username}`);
+        } else {
+          req.flash('flashMessage', 'User password successfully updated.');
+        }
         res.redirect('/admin');
       });
     });
@@ -21,14 +25,6 @@ router.post('/', function (req, res, next) {
     req.flash('flashMessage', 'Not enough information for form handler to complete action.');
     res.redirect('/admin');
   }
-
-  // if (req.body.verify) {
-  //   userHelper.updateVerifiedByUsername(req.body.username, function(data) {
-  //     req.flash('flashMessage', 'User set to verified.');
-  //     res.redirect('/admin');
-  //   });
-  // }
-
 
 });
 

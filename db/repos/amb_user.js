@@ -25,6 +25,9 @@ module.exports = (rep, pgp) => {
     select: id =>
       rep.one(sql.select, id, amb_user => amb_user),
 
+    select_with_login_values: values =>
+      rep.one(sql.select_with_login_values, values, amb_user => amb_user),
+
     username_select: username =>
       rep.one(sql.username_select, username, amb_user => amb_user),
 

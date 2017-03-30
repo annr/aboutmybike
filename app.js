@@ -111,9 +111,18 @@ app.get('/auth/facebook/callback',
 
 // TO-DO: send user to their bike page or the add page if they have not yet added their bike.
 app.post('/login',
-  passport.authenticate('local', {
+  passport.authenticate('local-login', {
     successRedirect: '/add', // the home page will have bikes on it soon.
     failureRedirect: '/login',
+    failureFlash: true
+  })
+);
+
+// TO-DO: send user to their bike page or the add page if they have not yet added their bike.
+app.post('/signup',
+  passport.authenticate('local-signup', {
+    successRedirect: '/add', // the home page will have bikes on it soon.
+    failureRedirect: '/signup',
     failureFlash: true
   })
 );
