@@ -1,9 +1,4 @@
-{{#if flash_message}}
-  <div class="alert alert-warning">{{flash_message}}</div>
-{{/if}}
-
 <h3>{{page_title}}</h3>
-
 {{#if user}}
   {{#unless user.username}}
     <form action="/username" method="post" id="usernameForm" class="page-form">

@@ -101,6 +101,7 @@ app.get('/auth/facebook/callback',
   function (req, res) {
     // if they haven't added their username yet, take them to the form.
     if (!req.user.username) {
+      req.flash('flashMessage', 'You are successfully authenticated. We need just one more piece of information to create your account: a username.')
       res.redirect('/username');
     } else if (req.user.bike_id) {
       res.redirect(`/bike/${req.user.bike_id}`);

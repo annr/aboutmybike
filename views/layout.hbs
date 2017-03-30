@@ -61,6 +61,10 @@
         <h4 class="text-muted amb-text-logo"><a href="/">{{app_name}}</a></h4>
       </div>
 
+    {{#if flash_message}}
+      <div class="alert alert-warning">{{flash_message}}</div>
+    {{/if}}
+
     {{{body}}}
 
 <br><br>
