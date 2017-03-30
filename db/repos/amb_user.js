@@ -16,6 +16,9 @@ module.exports = (rep, pgp) => {
     update_last_login: id =>
       rep.result(sql.update_last_login, id),
 
+    update_profile: values =>
+      rep.result(sql.update_profile, values),
+
     update_last_fb_login: facebook_id =>
       rep.result(sql.update_last_fb_login, facebook_id),
 

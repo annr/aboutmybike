@@ -88,6 +88,15 @@ function updatePasswordOfUsername(username, password, callback) {
     });
 }
 
+function updateProfile(id, bio, website, callback) {
+  db.amb_user.update_profile([id, bio, website])
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      throw new Error(`Failed to update profile for ${id}: (${err})`);
+    });
+}
 
 function addUsernameAndVerify(username, id, callback) {
   db.amb_user.update_username([parseInt(id), username])
@@ -110,4 +119,5 @@ module.exports = {
   setVerified,
   updatePasswordOfUsername,
   addUsernameAndVerify,
+  updateProfile,
 }

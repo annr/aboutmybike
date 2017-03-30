@@ -8,30 +8,26 @@
     {{/if}}
     </div>
     <div class="col-10">
+      <h3 class="title">{{profile_user.username}}</h3>
+      <div class="float-right edit-link-align-to-title"><a href="/profile_edit/{{profile_user.username}}">Edit Profile</a></div>
       <dl>
-        <dt>Username</dt>
-        <dd>{{profile_user.username}}</dd>
-
-        <dt>Joined</dt>
-        <dd>{{profile_user.join_date}}</dd>
-
         {{#if profile_user.bio}}
         <dt>Bio</dt>
         <dd>{{profile_user.bio}}</dd>
         {{else}}
           {{#if is_users_profile}}
           <dt>Bio</dt>
-          <dd><a href="/u/{{profile_user.username}}/edit">add bio</a></dd>
+          <dd><a href="/profile_edit/{{profile_user.username}}">add bio</a></dd>
           {{/if}}
         {{/if}}
 
-        {{#if profile_user.web_url}}
-        <dt>Web Url</dt>
-        <dd>{{profile_user.web_url}}</dd>
+        {{#if profile_user.website}}
+        <dt>Website</dt>
+        <dd>{{profile_user.website}}</dd>
         {{else}}
           {{#if is_users_profile}}
-          <dt>Web Url</dt>
-          <dd><a href="/u/{{profile_user.username}}/edit">add web url</a></dd>
+          <dt>Website</dt>
+          <dd><a href="/profile_edit/{{profile_user.username}}">add website</a></dd>
           {{/if}}
         {{/if}}
 
@@ -48,10 +44,12 @@
         {{else}}
           {{#if is_users_profile}}
           <dt>Bike</dt>
-          <dd><a href="/edit/{{profile_user.bike_id}}">add bike</a></dd>
+          <dd><a href="/add">add bike</a></dd>
           {{/if}}
         {{/if}}
 
+        <dt>Joined</dt>
+          <dd>{{profile_user.join_date}}</dd>
       </dl>
     </div>
   </div>

@@ -15,3 +15,4 @@ LEFT JOIN type on b.type_ids[1]=type.id
     WHERE b.description IS NOT null 
       AND b.status != -1
       AND amb_user.verified = true
+    ORDER BY b.created_at DESC

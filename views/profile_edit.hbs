@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2">
+    {{#if profile_user.picture}}
+      <p><img class="profile-photo float-right" src="{{profile_user.picture}}" alt="{{profile_user.username}}'s profile photo" width="50" height="50"></p>
+    {{else}}
+       <img class="profile-photo float-right" src="/images/user-sm.png" width="50" height="50" alt="User Profile Icon">
+    {{/if}}
+    </div>
+    <div class="col-10">
+      <h3 class="title">{{profile_user.username}}'s profile</h3>
+      <div class="float-right edit-link-align-to-title"><a href="/u/{{profile_user.username}}">View Profile</a></div>
+
+      <form action="/profile_edit" method="post">
+
+        <div class="form-group">
+          <label for="bio">Your bio</label>
+          <textarea class="form-control" rows="5" name="bio">{{profile_user.bio}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="website">Your website</label>
+          <input type="text" class="form-control" name="website" value="{{profile_user.website}}">
+        </div>
+        <div class="form-group">
+          <input class="btn btn-warning" value="Update Profile" type="submit" />
+        </div>
+
+        <input type="hidden" value="{{profile_user.id}}" name="id">
+        <input type="hidden" value="{{profile_user.username}}" name="username">
+
+      </form>
+
+    </div>
+  </div>
+</div>
+

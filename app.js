@@ -23,6 +23,7 @@ const edit = require('./routes/edit');
 const add = require('./routes/add');
 const upload = require('./routes/upload');
 const profile = require('./routes/profile');
+const profile_edit = require('./routes/profile_edit');
 const privacy = require('./routes/privacy');
 const terms = require('./routes/terms');
 
@@ -111,7 +112,7 @@ app.get('/auth/facebook/callback',
 // TO-DO: send user to their bike page or the add page if they have not yet added their bike.
 app.post('/login',
   passport.authenticate('local', {
-    successRedirect: '/', // the home page will have bikes on it soon.
+    successRedirect: '/add', // the home page will have bikes on it soon.
     failureRedirect: '/login',
     failureFlash: true
   })
@@ -179,6 +180,7 @@ app.use('/edit', ensureAuthenticated, edit);
 app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/u', ensureAuthenticated, profile);
+app.use('/profile_edit', ensureAuthenticated, profile_edit);
 
 app.get('/logout', function (req, res) {
   req.logout();
