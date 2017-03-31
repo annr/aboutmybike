@@ -1,12 +1,18 @@
 <form class="generic-container" id="postFeedback" action="/feedback" method="post">
 
 <h4>{{page_title}}</h4>
-<div class="form-group">
-
-<label for="email">Email</label><input type="email" class="form-control" id="email" name="email">
-
-</div>
-
+<br>
+{{#if user.email}}
+  <dl class="form-grop">
+    <dt>Email</dt>
+    <dd>{{user.email}}</dd>
+    <input type="hidden" class="form-control" name="email" value="{{user.email}}" required>
+  </dl>
+{{else}}
+  <div class="form-group">
+  <label for="email">Email</label><input type="email" class="form-control" id="email" name="email" required>
+  </div>
+{{/if}}
 
 <div class="form-group">
 
