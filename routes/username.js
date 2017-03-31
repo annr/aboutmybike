@@ -29,10 +29,10 @@ router.post('/', function (req, res, next) {
 
 router.get('/', function (req, res, next) {
   if (req.user.username) {
-    req.flash('flashMessage', 'Your username is set. To change your username after setting, please contact support.');
+    req.flash('flashMessage', 'Your username is set. To change your username after setting it, please contact support.');
   }
   res.render('username', {
-    page_title: 'Create your username',
+    page_title: 'Create a username',
     formClass: 'page-form',
     flash_message: req.flash('flashMessage'),
   });

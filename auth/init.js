@@ -24,8 +24,12 @@ passport.deserializeUser(function (id, callback) {
     });
 });
 
-function initPassport () {
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
 
+function initPassport () {
 
   passport.use('local-login',
     new LocalStrategy({
@@ -33,38 +37,40 @@ function initPassport () {
       passwordField: 'password',
       passReqToCallback : true
     },
-    function(req, username, password, callback) {
-      db.one('select * from amb_user where username = $1', [username])
-        .then(function (data) {
-          if (!data) {
-            return callback(null, false, req.flash('flashMessage', 'No user found.'));
-          }
-
+    function(req, username, password, done) {
+      // user can enter email or usename
+      // the "username" field holds either.
+      let email = null;
+      let confirmed_username = username;
+      if(validateEmail(username)) {
+        email = username;
+        confirmed_username = null;
+      }
+      console.log(`values email ${email} username ${confirmed_username}`);
+      userHelper.getUserWithLoginValues(email, confirmed_username, function(err, data) {
+        if (err) {
+          return done(null, false, req.flash('flashMessage', 'No user found.'));
+        } else {
           if (data.facebook_id) {
-            return callback(null, false, req.flash('flashMessage', 'This username or email is associated with a Facebook account. Please continue to log in with Facebook or contact About My Bike support.'));
+            return done(null, false, req.flash('flashMessage', 'This username or email is associated with a Facebook account. Please continue with Facebook or contact About My Bike support.'));
           }
-
           if (!data.password) {
-            return callback(null, false, req.flash('flashMessage', 'Password is not set for this user. Please contact support.'));
+            return done(null, false, req.flash('flashMessage', 'Password is not set for this user. Please contact support.'));
           }
           bcrypt.compare(password, data.password, function(err, res) {
             if (err) {
-              return callback(err);
+              return done(err);
             }
             if (res) {
-              return callback(null, data);
+              return done(null, data);
             } else {
-              return callback(null, false, req.flash('flashMessage', 'Incorrect password.'));
+              return done(null, false, req.flash('flashMessage', 'Incorrect password.'));
             }
           });
-
-        })
-        .catch(function (err) {
-          return callback(err);
-        });
+        }
+      });
     }
   ));
-
 
   passport.use('local-signup',
     new LocalStrategy({
@@ -81,10 +87,6 @@ function initPassport () {
         if (req.body.email && username && password) {
           let email = req.body.email.toLowerCase();
           username = username.toLowerCase();
-
-          /// TO-DO: test if username or email already exists!!!!
-          ////
-          ///
 
           userHelper.getUserWithLoginValues(email, username, function(err, data) {
             if (err) {
@@ -108,7 +110,10 @@ function initPassport () {
               // you can try to log them in with password they provided.
               // either username or email was found.
               if (email === data.email) {
-                return done(null, false, req.flash('flashMessage', 'The email you entered belongs to an existing user. Please log in or contact support if this is your email.'));
+                if (data.facebook_id) {
+                  return done(null, false, req.flash('flashMessage', 'You\'ve previously logged in with Facebook. Do you want to continue with Facebook?'));
+                }
+                return done(null, false, req.flash('flashMessage', 'The email you entered belongs to an existing user. If you forgot your password please contact support.'));
               }
               if (username === data.username) {
                 return done(null, false, req.flash('flashMessage', 'Username is associated with an existing account. Please log in or choose another username.'));
@@ -119,9 +124,7 @@ function initPassport () {
           });
 
         } else {
-          console.log('missing signup fields.');
-
-          //return done(null, req.user); // you're logged in alrady!!!
+          return done(null, req.user); // you're logged in alrady!!!
         }
 
       }

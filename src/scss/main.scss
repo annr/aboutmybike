@@ -517,15 +517,13 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 }
 
 @media (max-width: 389px) {
-  .modal-form, .continue-with-facebook-btn {
+  .modal-form, .page-form, .continue-with-facebook-btn {
     width: 225px;
   }
 .continue-with-facebook-btn {
     height: 55px;
   }
 }
-
-
 
 /*
 @media (min-width: 543px) and (max-width: 767px) {
@@ -551,7 +549,7 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
     width: 270px;
   }
 
-  .modal-form {
+  .modal-form, .page-form {
     width: 230px;
   }
 }

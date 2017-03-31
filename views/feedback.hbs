@@ -1,50 +1,56 @@
-<form class="generic-container" id="postFeedback" action="/feedback" method="post">
+<div class="clearfix">
+<div class="container float-left" style="max-width: 500px;">
+  <div class="row">
+  <div class="col">
+  <h4>{{page_title}}</h4>
+    <form class="generic-container" id="postFeedback" action="/feedback" method="post">
+    {{#if user.email}}
+      <dl class="form-grop">
+        <dt>Email</dt>
+        <dd>{{user.email}}</dd>
+        <input type="hidden" class="form-control" name="email" value="{{user.email}}" required>
+      </dl>
+    {{else}}
+      <div class="form-group">
+      <label for="email">Email</label><input type="email" class="form-control" id="email" name="email" required>
+      </div>
+    {{/if}}
 
-<h4>{{page_title}}</h4>
-<br>
-{{#if user.email}}
-  <dl class="form-grop">
-    <dt>Email</dt>
-    <dd>{{user.email}}</dd>
-    <input type="hidden" class="form-control" name="email" value="{{user.email}}" required>
-  </dl>
-{{else}}
-  <div class="form-group">
-  <label for="email">Email</label><input type="email" class="form-control" id="email" name="email" required>
+    <div class="form-group">
+
+    <label for="comments">What can we help you with?</label><textarea class="form-control" id="comments" rows="5" name="comments" required></textarea>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary" required>Submit</button>
+    </form>
   </div>
-{{/if}}
-
-<div class="form-group">
-
-<label for="comments">What can we help you with?</label><textarea class="form-control" id="comments" rows="5" name="comments" required></textarea>
-
+  </div>
+</div>
 </div>
 
-<button type="submit" class="btn btn-primary" required>Submit</button>
-</form>
+    {{!-- <script src="/javascripts/amb/feedback.js"></script> --}}
 
-{{!-- <script src="/javascripts/amb/feedback.js"></script> --}}
+    <script>
 
-<script>
-
-$(document).ready(function() {
-  $("#postFeedback").submit(function( event ) {
-    event.preventDefault();
-    $.ajax({
-      url: $(this).attr('action'),
-      type: 'POST',
-      data: $(this).serialize(),
-      success: function() {
-        $('footer').prepend('<div class="alert alert-warning" role="alert">Thanks! 🌈 &nbsp; 🚴‍♀️  🌈</div>');
-        // unset form values:
-        $('#email').val('');
-        $('#comments').val('');
-      },
-      error: function(err) {
-        $('footer').prepend('<div class="alert alert-danger" role="alert">Could not complete request. Please try again later.</div>');
-      }
+    $(document).ready(function() {
+      $("#postFeedback").submit(function( event ) {
+        event.preventDefault();
+        $.ajax({
+          url: $(this).attr('action'),
+          type: 'POST',
+          data: $(this).serialize(),
+          success: function() {
+            $('footer').prepend('<div class="alert alert-warning" role="alert">Thanks! 🌈 &nbsp; 🚴‍♀️  🌈</div>');
+            // unset form values:
+            $('#email').val('');
+            $('#comments').val('');
+          },
+          error: function(err) {
+            $('footer').prepend('<div class="alert alert-danger" role="alert">Could not complete request. Please try again later.</div>');
+          }
+        });
+      });
     });
-  });
-});
 
-</script>
+    </script>
