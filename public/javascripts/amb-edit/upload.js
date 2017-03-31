@@ -72,12 +72,14 @@ $(document).ready(function() {
         // load the image to get height and width. 
         // if oblong, open modal.
         image.onload = function() {
+          // this will make it jump a bit:
+          $('#upload-target').attr('src', e.target.result);
+
           $('input[name=actualHeight]').val(this.height);
           $('input[name=actualWidth]').val(this.width);
           // if ratio is close to 4:3, just crop.
           // technically is ratio between 3:2 (0.666667) and 4:5 (0.8)
           if(this.height/this.width > 0.66 && this.height/this.width < 0.801) {
-            $('#upload-target').attr('src', e.target.result);
             $('#upload-target').removeClass('upload-placeholder');
             $("#uploadForm").submit();
           } else {
@@ -103,6 +105,12 @@ $(document).ready(function() {
     // unset crop modal values. if the user chooses another photo to select, the old will still be attached.
     $('#uploadForm').selekter('destroy');
     //$('#cropTarget').attr('src', '');
+    // now we need to load the inlined preview of the file with the crop.
+
+    // that is, based on their selection we need to adjust the CSS of the area.
+
+    // but for now just show full image. 
+
   });
 
   $("#bike_photo").change(function () {

@@ -7,7 +7,7 @@
 
       <div class="upload-target-wrapper">
 
-        {{#if bike.main_photo_path}}
+        {{#if bike.photo_url}}
         <img src="{{s3Url}}{{bike.photo_url}}?z={{cache-bust}}" class="bike-photo add-bike-photo" id="upload-target" style="display: inline;">
         {{else}}
         <img src="/images/example-with-upload.png" class="bike-photo add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
