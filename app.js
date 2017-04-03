@@ -33,6 +33,8 @@ const login = require('./routes/login');
 const admin = require('./routes/admin');
 const username = require('./routes/username');
 
+const verify = require('./routes/verify');
+
 const app = express();
 
 AWS.config.region = config.awsRegion;
@@ -136,6 +138,14 @@ const ensureAuthenticated = function (req, res, next) {
   res.redirect('/');
 };
 
+const ensureAdmin = function (req, res, next) {
+  // assumes logged in.
+  if (config.adminUserIds.indexOf(req.user.id) !== -1) {
+    return next();
+  }
+  res.redirect('/');
+};
+
 const userValues = function (req, res, next) {
   req.app.locals.user = req.user; // eslint-disable-line no-param-reassign
   next();
@@ -182,7 +192,7 @@ app.use('/terms', terms);
 app.use('/login', login);
 app.use('/signup', signup);
 
-app.use('/admin', ensureAuthenticated, admin);
+app.use('/admin', ensureAuthenticated, ensureAdmin, admin);
 app.use('/username', ensureAuthenticated, username);
 
 // these routes need to be authenticated:
@@ -191,6 +201,8 @@ app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/u', ensureAuthenticated, profile);
 app.use('/profile_edit', ensureAuthenticated, profile_edit);
+
+app.use('/verify', ensureAuthenticated, ensureAdmin, verify);
 
 app.get('/logout', function (req, res) {
   req.logout();

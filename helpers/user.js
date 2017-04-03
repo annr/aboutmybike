@@ -82,9 +82,20 @@ function setLastLogin(id) {
 }
 
 function setVerified(id) {
-  db.amb_user.verify(id)
+  db.amb_user.set_verified(id)
     .catch(function (err) {
       throw new Error(`Failed to set verified switch for user ${id}: (${err})`);
+    });
+}
+
+function setVerifiedByUsername(username, value, callback) {
+  var toggle = value === '1' ? true : false;
+  db.amb_user.set_verified_by_username([username, toggle])
+    .then(function () {
+      callback(null);
+    })
+    .catch(function (err) {
+      throw new Error(`Failed to set verified switch for user ${username}: (${err})`);
     });
 }
 
@@ -127,6 +138,7 @@ module.exports = {
   createPhoto,
   setLastLogin,
   setVerified,
+  setVerifiedByUsername,
   updatePasswordOfUsername,
   addUsernameAndVerify,
   updateProfile,

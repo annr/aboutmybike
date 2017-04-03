@@ -34,8 +34,11 @@ module.exports = (rep, pgp) => {
     fb_select: facebook_id =>
       rep.one(sql.fb_select, facebook_id, amb_user => amb_user),
 
-    verified: id =>
-      rep.result(sql.verified, id),
+    set_verified: id =>
+      rep.result(sql.set_verified, id),
+
+    set_verified_by_username: values =>
+      rep.result(sql.set_verified_by_username, values),
 
     update_password: values =>
       rep.result(sql.update_password, values),
