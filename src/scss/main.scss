@@ -219,13 +219,12 @@ dl.bike-details dt {
   width: 100%;
 }
 
-#choose_photo_help {
-    background-color: #ddd;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 0;
-    padding: 8px;
-    opacity: 0.5;
+.choose-photo {
+  background-color: #ddd;
+  padding: 8px;
+  opacity: 0.5;
+  width: 100%;
+  cursor: pointer;
 }
 
 .help-block {
