@@ -11,20 +11,6 @@ const authenticationMiddleware = require('./middleware');
 // this should / could be taken from the environment:
 AWS.config.region = config.awsRegion;
 
-passport.serializeUser(function (user, callback) {
-  callback(null, user.id);
-});
-
-passport.deserializeUser(function (id, callback) {
-  userHelper.getUser(id, function (err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, data);
-    }
-  });
-});
-
 function initPassport () {
   let keys;
 

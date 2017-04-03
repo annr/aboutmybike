@@ -35,6 +35,7 @@ module.exports = {
     update_last_login: sql('amb_user/update_last_login.sql'),
     update_last_fb_login: sql('amb_user/update_last_fb_login.sql'),
     select: sql('amb_user/select.sql'),
+    deserialize_select: sql('amb_user/deserialize_select.sql'),
     username_select: sql('amb_user/username_select.sql'),
     fb_select: sql('amb_user/fb_select.sql'),
     set_verified: sql('amb_user/set_verified.sql'),

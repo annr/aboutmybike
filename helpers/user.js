@@ -32,6 +32,17 @@ function getUser(userID, callback) {
     });
 }
 
+function getUserForDeserialize(userID, callback) {
+//  db.one('select * from bike where id = $1', bikeID)
+  db.amb_user.deserialize_select(userID)
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (err) {
+      callback(err);
+    });
+}
+
 function getUserByUsername(username, callback) {
 //  db.one('select * from bike where id = $1', bikeID)
   db.amb_user.username_select(username)
@@ -133,6 +144,7 @@ module.exports = {
   createUser,
   createFacebookUser,
   getUser,
+  getUserForDeserialize,
   getUserByUsername,
   getFacebookUser,
   createPhoto,

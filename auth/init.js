@@ -9,19 +9,17 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 passport.serializeUser(function (user, callback) {
-  console.log('in serizalize user');
   callback(null, user.id);
 });
 
 passport.deserializeUser(function (id, callback) {
-  console.log('in deserizalize user');
-  db.one('select * from amb_user where id = $1', [parseInt(id)])
-    .then(function (data) {
-      callback(null, data);
-    })
-    .catch(function (err) {
+  userHelper.getUserForDeserialize(id, function (err, data) {
+    if (err) {
       callback(err);
-    });
+    } else {
+      callback(null, data);
+    }
+  });
 });
 
 function validateEmail(email) {
