@@ -319,7 +319,7 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   text-align: center;
 }
 
-/* largest size catch-all */
+/* catch-all ?? */
 
 .card-photo-wrapper {
   height: 261px;
@@ -327,7 +327,15 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   overflow:hidden;
 }
 
-
+@media (min-width: 1400px) {
+  .container {
+    width: 1350px;
+    max-width: 100%; }
+  .card-photo-wrapper {
+    height: 314px;
+    width: 419px;
+  }
+}
 
 /* Spinner styles */
 
@@ -397,7 +405,9 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   background: #bbb;
 }
 
+
 /* End Spinner styles */
+
 @media (min-width: 992px) and (max-width: 1200px) {
   .card-photo-wrapper {
     height: 216px;
