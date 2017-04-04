@@ -11,7 +11,7 @@
       <h3 class="title">{{profile_user.username}}'s profile</h3>
       <div class="float-right edit-link-align-to-title"><a href="/u/{{profile_user.username}}">View Profile</a></div>
 
-      <form action="/profile_edit" method="post">
+      <form action="/profile_edit" method="post" id="profileEdit">
 
         <div class="form-group">
           <label for="bio">Your bio</label>
@@ -20,11 +20,13 @@
 
         <div class="form-group">
           <label for="website">Your website</label>
-          <input type="url" class="form-control" name="website" value="{{profile_user.website}}">
+          <input type="url" class="form-control" name="website" placeholder="http://www.example.com" value="{{profile_user.website}}">
         </div>
         <div class="form-group">
           <input class="btn btn-warning" value="Update Profile" type="submit" />
         </div>
+
+        <span class="error-message" style="color: red;"></span>
 
         <input type="hidden" value="{{profile_user.id}}" name="id">
         <input type="hidden" value="{{profile_user.username}}" name="username">
