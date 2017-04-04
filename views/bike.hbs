@@ -1,5 +1,5 @@
 {{#if bike.title}}
-  <h4 class="title">{{#if bike.username}}{{bike.username}}'s {{/if}}{{bike.title}}</h4>{{#if is_users_bike}}<div class="float-right edit-link-align-to-title"><a href="/edit/{{bike.id}}">Edit Bike</a></div>{{/if}}
+  <h4 class="title">{{#if bike.username}}<a href="/u/{{bike.username}}" class="no-link-color">{{bike.username}}'s</a> {{/if}}{{bike.title}}</h4>{{#if is_users_bike}}<div class="float-right edit-link-align-to-title"><a href="/edit/{{bike.id}}">Edit Bike</a></div>{{/if}}
 {{/if}}
 <div class="row">
 
