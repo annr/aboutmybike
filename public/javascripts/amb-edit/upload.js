@@ -49,8 +49,9 @@ $(document).ready(function() {
           if($('input[name=bike_id]').val() === '') {
             $('input[name=bike_id]').val(data.id);
           }
-          // make sure preview uses cache-busted new file
-          //$('#upload-target').attr('src', data.photoPath+'?bust='+(new Date()).getTime());
+          // this doesn't work. we get a 403 as if the photo is too 'fresh'.
+          //$('#upload-target').attr('src', data.photoPath);
+          $('#hacked_main_path').val(data.photoPath);
         }
       },
       error: function(err) {
@@ -143,6 +144,12 @@ $(document).ready(function() {
       }
       return true;
     } 
+  }
+
+  // this is a hack!!!
+  // if there is a hacked_main_path, there is a new photo that was not able to be shown previously for no known reason.
+  if ($('#hacked_main_path').val() !== '') {
+    $('#upload-target').attr('src', $('#hacked_main_path').val());
   }
 
 });

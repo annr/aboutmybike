@@ -169,11 +169,6 @@ hbs.registerHelper('preserve-linebreaks', function (str) {
     .replace(/(?:\r\n|\r|\n)/g, '<br />');
 });
 
-hbs.registerHelper('cache-bust', function () {
-  // we have to escape all the special chars and then conver line breaks to brs.
-  return (new Date()).getTime();
-});
-
 app.use(favicon(path.join(__dirname, 'public', iconFile)));
 
 app.use(express.static(path.join(__dirname, 'public')));

@@ -19,8 +19,7 @@ const DESTINATION_FOLDER = `${rootFolder}/${YYYY}-${MM}-${DD}`;
 function getTemplateFilename(bike_id) {
   let extension = '.jpg';
   // limits main photo by bike id by day. We'll retain new photos if they are not added too often.
-  let impreciseTs = ((new Date()).setHours(0, 0, 0, 0)/10000);
-  return '' + bike_id + '-' + impreciseTs + '_{*}' + extension;
+  return '' + bike_id + '-' + (new Date().getTime()) + '_{*}' + extension;
 }
 
 function getTwoDigitDate(toPad) {
@@ -160,6 +159,13 @@ function readAndStoreFile(pathToFile, s3Params, callback) {
   });
 }
 
+function deleteOldPhotos(pathToFile) {
+  // PLACEHOLDER
+  console.log('would delete all version of this: ' + pathToFile);
+  // loop thru versions to delete all.
+  //let s3Params = { Bucket: config.s3Bucket, Key: pathToFile };
+}
+
 module.exports = {
   optimizeAndStoreCopies,
   replacePathWildcard,
@@ -168,5 +174,6 @@ module.exports = {
   getFullStoredPath,
   getPhotoProperties,
   storeOriginal,
+  deleteOldPhotos,
 }
 

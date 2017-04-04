@@ -1,5 +1,6 @@
 let db = require('../db');
 let _ = require('../public/javascripts/lodash');
+let photoHelper = require('../helpers/photo');
 
 let types = require('./bike-types').types;
 let reasons = [
@@ -151,6 +152,9 @@ function createOrUpdatePhoto(user_id, bike_id, original_filename, photoPath, met
         .then(function () {
           // sets the id of the main photo added above on the bike record.
           updateMainPhoto(photo.id, bike_id);
+          // we are safe to delete the old photo since the new one has been stored.
+          // we need to remove the record and the file.
+          photoHelper.deleteOldPhotos(photo.main_photo_path);
         })
         .catch(function (err) {
           throw new Error(`Failed to create photo record. May have orphaned photo on server. (${err})`);
