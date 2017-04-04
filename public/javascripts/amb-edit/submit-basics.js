@@ -45,11 +45,11 @@ $(document).ready(function() {
           $('.alert').remove();
           // we hide the basics tab until they finish intro.
           $('#basics_nav_item').show();
-          step2.tab('show');
+          let basicsTab = '#basics';
+          $('a[href="'+ basicsTab + '"]').tab('show');
+          history.pushState(null, null, basicsTab);
+          //step2.tab('show');
         } else {
-          // also can add "view bike"
-          //appendAlert('Intro saved. <a data-toggle="tab" href="/edit/' + $('#intro input[name=bike_id]').val() +'#basics">Edit basics</a>');
-          //appendAlert('Intro values saved.');
           location.replace('/bike/' + $('#intro input[name=bike_id]').val());
         }
       },

@@ -41,7 +41,7 @@ $(document).ready(function() {
       },
       success: function(data) {
         $('.upload-target-wrapper .progress').css('visibility', 'hidden');
-        // it's question if you should design this under "success"
+        // it's a question whether you should design as "success"
         if(data.error) {
           appendAlert(data.error, null, 'warning');
         } else {
