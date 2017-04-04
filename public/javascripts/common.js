@@ -17,7 +17,7 @@ $(document).ready(function() {
 
   // $('form').on('submit', function() {
   //   event.preventDefault();
-  //   var requiredFields = $("input").prop('required', true);
+  //   var requiredFields = $(this).find('input').prop('required', true);
   //   // make sure any required fields are entered.
   //   console.log('there are ' + requiredFields.length + ' required fields.');
   //   // everything is fine. submit.
