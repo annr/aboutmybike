@@ -112,10 +112,13 @@ function updateBasics(fields, callback) {
   if (!fields.description) { fields.description = null; }
   if (!fields.nickname) { fields.nickname = null; }
 
-  if (!fields.brand_id && fields.brand !== '') {
+  // even when we have a brand linked to the manufacturers table, we still
+  // insert the brand and models as text for easy retrieval. It would suck if
+  // this ever became out of sync.
+  if (fields.brand !== '') {
     brand = fields.brand;
   }
-  if (!fields.model_id && fields.model !== '') {
+  if (fields.model !== '') {
     model = fields.model;
   }
 
@@ -178,7 +181,7 @@ function transformForDisplay(data) {
   let bike = data;
   let detailString = [];
 
-  bike.title = getTitle(bike);
+  bike.title = getDetailedTitle(bike);
 
   bike.for = getReasonsList(bike.reason_ids);
 
@@ -259,70 +262,50 @@ function getFormEras(era) {
   return formEras;
 }
 
-/* TITLE
- *
- * We want to get as much as possible that is available for the title.
- *
- * 
-/*
-
-
-/* If available add era, bike type and ' Bike'.
-   otherwise just return ' Bike'.
-
-   Ex. return '1980s Road Bike'
-*/
-function getTitle(bike) {
-  let title = '';
-
-  if (bike.era && bike.era !== 'Recent' && bike.era !== '2000s') { // too recent to be interesting.
-    title += bike.era;
-  }
-
-  title += bike.type ? (` ${bike.type}`) : '';
-
-  // add ' Bike' for most bike types OR neither era or type
-  if (bike.type || title === '') {
-    if (!/cycle|bike|bicycle|cruiser|mixte/i.test(bike.type)) {
-      title += ' Bike';
-    }
-  }
-  // title might have an space at the beginning; in front of type or ' Bike'
-  return title.trim();
+function getSingleType(type_ids) {
+  if (!type_ids) return '';
+  return _.find(types, {id: type_ids[0]}).label;
 }
 
+/* TITLE
+ 
+  We want to get as much as possible that is available for the title.
 
-/* get brand and model if brand exists + bike type + ' Bike' */
-function getTitleWithBrandAndModel(bike) {
+  1) + era if it's interesting: < 2000s
+  2) + brand if avail.
+  3) + model if avail.
+  4) + type and in most cases 'bike' 
+      (exceptions include tricycle and cruiser)
+*/
+
+function getDetailedTitle(bike) {
   let title = '';
   let type = bike.type;
+  var brand, model;
 
-  if (bike.manufacturer_name) {
-    title += bike.manufacturer_name;
-    if (bike.model_name) {
-      title += ` ${bike.model_name}`;
-    } else if (bike.model_unlinked !== '') {
-      // complicated, but they could have an
-      // unlinked model name with a stored manufacturer
-      title += ` ${bike.model_unlinked}`;
-    }
-  } else if (bike.brand_unlinked) {
-    title += bike.brand_unlinked;
+  if (bike.era && bike.era !== 'Recent' && bike.era !== '2000s') { // too recent to be interesting.
+    title += `${bike.era}`;
+  }
+
+  if (bike.brand_unlinked) {
+    brand = bike.brand_unlinked;
+    title += ` ${bike.brand_unlinked}`;
     if (bike.model_unlinked) {
+      model = bike.model_unlinked;
       title += ` ${bike.model_unlinked}`;
     }
   }
-
-  // add 'bike' when there is an associated type on nothing
+  // add 'bike' when there is an associated type and no model or nothing
   title += type ? ` ${type}` : '';
 
-  if (type || title === '') {
+  // we just allow one type for now
+  if (type) {
     if (!/cycle|bike|bicycle|cruiser|mixte/i.test(type)) {
       title += ' Bike';
     }
   }
   // (bike.brand + ' ' + bike.model).trim();
-  return title.trim();
+  return title.trim() || '(No Style Specified)';
 }
 
 module.exports = {
@@ -333,7 +316,7 @@ module.exports = {
   updateBasics,
   updateBasicsInfo,
   createOrUpdatePhoto,
-  getTitle,
+  getDetailedTitle,
   transformForDisplay,
   getFormReasons,
   getFormTypes,

@@ -5,6 +5,7 @@
           type.label AS type,
           amb_user.username AS username,
           type.id AS type_id,
+          type.label AS type,
           Coalesce(manufacturer.name, b.brand_unlinked) AS manufacturer_name,
           Coalesce(model.name, b.model_unlinked) As model_name,
           bike_info.era AS era, 

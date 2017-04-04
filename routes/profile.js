@@ -10,7 +10,7 @@ router.get(['/', '/:username'], function (req, res, next) {
       next(err);
     } else {
       if(data.bike_main_photo) {
-        data.bike_main_photo = data.bike_main_photo.replace('{*}', 't');
+        data.bike_main_photo = data.bike_main_photo.replace('{*}', 's');
       }
       res.render('profile', {
         page_title: username  + '\'s Profile',

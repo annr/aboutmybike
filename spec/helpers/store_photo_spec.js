@@ -1,7 +1,7 @@
 var assert = require('assert');
-var storePhoto = require('../../helpers/store_photo');
+var storePhotos = require('../../helpers/store_photos');
 
-describe('storePhoto > ', function() {
+describe('storePhotos > ', function() {
 
   describe('run()', function() {
     describe('calls functions to get photo properties, stores photos, and if bike does not exist, creates bike record', function() {

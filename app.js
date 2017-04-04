@@ -140,7 +140,7 @@ const ensureAuthenticated = function (req, res, next) {
 
 const ensureAdmin = function (req, res, next) {
   // assumes logged in.
-  if (config.adminUserIds.indexOf(req.user.id) !== -1) {
+  if (env === 'development' || config.adminUserIds.indexOf(req.user.id) !== -1) {
     return next();
   }
   res.redirect('/');

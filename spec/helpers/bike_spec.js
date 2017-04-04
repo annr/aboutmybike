@@ -12,27 +12,25 @@ describe('bikeHelper > ', function() {
   describe('transformForDisplay()', function() {
     var record = {
       id: 5,
-      brand_unlinked: null,
-      model_unlinked: null,
+      brand_unlinked: 'Peugeot',
+      model_unlinked: 'UO-9',
       created_at: '2017-03-21T21:07:26.975Z',
       updated_at: '2017-03-22T05:08:17.520Z',
       user_id: 6,
-      description: 'why??',
+      description: 'My bike is awesome.',
       notes: null,
-      nickname: null,
+      nickname: 'Antoine',
       manufacturer_id: null,
       model_id: null,
       serial_number: null,
-      type_ids: null,
+      type_ids: [ 1 ],
       reason_ids: [ 9 ],
       status: 1,
-      main_photo_id: 6,
-      type: null,
       username: null,
       type_id: null,
       manufacturer_name: null,
       model_name: null,
-      era: '1990s',
+      era: '1980s',
       color: null,
       main_photo_path: '/dev/2017-03-21/5-149007960_{*}.jpg' 
     };
@@ -55,5 +53,21 @@ describe('bikeHelper > ', function() {
         expect(bike.details).not.toBeUndefined();
       });
     });
+
+    describe('should return a title that is as detailed as possible', function() {
+      var bikeTitle = bikeHelper.getDetailedTitle(record);
+      var noDetails = bikeHelper.getDetailedTitle({ id: 6 });
+
+      // there must be a more elegant way to test these keys.
+      it('should add a title value', function() {
+        expect(bikeTitle).toBe('1980s Peugeot UO-9 Road Bike');
+      });
+
+      it('if no details are provided should return `(No Style Specified)`', function() {
+        expect(noDetails).toBe('(No Style Specified)');
+      });
+
+    });
+
   });
 });

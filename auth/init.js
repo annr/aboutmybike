@@ -44,7 +44,6 @@ function initPassport () {
         email = username;
         confirmed_username = null;
       }
-      console.log(`values email ${email} username ${confirmed_username}`);
       userHelper.getUserWithLoginValues(email, confirmed_username, function(err, data) {
         if (err) {
           return done(null, false, req.flash('flashMessage', 'No user found.'));
