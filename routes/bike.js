@@ -11,7 +11,7 @@ router.get('/:id', function (req, res, next) {
     } else {
       let bike = helper.transformForDisplay(data);
       res.render('bike', {
-        page_title: 'Bike Detail',
+        page_title: bike.title,
         bike,
         is_users_bike: req.user && (req.user.bike_id === id),
       });

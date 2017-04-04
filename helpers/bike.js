@@ -300,7 +300,7 @@ function getDetailedTitle(bike) {
 
   // we just allow one type for now
   if (type) {
-    if (!/cycle|bike|bicycle|cruiser|mixte/i.test(type)) {
+    if (!/cycle|bike|bicycle|cruiser|mixte/i.test(type) && !/cycle|bike|bicycle|cruiser|mixte/i.test(bike.brand_unlinked)) {
       title += ' Bike';
     }
   }
