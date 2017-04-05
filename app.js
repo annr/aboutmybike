@@ -24,6 +24,8 @@ const add = require('./routes/add');
 const upload = require('./routes/upload');
 const profile = require('./routes/profile');
 const profile_edit = require('./routes/profile_edit');
+const password_change = require('./routes/password_change');
+
 const privacy = require('./routes/privacy');
 const terms = require('./routes/terms');
 
@@ -196,6 +198,7 @@ app.use('/add', ensureAuthenticated, add);
 app.use('/upload', ensureAuthenticated, upload);
 app.use('/u', ensureAuthenticated, profile);
 app.use('/profile_edit', ensureAuthenticated, profile_edit);
+app.use('/password_change', ensureAuthenticated, password_change);
 
 app.use('/verify', ensureAuthenticated, ensureAdmin, verify);
 

@@ -15,7 +15,8 @@ router.get(['/', '/:username'], function (req, res, next) {
       res.render('profile', {
         page_title: username  + '\'s Profile',
         profile_user: data,
-        is_users_profile: req.user && (req.user.username === username)
+        is_users_profile: req.user && (req.user.username === username),
+        flash_message: req.flash('flashMessage'),
       });
     }
   });

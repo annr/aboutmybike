@@ -51,6 +51,9 @@
         <dt>Joined</dt>
           <dd>{{profile_user.join_date}}</dd>
       </dl>
+      {{#if is_users_profile}}
+        <p><a href="/password_change/{{profile_user.username}}">Change password</a></p>
+      {{/if}}
     </div>
   </div>
 </div>
