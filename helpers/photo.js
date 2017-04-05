@@ -116,11 +116,17 @@ let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, 
 
   // we check for the existence of height and width to see if it's not full size.
   if ((width && height) || img.format === 'PNG') {
-    // If height and width aren't in the object it means it's "full size" or 'f'.
-    // Upload local file unless it's a PNG and needs to be converted
+    // if uploaded image is lower-res than any of the versions, don't make bigger
+    // the test for width here will skip 'f' which will be taken care of below
+    //  (resizeOptions.width will be set to img.width in any case)
+    if(width && img.width < width) {
+      resizeOptions.width = img.width;
+      resizeOptions.height = img.height;
+    }
 
+    // If height and width aren't in the object it means it's full size or 'f'.
     // That is, if height and width didn't come with the object, it's 'f,' but we also have to set those values for resize
-    // although in this case we are just using resize to chnage the file format.
+    // although in this case we are just using resize to change the file format. it's already been cropped to the right dims
     if (!width && !height) {
       resizeOptions.width = img.width;
       resizeOptions.height = img.height;
@@ -128,6 +134,7 @@ let optimizeAndStoreCopy = function(localPath, storedPath, img, sizeKey, width, 
     } else {
       resizeOptions.quality = 0.85; // only reduce quality if it's not the full size.
     }
+
     im.resize(resizeOptions, function(err, stdout, stderr){
       if (err) throw err;
       let s3Params = { Bucket: config.s3Bucket + DESTINATION_FOLDER, Key: replacePathWildcard(storedPath, sizeKey) };

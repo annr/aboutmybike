@@ -3,20 +3,14 @@
 {{/if}}
 <div class="row">
 
-  <div class="col-md-6 bike-column">
-    <p><img class="bike-photo" src="{{s3Url}}{{bike.photo_url}}" alt="{{bike.title}}"></p>
-  </div>
+    <div class="col-md-6 bike-column">
+      <div class="zoom"><img class="bike-photo" src="{{s3Url}}{{bike.photo_url}}" alt="{{bike.title}}"></div>
+    </div>
 
    <div class="col-md-6">
-
-{{!--     {{#if bike.title}}
-        <h4 class="title">{{bike.title}} &nbsp;<span class="title-edit-link-wrapper">(<a href="/edit/{{bike.id}}">Edit Bike</a>)</span></h4>
-      {{/if}} --}}
-
     {{#if bike.description}}
       <p>{{{preserve-linebreaks bike.description}}}</p>
     {{/if}}
-
 		<dl class="row">
 
 			{{#if bike.nickname}}
@@ -54,16 +48,6 @@
         <dd class="col-sm-10">{{bike.era}}</dd>
       {{/if}}
 
-{{!-- 			{{#if bike.city}}
-			  <dt class="col-sm-2 text-truncate">City</dt>
-			  <dd class="col-sm-10">{{bike.city}}</dd>
-			{{/if}} --}}
-
-{{!--       {{#if bike.serial_number}}
-        <dt class="col-sm-2">SN</dt>
-        <dd class="col-sm-10">{{bike.serial_number}}</dd>
-    {{/if}} --}}
-
 		</dl>
 
    </div>
@@ -72,7 +56,12 @@
 
    <hr>
   <br>
-{{!--   <div class="cta-wrapper">
-     <div class="cta"><a class="btn btn-lg btn-success" href="/add" role="button">Edit Your Bike</a></div>
-  </div>
- --}}
+
+
+<script>
+$(document).ready(function(){
+  $('.zoom').zoom({
+    url: '{{s3Url}}{{large_photo}}'
+  });
+});
+</script>

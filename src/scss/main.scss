@@ -322,8 +322,8 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 /* catch-all ?? */
 
 .card-photo-wrapper {
-  height: 261px;
-  width: 348px;
+  height: 262px;
+  width: 349px;
   overflow:hidden;
 }
 
@@ -332,9 +332,23 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
     width: 1350px;
     max-width: 100%; }
   .card-photo-wrapper {
-    height: 314px;
+    height: 315px;
     width: 419px;
   }
+}
+
+.bike-photo-wrapper {
+  position: relative;
+}
+
+/* if the background is white, mag-glass will not be seen
+ * one option would be to change it to gray
+*/
+.mag-glass {
+  position: absolute;
+  opacity: 0.5;
+  bottom: 4px;
+  right: 4px;
 }
 
 /* Spinner styles */
@@ -535,60 +549,17 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   }
 }
 
-/*
-@media (min-width: 543px) and (max-width: 767px) {
-  .bike-photo, .photo-space {
-    width: 460px;
-  }
+.zoom {
+  position: relative;
 }
-
-@media (min-width: 500px) and (max-width: 543px) {
-  .bike-photo, .photo-space {
-    width: 400px;
-  }
+/* magnifying glass icon */
+.zoom:after {
+  content:'';
+  display:block; 
+  width:33px; 
+  height:33px; 
+  position:absolute; 
+  top:0;
+  right:0;
+  background:url('/images/mag-glass.png');
 }
-
-@media (min-width: 390px) and (max-width: 499px) {
-  .bike-photo, .photo-space {
-    width: 350px;
-  }
-}
-
-@media (max-width: 389px) {
-  .bike-photo, .photo-space {
-    width: 270px;
-  }
-
-  .modal-form, .page-form {
-    width: 230px;
-  }
-}
-*/
-
-
-/* UNUSED??? */
-
-/* THE HTML IS COMMENTED OUT IN ADD.HBS */
-/*
-.wheel-hint {
-  position: absolute;
-  display: none;
-  line-height: 120%;
-}
-
-@media (min-width: 768px) {
-  .wheel-hint {
-    display: block;
-  }
-
-  #right-wheel {
-    top: 431px;
-    left: 450px;
-  }
-
-  #left-wheel {
-    top: 160px;
-    left: 20px;
-  }
-}
-*/

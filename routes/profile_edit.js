@@ -8,6 +8,10 @@ router.get(['/', '/:username'], function (req, res, next) {
     if (err) {
       next(err);
     } else {
+      // must be user's profile for them to edit
+      if (data.id != req.user.id) {
+       res.redirect('/');
+      }
       res.render('profile_edit', {
         page_title: 'Edit Profile',
         profile_user: data

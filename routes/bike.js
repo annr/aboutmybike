@@ -14,6 +14,7 @@ router.get('/:id', function (req, res, next) {
         page_title: bike.title,
         bike,
         is_users_bike: req.user && (req.user.bike_id === id),
+        large_photo: bike.main_photo_path.replace('{*}', 'z'),
       });
     }
   });
