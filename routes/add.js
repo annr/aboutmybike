@@ -12,8 +12,6 @@ router.get(['/', '/:id'], function (req, res, next) {
   let line = 60;
   let calculatedRows;
 
-  // if logged in user has added created a bike record by uploading a photo, make sure that bike record is used.
-  // we need to preserve add/edit versions.
   if (!req.user.bike_id) {
     res.render(view, {
       page_title,
@@ -25,32 +23,9 @@ router.get(['/', '/:id'], function (req, res, next) {
       is_new: true,
     });
   } else {
+    // go to edit
     let id = req.user.bike_id;
-    helper.getBike(id, function (err, data) {
-      if (err) {
-        next(err);
-      } else {
-        // Try to guess how many textarea rows will be necessary to edit the text.
-        // This is hard, because responsive, but if the text is really long, you can give more editor.
-        if (data.description && data.description.length) {
-          calculatedRows = Math.round(data.description.length / line);
-          if (calculatedRows < maxRows && calculatedRows > rows) {
-            rows = calculatedRows;
-          }
-        }
-        data.photo_url = data.main_photo_path.replace('{*}', 'b');
-        res.render(view, {
-          page_title,
-          page_heading,
-          bike: data,
-          reasons: helper.getFormReasons(data.reason_ids),
-          types: helper.getFormTypes(data.type_id),
-          eras: helper.getFormEras(data.era),
-          rows,
-          is_new: true,
-        });
-      }
-    });
+    res.redirect(`/edit/${req.user.bike_id}`);
   }
 });
 
