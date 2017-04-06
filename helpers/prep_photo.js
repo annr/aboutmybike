@@ -29,16 +29,19 @@ let run = function(localPath, fields, callback) {
   }
   // here we choose to get the actualWidth and actualHeight from the form.
   // may be a bad idea. We can always validate this easily.
+
   let width = parseInt(fields.actualWidth);
   let height = parseInt(fields.actualHeight);
   let ratio = Math.round((height/width) * 100)/100;
-  if(fields.scale !== '' && fields.cropWidth !== '' && fields.cropHeight !== '' && fields.xValue !== '' && fields.yValue !== '') {
-    options.width = parseInt(fields.cropWidth * fields.scale);
-    options.height = parseInt(fields.cropHeight * fields.scale);
-    options.xValue = parseInt(fields.xValue * fields.scale);
-    options.yValue = parseInt(fields.yValue * fields.scale);
+  console.log(ratio);
+  if(fields.cropWidth !== '' && fields.cropHeight !== '' && fields.xValue !== '' && fields.yValue !== '') {
+    options.width = parseInt(fields.cropWidth);
+    options.height = parseInt(fields.cropHeight);
+    options.xValue = parseInt(fields.xValue);
+    options.yValue = parseInt(fields.yValue);
     options.gravity = 'NorthWest';
   } else {
+    // I MIGHT NOT CARE TO DO THIS ANYMORE. IT CAN ALL BE DONE THE SAME WAY.
     options.width = width;
     options.height = height;
     // here we automatically normalize to 4:3 if necesssary. modal select area cropping is applied before this step

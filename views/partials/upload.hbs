@@ -1,3 +1,5 @@
+
+
 <div class="generic-container">
 
   <form class="add-bike-form" id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
@@ -8,53 +10,27 @@
       <div class="upload-target-wrapper">
 
         {{#if bike.photo_url}}
-        <img src="{{s3Url}}{{bike.photo_url}}" class="bike-photo add-bike-photo" id="upload-target" style="display: inline;">
+        <img src="{{s3Url}}{{bike.photo_url}}" class="add-bike-photo" id="upload-target" style="display: inline;">
         {{else}}
-        <img src="/images/example-with-upload.png" class="bike-photo add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
+        <img src="/images/example-with-upload.png" class="add-bike-photo upload-placeholder" id="upload-target" style="display: inline;">
         {{/if}}
 
         <div class="progress" style="visibility: hidden;"><div>Loading…</div></div>
-        <div class="choose-photo">Choose a photo of your bike from the side</div>
       </div>
-
+      <div class="choose-photo">Choose a photo of your bike from the side</div>
       <input type="hidden" name="original_filename">
       </label>
     </div>
     <input type="hidden" name="bike_id" value="{{bike.id}}">
     <input type="hidden" name="user_id" value="{{user.id}}">
 
-    <input type="hidden" name="scale" value="">
-    <input type="hidden" name="xValue" value="">
-    <input type="hidden" name="yValue" value="">
+    <input type="hidden" name="xValue" value="0">
+    <input type="hidden" name="yValue" value="0">
     <input type="hidden" name="cropWidth" value="">
     <input type="hidden" name="cropHeight" value="">
 
     <input type="hidden" name="actualHeight" value="">
     <input type="hidden" name="actualWidth" value="">
-
-    <div class="modal fade" id="selectAreaModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Please select crop</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body" style="text-align: center">
-            <p>Primary photo must be from the side and a certain aspect ratio.</p>
-            <div class="form-group">
-              <div class="upload-target-wrapper">
-                <img src="" id="cropTarget" width="100%" alt="Selected photo to crop">
-              </div>
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary" id="selectCrop">Select Crop</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <input type="hidden" id="hacked_main_path" value="">
 

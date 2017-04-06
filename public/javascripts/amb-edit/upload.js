@@ -63,6 +63,13 @@ $(document).ready(function() {
   });
 
   function filePreview(file, callback) {
+
+    var preview = $('.upload-target-wrapper');
+    var target = $('#upload-target');
+
+    $('input[name=cropHeight]').val(preview.height());
+    $('input[name=cropWidth]').val(preview.width());
+
     if (file) {
       $('input[name=original_filename]').val(file.name)
       let reader = new FileReader();
@@ -70,49 +77,58 @@ $(document).ready(function() {
       reader.onload = function (e) {
         var image = new Image();
         image.src = e.target.result;
-        // load the image to get height and width. 
-        // if oblong, open modal.
         image.onload = function() {
-          // this will make it jump a bit:
-          $('#upload-target').attr('src', e.target.result);
-
           $('input[name=actualHeight]').val(this.height);
           $('input[name=actualWidth]').val(this.width);
-          // if ratio is close to 4:3, just crop.
-          // technically is ratio between 3:2 (0.666667) and 4:5 (0.8)
-          if(this.height/this.width > 0.66 && this.height/this.width < 0.801) {
-            $('#upload-target').removeClass('upload-placeholder');
-            $("#uploadForm").submit();
-          } else {
-            // we'll open up the modal dialog for cropping.
-            // first unset the values:
-            $('#cropTarget').attr('src', e.target.result);
-            $('#selectAreaModal').modal('show');
+          // access image size here 
+          var ratio = this.height/this.width;
+          var normalizedRatio = 0.75;
+          var diff = 0.05;
+          var cropWidth;
+          var cropHeight;
+          var adjustedHeight;
+          var adjustedWidth;
+          var scale;
+          var shiftPixels;
+
+          if(ratio < (normalizedRatio - diff) || ratio > (normalizedRatio + diff)) {
+            preview.width(Math.floor(preview.width()));
+            preview.height(Math.floor(preview.width() * 0.75));
+            preview.css('overflow', 'hidden');
+            target.css('position', 'absolute');
+            target.css('left', '0'); // we need to manually set these because the
+            target.css('top', '0');  // value can bleed over to the next attachment.
+            scale = this.width/preview.width();
+            if(ratio < 0.70) {
+              target.css('height', preview.height());
+              cropWidth = this.height * (1/normalizedRatio);
+              adjustedWidth = Math.floor(preview.height() * 1/ratio);
+              target.css('width', adjustedWidth);
+              shiftPixels = Math.floor(this.width - cropWidth)/2;
+              $('input[name=xValue]').val(shiftPixels);
+              $('input[name=cropWidth]').val(Math.floor(cropWidth));
+              $('input[name=cropHeight]').val(Math.floor(this.height));
+              target.css('left', '-' + Math.floor(shiftPixels * 1/scale) + 'px');
+            } else {
+              target.css('width', preview.width());
+              $('input[name=scale]').val(this.width/preview.width());
+              cropHeight = this.width * normalizedRatio;
+              adjustedHeight = Math.floor(preview.width() * ratio);
+              target.css('height', adjustedHeight);
+              shiftPixels = Math.floor(this.height - cropHeight)/2;
+              $('input[name=yValue]').val(shiftPixels);
+              $('input[name=cropHeight]').val(Math.floor(cropHeight));
+              $('input[name=cropWidth]').val(Math.floor(this.width));
+              target.css('top', '-' + Math.floor(shiftPixels * 1/scale) + 'px');
+            }
           }
-        };
+          $('#upload-target').attr('src', e.target.result);
+          $('#upload-target').removeClass('upload-placeholder');
+          $("#uploadForm").submit();
+        }
       }
     } 
   }
-
-  $('#selectAreaModal').on('shown.bs.modal', function (e) {
-    $("#uploadForm").selekter({
-      img: $('#cropTarget'),
-      actualWidth: $('input[name=actualWidth]').val(),
-      actualHeight: $('input[name=actualHeight]').val()
-    });
-  })
-
-  $('#selectAreaModal').on('hidden.bs.modal', function (e) {
-    // unset crop modal values. if the user chooses another photo to select, the old will still be attached.
-    $('#uploadForm').selekter('destroy');
-    //$('#cropTarget').attr('src', '');
-    // now we need to load the inlined preview of the file with the crop.
-
-    // that is, based on their selection we need to adjust the CSS of the area.
-
-    // but for now just show full image. 
-
-  });
 
   $("#bike_photo").change(function () {
     // if the photo is oblong, we load it in a modal for cropping
@@ -147,7 +163,8 @@ $(document).ready(function() {
   }
 
   // this is a hack!!!
-  // if there is a hacked_main_path, there is a new photo that was not able to be shown previously for no known reason.
+  // if there is a hacked_main_path, there is a new photo that was not able to be shown previously
+  // for no known reason.
   if ($('#hacked_main_path').val() !== '') {
     $('#upload-target').attr('src', $('#hacked_main_path').val());
   }

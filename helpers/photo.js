@@ -18,7 +18,6 @@ const DESTINATION_FOLDER = `${rootFolder}/${YYYY}-${MM}-${DD}`;
 /* PRIVATE FUNCTIONS */
 function getTemplateFilename(bike_id) {
   let extension = '.jpg';
-  // limits main photo by bike id by day. We'll retain new photos if they are not added too often.
   return '' + bike_id + '-' + (new Date().getTime()) + '_{*}' + extension;
 }
 
@@ -174,6 +173,7 @@ function deleteOldPhotos(pathToFile) {
 }
 
 module.exports = {
+  DESTINATION_FOLDER,
   optimizeAndStoreCopies,
   replacePathWildcard,
   readAndStoreFile,

@@ -30,7 +30,7 @@ let run = function(localPath, fields, callback) {
 let storePhotos = function (bike_id, localPath, fields, callback) {
   
   let storedPath = photoHelper.getStoredPath(bike_id);
-  let fullStoredPath = photoHelper.getFullStoredPath(bike_id);
+  let fullStoredPath = photoHelper.DESTINATION_FOLDER + '/' + storedPath;
 
   // get properties so that we have image format for optimizing and storing
   // as well as storing in the database after success.

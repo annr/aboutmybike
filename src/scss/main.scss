@@ -327,16 +327,6 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   overflow:hidden;
 }
 
-@media (min-width: 1400px) {
-  .container {
-    width: 1350px;
-    max-width: 100%; }
-  .card-photo-wrapper {
-    height: 315px;
-    width: 419px;
-  }
-}
-
 .bike-photo-wrapper {
   position: relative;
 }
@@ -419,13 +409,32 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
   background: #bbb;
 }
 
-
 /* End Spinner styles */
+
+@media (min-width: 1400px) {
+  .container {
+    width: 1350px;
+    max-width: 100%; }
+  .card-photo-wrapper {
+    height: 315px;
+    width: 419px;
+  }
+  .progress {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+  }
+}
 
 @media (min-width: 992px) and (max-width: 1200px) {
   .card-photo-wrapper {
     height: 216px;
     width: 288px;
+  }
+  .progress {
+    position: absolute;
+    top: 45%;
+    left: 45%;
   }
 }
 
@@ -487,6 +496,10 @@ different: ~500x380 vs 206x154 (!!!) FIX THIS.
 .bike-photo, .photo-space {
   max-width: 700px;
   max-height: 500px;
+  width: 100%;
+}
+
+.add-bike-photo {
   width: 100%;
 }
 
